@@ -2,19 +2,25 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Search, 
-  Filter, 
-  Calendar, 
-  Download, 
-  FileText, 
+import {
+  Search,
+  Download,
+  FileText,
   AlertCircle,
   ChevronRight,
-  Tag
+  Tag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const CATEGORIES = ["All", "Academic", "Examination", "Placement", "Admission", "Events", "Tenders"];
+const CATEGORIES = [
+  "All",
+  "Academic",
+  "Examination",
+  "Placement",
+  "Admission",
+  "Events",
+  "Tenders",
+];
 
 const NOTICES_DATA = [
   {
@@ -24,7 +30,7 @@ const NOTICES_DATA = [
     date: "Feb 14, 2026",
     priority: "HIGH",
     desc: "All first-year students are hereby notified that the practical examination schedule has been revised due to unavoidable circumstances.",
-    file: "exam_schedule_v2.pdf"
+    file: "exam_schedule_v2.pdf",
   },
   {
     id: 2,
@@ -33,7 +39,7 @@ const NOTICES_DATA = [
     date: "Feb 13, 2026",
     priority: "NORMAL",
     desc: "Google India is conducting a virtual campus recruitment drive for Software Engineering roles. Interested students must register by Feb 20.",
-    file: "google_recruitment.pdf"
+    file: "google_recruitment.pdf",
   },
   {
     id: 3,
@@ -42,7 +48,7 @@ const NOTICES_DATA = [
     date: "Feb 12, 2026",
     priority: "NORMAL",
     desc: "Students residing in the boys and girls hostels are required to pay their semester fees through the online portal.",
-    file: "hostel_fee_notice.pdf"
+    file: "hostel_fee_notice.pdf",
   },
   {
     id: 4,
@@ -51,7 +57,7 @@ const NOTICES_DATA = [
     date: "Feb 10, 2026",
     priority: "NORMAL",
     desc: "A three-day workshop on Blockchain development will be organized by the CSE department in collaboration with Industry Experts.",
-    file: "workshop_details.pdf"
+    file: "workshop_details.pdf",
   },
   {
     id: 5,
@@ -60,18 +66,20 @@ const NOTICES_DATA = [
     date: "Feb 08, 2026",
     priority: "NORMAL",
     desc: "Sealed tenders are invited from reputed vendors for the supply and installation of VLSI design software and hardware kits.",
-    file: "tender_ece_lab.pdf"
-  }
+    file: "tender_ece_lab.pdf",
+  },
 ];
 
 const NoticePage = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const filteredNotices = NOTICES_DATA.filter(notice => {
-    const matchesCategory = activeCategory === "All" || notice.category === activeCategory;
-    const matchesSearch = notice.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          notice.desc.toLowerCase().includes(searchQuery.toLowerCase());
+  const filteredNotices = NOTICES_DATA.filter((notice) => {
+    const matchesCategory =
+      activeCategory === "All" || notice.category === activeCategory;
+    const matchesSearch =
+      notice.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      notice.desc.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
@@ -82,7 +90,7 @@ const NoticePage = () => {
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="text-4xl md:text-5xl font-extrabold text-white mb-6"
@@ -90,7 +98,8 @@ const NoticePage = () => {
               Notice Board & Announcements
             </motion.h1>
             <p className="text-xl text-blue-100">
-              Stay updated with the latest information, academic alerts, and official notifications from CGEC.
+              Stay updated with the latest information, academic alerts, and
+              official notifications from CGEC.
             </p>
           </div>
         </div>
@@ -105,15 +114,15 @@ const NoticePage = () => {
                 {/* Search */}
                 <div className="lg:col-span-5 relative">
                   <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     placeholder="Search notices, keywords..."
                     className="w-full pl-12 pr-4 py-4 bg-gray-50 border border-gray-200 rounded-2xl focus:ring-2 focus:ring-blue-600 focus:border-transparent outline-none transition-all"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                   />
                 </div>
-                
+
                 {/* Category Pills */}
                 <div className="lg:col-span-7 flex flex-wrap gap-2">
                   {CATEGORIES.map((cat) => (
@@ -122,9 +131,9 @@ const NoticePage = () => {
                       onClick={() => setActiveCategory(cat)}
                       className={cn(
                         "px-6 py-3 rounded-xl font-bold text-sm transition-all whitespace-nowrap",
-                        activeCategory === cat 
-                          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20" 
-                          : "bg-gray-100 text-gray-500 hover:bg-gray-200"
+                        activeCategory === cat
+                          ? "bg-blue-600 text-white shadow-lg shadow-blue-600/20"
+                          : "bg-gray-100 text-gray-500 hover:bg-gray-200",
                       )}
                     >
                       {cat}
@@ -138,21 +147,25 @@ const NoticePage = () => {
             <div className="space-y-6">
               <AnimatePresence mode="popLayout">
                 {filteredNotices.length > 0 ? (
-                  filteredNotices.map((notice, index) => (
+                  filteredNotices.map((notice) => (
                     <motion.div
                       key={notice.id}
                       layout
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.3 }}
-                      className="group bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-xl shadow-blue-900/5 hover:shadow-blue-900/10 transition-all"
+                      transition={{ duration: 0.2 }}
+                      className="bg-white p-6 rounded-xl border border-gray-100 hover:shadow-lg transition-all group relative overflow-hidden"
                     >
                       <div className="flex flex-col md:flex-row md:items-start gap-8">
                         {/* Date Box */}
                         <div className="shrink-0 flex md:flex-col items-center justify-center w-24 h-24 bg-blue-50 text-blue-600 rounded-3xl p-4">
-                          <span className="text-2xl font-black">{notice.date.split(' ')[1].replace(',', '')}</span>
-                          <span className="text-xs font-bold uppercase tracking-widest">{notice.date.split(' ')[0]}</span>
+                          <span className="text-2xl font-black">
+                            {notice.date.split(" ")[1].replace(",", "")}
+                          </span>
+                          <span className="text-xs font-bold uppercase tracking-widest">
+                            {notice.date.split(" ")[0]}
+                          </span>
                         </div>
 
                         {/* Content */}
@@ -169,11 +182,11 @@ const NoticePage = () => {
                               </span>
                             )}
                           </div>
-                          
+
                           <h2 className="text-2xl font-bold text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
                             {notice.title}
                           </h2>
-                          
+
                           <p className="text-gray-500 leading-relaxed max-w-3xl">
                             {notice.desc}
                           </p>
@@ -194,7 +207,7 @@ const NoticePage = () => {
                     </motion.div>
                   ))
                 ) : (
-                  <motion.div 
+                  <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     className="text-center py-20 bg-white rounded-[2.5rem] border border-dashed border-gray-300"
@@ -202,8 +215,12 @@ const NoticePage = () => {
                     <div className="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
                       <Search className="w-10 h-10 text-gray-300" />
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900">No notices found</h3>
-                    <p className="text-gray-500 mt-2">Try adjusting your filters or search query.</p>
+                    <h3 className="text-xl font-bold text-gray-900">
+                      No notices found
+                    </h3>
+                    <p className="text-gray-500 mt-2">
+                      Try adjusting your filters or search query.
+                    </p>
                   </motion.div>
                 )}
               </AnimatePresence>

@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, Calendar, ArrowRight, ExternalLink } from "lucide-react";
+import { Calendar, Bell, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
@@ -81,7 +81,7 @@ const NoticeBoard = () => {
               transition={{ duration: 0.2 }}
             >
               {filteredNotices.length > 0 ? (
-                filteredNotices.map((notice, index) => (
+                filteredNotices.map((notice) => (
                   <div
                     key={notice.id}
                     className="group p-6 hover:bg-blue-50/50 transition-all cursor-pointer"

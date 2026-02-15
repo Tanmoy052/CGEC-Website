@@ -4,19 +4,13 @@ import React, { useState } from "react";
 import Hero from "@/components/home/Hero";
 import NoticeBoard from "@/components/home/NoticeBoard";
 import {
-  GraduationCap,
-  BookOpen,
-  Users,
-  Trophy,
   ArrowRight,
-  Building2,
-  Cpu,
-  Zap,
-  Quote,
   ChevronLeft,
   ChevronRight,
-  Star,
+  Quote,
+  Users,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -217,7 +211,7 @@ export default function Home() {
                       {leader.role}
                     </p>
                     <p className="text-gray-600 text-sm leading-relaxed italic group-hover:text-gray-100 line-clamp-4">
-                      "{leader.message}"
+                      &quot;{leader.message}&quot;
                     </p>
                   </div>
                 </div>
@@ -239,18 +233,18 @@ export default function Home() {
                 </h2>
                 <div className="prose prose-blue lg:prose-lg text-gray-600 max-w-none leading-relaxed">
                   <p className="font-medium text-gray-900 text-xl mb-4">
-                    "तमसो मा ज्योतिर्गमय" - From darkness, lead me to
+                    &quot;तमसो मा ज्योतिर्गमय&quot; - From darkness, lead me to
                     enlightenment.
                   </p>
                   <p>
                     The college is situated in a prime location in the Cooch
                     Behar District. The college, being well connected from any
-                    part of the Cooch Behar city, enables the student's easy
-                    access. The college is approved by AICTE and Maulana Abul
-                    Kalam Azad University of Technology, West Bengal (Formerly
-                    known as West Bengal University of Technology) – WBUT and
-                    Government of India and the Department of Higher Education,
-                    Government of West Bengal.
+                    part of the Cooch Behar city, enables the student&apos;s
+                    easy access. The college is approved by AICTE and Maulana
+                    Abul Kalam Azad University of Technology, West Bengal
+                    (Formerly known as West Bengal University of Technology) –
+                    WBUT and Government of India and the Department of Higher
+                    Education, Government of West Bengal.
                   </p>
                   <p>
                     The Institute is located at its own sprawling campus of 21
@@ -327,11 +321,11 @@ export default function Home() {
                       <div className="h-48 overflow-hidden relative bg-gray-100">
                         {/* Fallback gradient in case image fails */}
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-gray-200 animate-pulse"></div>
-                        <img
+                        <Image
                           src={course.image}
                           alt={course.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 relative z-10"
-                          loading="lazy"
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500 relative z-10"
                         />
                         <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold z-20">
                           B.Tech
@@ -530,7 +524,7 @@ export default function Home() {
                 >
                   <div className="bg-white p-6 rounded-2xl shadow-lg border border-gray-50 mb-6 relative min-h-[160px] flex items-center">
                     <p className="text-sm text-gray-600 leading-relaxed italic text-center">
-                      "{testimonial.text}"
+                      &quot;{testimonial.text}&quot;
                     </p>
                     <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rotate-45 border-r border-b border-gray-50 shadow-lg"></div>
                   </div>

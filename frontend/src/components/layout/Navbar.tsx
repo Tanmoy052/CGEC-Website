@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { COLLEGE_NAME, COLLEGE_SHORT_NAME, NAV_LINKS } from "@/lib/constants";
+import { NAV_LINKS } from "@/lib/constants";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,11 +33,13 @@ export default function Navbar() {
         <div className="container mx-auto px-4 flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <div className="relative h-12 w-auto overflow-hidden shrink-0">
-              <img
+            <div className="relative h-12 w-32 overflow-hidden shrink-0">
+              <Image
                 src="https://cgec.org.in/img/cgec_logo.png"
                 alt="CGEC Logo"
-                className="h-full w-auto object-contain transform group-hover:scale-105 transition-transform duration-300"
+                fill
+                className="object-contain transform group-hover:scale-105 transition-transform duration-300"
+                priority
               />
             </div>
           </Link>

@@ -3,6 +3,7 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { History, Target, Eye, Award, CheckCircle2 } from "lucide-react";
+import Image from "next/image";
 
 const AboutPage = () => {
   return (
@@ -75,11 +76,12 @@ const AboutPage = () => {
               transition={{ duration: 0.6 }}
               className="relative"
             >
-              <div className="rounded-3xl overflow-hidden shadow-2xl">
-                <img
+              <div className="rounded-3xl overflow-hidden shadow-2xl relative h-[500px]">
+                <Image
                   src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
                   alt="College Campus"
-                  className="w-full h-[500px] object-cover"
+                  fill
+                  className="object-cover"
                 />
               </div>
               <div className="absolute -bottom-8 -left-8 bg-blue-600 text-white p-8 rounded-2xl shadow-xl hidden md:block">

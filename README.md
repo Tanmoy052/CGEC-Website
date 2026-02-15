@@ -24,6 +24,18 @@ This is a full-stack website for CGEC, featuring a modern UI/UX, role-based acce
 
 ### Running the Project
 
+To start both the frontend and backend servers concurrently:
+
+```bash
+npm run dev
+```
+
+This command will launch:
+- **Frontend**: http://localhost:3000
+- **Backend**: http://localhost:5000
+
+Alternatively, you can run them individually:
+
 #### Backend
 ```bash
 cd backend
