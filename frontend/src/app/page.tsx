@@ -25,6 +25,7 @@ export default function Home() {
       dept: "Mechanical Engineering",
       message:
         "Excellent facilities in terms of equipment and staffs are available to prepare students as professional Mechanical Engineers.",
+      image: "https://cgec.org.in/img/Faculty/ME_Sushovan_Chatterjee.jpg",
     },
     {
       name: "Dr. Palash Das",
@@ -32,6 +33,7 @@ export default function Home() {
       dept: "Electronics & Comm. Engg.",
       message:
         "I believe that someone's adaptive nature is one of the reasons behind his success. Our students are sufficiently adaptive.",
+      image: "https://cgec.org.in/img/Faculty/ECEpalashDas.jpg",
     },
     {
       name: "Dr. Kingshuk Dan",
@@ -39,28 +41,49 @@ export default function Home() {
       dept: "Civil Engineering",
       message:
         "The aim of the department is to impart the students a sound knowledge of the theory of civil engineering subjects.",
+      image: "https://cgec.org.in/img/Faculty/Kingshuk%20Dan.jpg",
     },
     {
-      name: "Prof. S. Sengupta",
+      name: "Prof. Somen Mondal  (Head, TPO Cell)",
+      role: "HOD & Assistant Professor",
+      dept: "Electrical Engineering",
+      message:
+        "The TPO Cell emphasizes student success, faculty dedication, industry collaboration, and the college’s commitment to strong training and placement outcomes.",
+      image: "https://cgec.org.in/img/Faculty/Somen_P.jpg",
+    },
+    // Adding more leaders for carousel
+    {
+      name: "Prof. Arnab Gain",
+      role: "Assistant Professor",
+      dept: "Computer Science & Engg.",
+      message:
+        "Our department is committed to excellence in teaching and research in the field of computer science and technology.",
+      image: "https://cgec.org.in/img/Faculty/423-A.jpg",
+    },
+    {
+      name: "Prof. Sourav Chakraborty",
       role: "Assistant Professor",
       dept: "Electrical Engineering",
       message:
         "We focus on providing a strong foundation in electrical systems and power electronics for sustainable future.",
+      image: "https://cgec.org.in/img/Faculty/sourav.png",
     },
     // Adding more leaders for carousel
     {
-      name: "Prof. A. Ray",
+      name: "Prof. Atanu Maji",
       role: "HOD & Assistant Professor",
       dept: "Computer Science & Engg.",
       message:
-        "Our department is committed to excellence in teaching and research in the field of computer science and technology.",
+        " As HOD (EE), I am committed to academic excellence, practical learning, and preparing our students for successful careers.",
+      image: "https://cgec.org.in/img/Faculty/EE_Atanu.jpg",
     },
     {
-      name: "Dr. M. K. Ghosh",
+      name: "Dr. Samik Nag",
       role: "Assistant Professor",
       dept: "Physics",
       message:
         "Basic sciences form the backbone of engineering. We ensure our students have a solid conceptual foundation.",
+      image: "https://cgec.org.in/img/Faculty/CHE_Samik_Nag.jpg",
     },
   ];
 
@@ -70,66 +93,111 @@ export default function Home() {
       role: "2020 passout",
       dept: "CSE",
       text: "A Model Engineering College. Clean bright classrooms, highly configured computer labs, modern library, workshops, graphics labs. A very rare govt engineering college.",
+      image: "https://cgec.org.in/img/Student/CSE_Sagnik_Banik.jpg",
     },
     {
       name: "Rounak das",
       role: "2020 passout",
       dept: "EE",
       text: "Well furnished classroom facilities, laboratories, workshops, hostels, mess and great infrastructure. Provides a great atmosphere to study learn and to become successful.",
+      image: "https://cgec.org.in/img/Student/EE_Rounak%20Das.jpg",
     },
     {
       name: "Anubrata Sengupta",
       role: "2020 passout",
       dept: "EE",
       text: "A new bud in the educational field of Bengal. Hope it will flourish as the center of excellence of North Bengal. A perfect place to study, learn and increase knowledge.",
+      image: "https://cgec.org.in/img/Student/EE_ANUBRATA%20SENGUPTA.jpg",
     },
     {
       name: "Manas Kumar Kundu",
       role: "2020 passout",
       dept: "ECE",
       text: "Very very excellent college.... I'm a student of this college. All teachers and students are very close to each other. No words for this college..",
+      image: "https://cgec.org.in/img/Student/ECE_MANAS%20KUMAR%20KUNDU.jpg",
     },
     {
       name: "Rahul Sharma",
       role: "2021 passout",
       dept: "ME",
       text: "The mechanical workshops are world-class. The hands-on experience I gained here helped me secure a position at a top manufacturing firm.",
+      image: "https://randomuser.me/api/portraits/men/15.jpg",
     },
     {
       name: "Priya Singh",
       role: "2022 passout",
       dept: "CE",
       text: "The faculty in the Civil department is extremely supportive. The structural labs are equipped with the latest testing machinery.",
+      image: "https://randomuser.me/api/portraits/women/16.jpg",
     },
     {
       name: "Sneha Mukherjee",
       role: "2021 passout",
       dept: "CSE",
       text: "The coding culture here is growing rapidly. Seniors are very helpful and the placement cell works tirelessly for student success.",
+      image: "https://randomuser.me/api/portraits/women/17.jpg",
     },
     {
       name: "Amit Kumar",
       role: "2023 passout",
       dept: "EE",
       text: "CGEC has provided me with not just an engineering degree but a life-changing experience. The campus life and extracurriculars are amazing.",
+      image: "https://randomuser.me/api/portraits/men/18.jpg",
     },
   ];
 
   const recruiters = [
-    "HiTechnext",
-    "ICICI Bank",
-    "Infosys",
-    "inSync",
-    "Mindtree",
-    "Nineleaps",
-    "TCS",
-    "Cognizant",
-    "Wipro",
-    "Accenture",
-    "Capgemini",
-    "HCL",
-    "Tech Mahindra",
-    "LTI",
+    {
+      name: "Technext",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVqX3biFjz21ZQdxt9C-EPUjdLvEhobTJaJuEuL0z1&s",
+    },
+    {
+      name: "ICICI Bank",
+      logo: "https://www.google.com/s2/favicons?domain=icicibank.com&sz=256",
+    },
+    {
+      name: "Infosys",
+      logo: "https://content.linkedin.com/content/dam/me/business/en-us/sales-solutions/resources/images/apac/images/infosys-logo.png.original.png",
+    },
+    
+    {
+      name: "Mindtree",
+      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe94WjiPTzH2WwFOu3mw5UQU9I5Q_haldfg&s",
+    },
+    
+    {
+      name: "TCS",
+      logo: "https://cgec.org.in/img/company_logo/Tata%20Consultancy%20Services.png",
+    },
+    {
+      name: "Cognizant",
+      logo: "https://www.google.com/s2/favicons?domain=cognizant.com&sz=256",
+    },
+    {
+      name: "Wipro",
+      logo: "https://www.google.com/s2/favicons?domain=wipro.com&sz=256",
+    },
+    {
+      name: "Accenture",
+      logo: "https://www.google.com/s2/favicons?domain=accenture.com&sz=256",
+    },
+    {
+      name: "Capgemini",
+      logo: "https://cgec.org.in/img/company_logo/Capgemini.jpg",
+    },
+    {
+      name: "HCL",
+      logo: "https://www.logo.wine/a/logo/HCL_Technologies/HCL_Technologies-Logo.wine.svg",
+    },
+    {
+      name: "Tech Mahindra",
+      logo: "https://architecturehouston.org/wp-content/uploads/2025/04/Logo-Without-Tagline_Blue.png",
+    },
+    {
+      name: "LTI",
+      logo: "https://www.google.com/s2/favicons?domain=lntinfotech.com&sz=256",
+    },
+    
   ];
 
   const nextLeadership = () => {
@@ -200,9 +268,17 @@ export default function Home() {
               .map((leader, i) => (
                 <div
                   key={i}
-                  className="bg-gray-50 p-6 rounded-3xl border border-gray-100 relative group hover:bg-blue-900 hover:text-white transition-all duration-500 shadow-lg shadow-gray-200/50 animate-fadeIn"
+                  className="bg-gray-50 p-6 rounded-3xl border border-gray-100 relative group hover:bg-blue-900 hover:text-white transition-all duration-500 shadow-lg shadow-gray-200/50 animate-fadeIn pt-12"
                 >
-                  <Quote className="w-10 h-10 text-blue-600/10 absolute top-4 right-6 group-hover:text-white/10" />
+                  <div className="absolute top-0 right-6 -translate-y-1/2 w-24 h-24 rounded-full border-4 border-white shadow-md overflow-hidden bg-gray-100">
+                    <Image
+                      src={leader.image}
+                      alt={leader.name}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  </div>
                   <div className="relative z-10">
                     <h3 className="text-lg font-bold mb-1 leading-tight">
                       {leader.name}
@@ -480,9 +556,15 @@ export default function Home() {
               .map((recruiter, i) => (
                 <div
                   key={i}
-                  className="text-xl font-black text-gray-300 hover:text-blue-600 transition-all duration-300 cursor-default select-none tracking-tighter animate-fadeIn"
+                  className="relative w-32 h-16 transition-all duration-300 hover:scale-110 flex items-center justify-center animate-fadeIn"
                 >
-                  {recruiter.toUpperCase()}
+                  <Image
+                    src={recruiter.logo}
+                    alt={recruiter.name}
+                    fill
+                    className="object-contain"
+                    unoptimized
+                  />
                 </div>
               ))}
           </div>
@@ -529,10 +611,14 @@ export default function Home() {
                     <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-white rotate-45 border-r border-b border-gray-50 shadow-lg"></div>
                   </div>
                   <div className="text-center">
-                    <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-3 overflow-hidden border-2 border-white shadow-sm">
-                      <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
-                        <Users className="w-8 h-8 text-blue-400" />
-                      </div>
+                    <div className="w-16 h-16 bg-gray-200 rounded-full mx-auto mb-3 overflow-hidden border-2 border-white shadow-sm relative">
+                      <Image
+                        src={testimonial.image}
+                        alt={testimonial.name}
+                        fill
+                        className="object-cover"
+                        unoptimized
+                      />
                     </div>
                     <h4 className="font-bold text-base text-blue-900 leading-tight">
                       {testimonial.name}
