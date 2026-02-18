@@ -78,15 +78,15 @@ const AboutPage = () => {
             >
               <div className="rounded-3xl overflow-hidden shadow-2xl relative h-[500px]">
                 <Image
-                  src="https://images.unsplash.com/photo-1541339907198-e08756ebafe3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+                  src="https://cgec.org.in/img/slider/5.jpg"
                   alt="College Campus"
                   fill
                   className="object-cover"
                 />
               </div>
-              <div className="absolute -bottom-8 -left-8 bg-blue-600 text-white p-8 rounded-2xl shadow-xl hidden md:block">
-                <div className="text-4xl font-bold mb-1">21</div>
-                <div className="text-sm font-medium text-blue-100 uppercase tracking-widest">
+              <div className="absolute -bottom-6 -left-6 bg-blue-600 text-white p-5 rounded-2xl shadow-xl hidden md:block">
+                <div className="text-3xl font-bold mb-1">21</div>
+                <div className="text-xs font-medium text-blue-100 uppercase tracking-widest">
                   Acres Campus
                 </div>
               </div>

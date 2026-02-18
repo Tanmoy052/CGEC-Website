@@ -159,12 +159,12 @@ export default function Home() {
       name: "Infosys",
       logo: "https://content.linkedin.com/content/dam/me/business/en-us/sales-solutions/resources/images/apac/images/infosys-logo.png.original.png",
     },
-    
+
     {
       name: "Mindtree",
       logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe94WjiPTzH2WwFOu3mw5UQU9I5Q_haldfg&s",
     },
-    
+
     {
       name: "TCS",
       logo: "https://cgec.org.in/img/company_logo/Tata%20Consultancy%20Services.png",
@@ -197,7 +197,6 @@ export default function Home() {
       name: "LTI",
       logo: "https://www.google.com/s2/favicons?domain=lntinfotech.com&sz=256",
     },
-    
   ];
 
   const nextLeadership = () => {
@@ -361,38 +360,50 @@ export default function Home() {
                   {[
                     {
                       name: "BTech in Computer Science & Engineering",
+                      slug: "cse",
                       image:
                         "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop",
                       fees: "1000/- Per Month",
                     },
                     {
                       name: "BTech in Electronics & Communication Engineering",
+                      slug: "ece",
                       image:
                         "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop",
                       fees: "1000/- Per Month",
                     },
                     {
                       name: "BTech in Mechanical Engineering",
+                      slug: "me",
                       image:
                         "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?w=800&auto=format&fit=crop",
                       fees: "500/- Per Month",
                     },
                     {
                       name: "BTech in Electrical Engineering",
+                      slug: "ee",
                       image:
                         "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?w=800&auto=format&fit=crop",
                       fees: "500/- Per Month",
                     },
                     {
                       name: "BTech in Civil Engineering",
+                      slug: "ce",
                       image:
                         "https://www.msruas.ac.in/uploads/blogs/btech-in-civil-engineering-your-pathway-to-monumental-success.webp",
                       fees: "500/- Per Month",
                     },
+                    {
+                      name: "Basic Science & Humanities",
+                      slug: "bsh",
+                      image:
+                        "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
+                    },
                   ].map((course, i) => (
-                    <div
+                    <Link
+                      href={`/academics/${course.slug}`}
                       key={i}
-                      className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group"
+                      className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all group block cursor-pointer"
                     >
                       <div className="h-48 overflow-hidden relative bg-gray-100">
                         {/* Fallback gradient in case image fails */}
@@ -403,9 +414,11 @@ export default function Home() {
                           fill
                           className="object-cover group-hover:scale-110 transition-transform duration-500 relative z-10"
                         />
-                        <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold z-20">
-                          B.Tech
-                        </div>
+                        {course.slug !== "bsh" && (
+                          <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold z-20">
+                            B.Tech
+                          </div>
+                        )}
                       </div>
                       <div className="p-6">
                         <h3 className="text-lg font-bold text-gray-900 mb-4 h-12 line-clamp-2">
@@ -413,12 +426,12 @@ export default function Home() {
                         </h3>
                         <div className="pt-4 border-t border-gray-50">
                           <p className="text-blue-700 font-bold">
-                            Semester Fees :{" "}
+                            {course.slug !== "bsh" && "Semester Fees : "}
                             <span className="text-gray-900">{course.fees}</span>
                           </p>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                   ))}
                 </div>
               </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { NAV_LINKS } from "@/lib/constants";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -58,8 +60,12 @@ export default function Navbar() {
                     className={cn(
                       "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 flex items-center space-x-1 uppercase",
                       scrolled
-                        ? "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                        : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
+                        ? pathname.startsWith(link.href)
+                          ? "text-blue-600 bg-blue-50"
+                          : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                        : pathname.startsWith(link.href)
+                          ? "text-blue-600 bg-white"
+                          : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
                     )}
                   >
                     <span>{link.label}</span>
@@ -76,8 +82,12 @@ export default function Navbar() {
                     className={cn(
                       "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 uppercase",
                       scrolled
-                        ? "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                        : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
+                        ? pathname === link.href
+                          ? "text-blue-600 bg-blue-50"
+                          : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                        : pathname === link.href
+                          ? "text-blue-600 bg-white"
+                          : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
                     )}
                   >
                     {link.label}
@@ -88,8 +98,12 @@ export default function Navbar() {
                     className={cn(
                       "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 uppercase",
                       scrolled
-                        ? "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                        : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
+                        ? pathname === link.href
+                          ? "text-blue-600 bg-blue-50"
+                          : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
+                        : pathname === link.href
+                          ? "text-blue-600 bg-white"
+                          : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
                     )}
                   >
                     {link.label}

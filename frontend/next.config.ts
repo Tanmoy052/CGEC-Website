@@ -36,6 +36,18 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "upload.wikimedia.org",
       },
+      {
+        protocol: "https",
+        hostname: "www.cgecsportsclub.in",
+      },
+      {
+        protocol: "https",
+        hostname: "www.collegebatch.com",
+      },
+      {
+        protocol: "https",
+        hostname: "media.licdn.com",
+      },
     ],
   },
 };
