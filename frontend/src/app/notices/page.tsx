@@ -12,61 +12,128 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const CATEGORIES = [
-  "All",
-  "Academic",
-  "Examination",
-  "Placement",
-  "Admission",
-  "Events",
-  "Tenders",
-];
+const CATEGORIES = ["All", "NOTICE", "TENDER", "NEWS", "RECRUITMENT"];
 
 const NOTICES_DATA = [
+  // NOTICE
   {
     id: 1,
-    title: "Revised Schedule for 1st Year Odd Semester Practical Exams",
-    category: "Examination",
-    date: "Feb 14, 2026",
+    title:
+      "Notice for Approved list contains selected students for WBFS (Full Freeship/ Half freeship) 2025-26 for 2nd year students.",
+    category: "NOTICE",
+    date: "Jan 29, 2026",
     priority: "HIGH",
-    desc: "All first-year students are hereby notified that the practical examination schedule has been revised due to unavoidable circumstances.",
-    file: "exam_schedule_v2.pdf",
+    desc: "Approved list of selected students for West Bengal Freeship Scheme (WBFS) 2025-26.",
+    file: "wbfs_list_2025.pdf",
   },
   {
     id: 2,
-    title: "Campus Recruitment Drive: Google India for 2026 Graduates",
-    category: "Placement",
-    date: "Feb 13, 2026",
-    priority: "NORMAL",
-    desc: "Google India is conducting a virtual campus recruitment drive for Software Engineering roles. Interested students must register by Feb 20.",
-    file: "google_recruitment.pdf",
+    title:
+      "Status of applications for decentralized counselling of B.Tech 3rd Semester(Lateral Entry) candidates",
+    category: "NOTICE",
+    date: "Jan 28, 2026",
+    priority: "HIGH",
+    desc: "Update on the status of applications for decentralized counselling for lateral entry candidates.",
+    file: "decentralized_status.pdf",
   },
   {
     id: 3,
-    title: "Hostel Fee Payment Notice for Even Semester 2026",
-    category: "Academic",
-    date: "Feb 12, 2026",
-    priority: "NORMAL",
-    desc: "Students residing in the boys and girls hostels are required to pay their semester fees through the online portal.",
-    file: "hostel_fee_notice.pdf",
+    title:
+      "NOTICE FOR ADMISSION THROUGH DECENTRALIZED COUNSELLING IN THE 2nd YEAR (LATERAL ENTRY) OF B. TECH COURSES AGAINST VACANCY 2024",
+    category: "NOTICE",
+    date: "Jan 24, 2026",
+    priority: "HIGH",
+    desc: "Notice regarding admission through decentralized counselling for 2nd year lateral entry students.",
+    file: "lateral_entry_admission.pdf",
   },
   {
     id: 4,
-    title: "Workshop on Blockchain & Web3 Technologies",
-    category: "Events",
-    date: "Feb 10, 2026",
+    title:
+      "NOTICE FOR REQUIREMENT OF VISITING FACULTY FOR THE EVEN SEMESTER 2026.",
+    category: "NOTICE",
+    date: "Dec 30, 2025",
     priority: "NORMAL",
-    desc: "A three-day workshop on Blockchain development will be organized by the CSE department in collaboration with Industry Experts.",
-    file: "workshop_details.pdf",
+    desc: "Applications are invited for Visiting Faculty positions for the upcoming even semester.",
+    file: "visiting_faculty_2026.pdf",
   },
+  // TENDER
   {
     id: 5,
-    title: "Tender for Supply of Lab Equipment for ECE Department",
-    category: "Tenders",
-    date: "Feb 08, 2026",
+    title:
+      "Notice inviting Quotation for Jungle Cutting and Cleaning of Sewerages of college campus",
+    category: "TENDER",
+    date: "Feb 12, 2026",
+    priority: "HIGH",
+    desc: "Quotations invited for jungle cutting and sewerage cleaning services within the college campus.",
+    file: "jungle_cutting_tender.pdf",
+  },
+  {
+    id: 6,
+    title:
+      "Notice Inviting Quotation for supply of various Items for CGEC Annual Sports Meet 2026.",
+    category: "TENDER",
+    date: "Jan 29, 2026",
+    priority: "HIGH",
+    desc: "Quotations invited for the supply of sports equipment and items for the Annual Sports Meet.",
+    file: "sports_meet_tender.pdf",
+  },
+  {
+    id: 7,
+    title:
+      "Notice Inviting Quotation for supply of CCTV and Electrical Items for Conduct of Various Semester Examination at College Campus.",
+    category: "TENDER",
+    date: "Jan 15, 2026",
     priority: "NORMAL",
-    desc: "Sealed tenders are invited from reputed vendors for the supply and installation of VLSI design software and hardware kits.",
-    file: "tender_ece_lab.pdf",
+    desc: "Quotations invited for CCTV and electrical items required for semester examinations.",
+    file: "cctv_tender.pdf",
+  },
+  {
+    id: 8,
+    title:
+      "Notice Inviting Quotation for the supply of Refreshments for Admission 2025",
+    category: "TENDER",
+    date: "Aug 26, 2025",
+    priority: "NORMAL",
+    desc: "Quotations invited for supplying refreshments during the 2025 admission process.",
+    file: "refreshments_tender.pdf",
+  },
+  // NEWS
+  {
+    id: 9,
+    title: "Induction Programme Final Brochure 2.0",
+    category: "NEWS",
+    date: "Oct 27, 2021",
+    priority: "NORMAL",
+    desc: "Final brochure for the Student Induction Programme.",
+    file: "induction_brochure.pdf",
+  },
+  {
+    id: 10,
+    title: "Student Induction Programme 2021 Invitation and Schedule",
+    category: "NEWS",
+    date: "Sep 14, 2021",
+    priority: "NORMAL",
+    desc: "Invitation and detailed schedule for the 2021 Student Induction Programme.",
+    file: "induction_schedule.pdf",
+  },
+  {
+    id: 11,
+    title: "AJANTRIK 2K21",
+    category: "NEWS",
+    date: "Sep 13, 2021",
+    priority: "NORMAL",
+    desc: "Highlights and details of the annual tech fest AJANTRIK 2K21.",
+    file: "ajantrik_2k21.pdf",
+  },
+  // RECRUITMENT
+  {
+    id: 12,
+    title: "Placement Drive: Tata Consultancy Services (TCS) for 2026 Batch",
+    category: "RECRUITMENT",
+    date: "Feb 10, 2026",
+    priority: "HIGH",
+    desc: "TCS recruitment drive for the 2026 graduating batch.",
+    file: "tcs_recruitment.pdf",
   },
 ];
 

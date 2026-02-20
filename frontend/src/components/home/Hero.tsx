@@ -49,7 +49,7 @@ const Hero = () => {
       rotateY: 0,
       scale: 1, // Settle at normal scale
       opacity: 1,
-      filter: "brightness(1) blur(0px)",
+      filter: "brightness(1.1) blur(0px)",
       transition: {
         x: {
           type: "spring",
@@ -62,8 +62,8 @@ const Hero = () => {
           ease: "linear",
         },
         scale: { duration: 7, ease: "linear" }, // Keep the slow zoom effect
-        opacity: { duration: 0.000000000000000000000000000000000000001 },
-        filter: { duration: 0.000000000000000000000000000000000000001 },
+        opacity: { duration: 0.8 },
+        filter: { duration: 0.8 },
       },
     },
     exit: (direction: number) => ({
@@ -157,19 +157,21 @@ const Hero = () => {
             backgroundColor: "#000",
           }}
         >
-          {/* Inner Vignette for cinematic depth */}
-          <div className="absolute inset-0 bg-black/20" />
+          {/* Inner Vignette for cinematic depth - Soft Blue Tint */}
+          <div className="absolute inset-0 bg-blue-500/10 mix-blend-multiply" />
         </motion.div>
       </AnimatePresence>
 
-      {/* Dynamic Overlay with animated gradient */}
+      {/* Dynamic Overlay with animated gradient - Enhanced Beautiful Blue Tint */}
       <motion.div
         animate={{
           backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
         }}
         transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 z-0 bg-gradient-to-r from-blue-900/80 via-blue-900/40 to-transparent bg-[length:200%_200%] pointer-events-none"
+        className="absolute inset-0 z-0 bg-gradient-to-r from-blue-600/30 via-sky-400/20 to-blue-600/30 bg-[length:200%_200%] pointer-events-none mix-blend-color-dodge"
       />
+      {/* Additional blue wash for unified tint */}
+      <div className="absolute inset-0 z-0 bg-blue-600/20 pointer-events-none mix-blend-color" />
 
       {/* Progress Bar */}
       <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10 z-30">
@@ -217,17 +219,16 @@ const Hero = () => {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            key={`content-${currentImageIndex}`} // Re-animate text on slide change
           >
             <motion.span
               variants={itemVariants}
-              className="inline-block px-4 py-1.5 mb-6 text-sm font-semibold tracking-wider text-blue-100 uppercase bg-blue-600/30 border border-blue-400/30 rounded-full backdrop-blur-md shadow-lg"
+              className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-white uppercase bg-blue-900/90 border border-blue-500 rounded-full backdrop-blur-md shadow-lg"
             >
-              Empowering Future Engineers
+              New Engineering College
             </motion.span>
             <motion.p
               variants={itemVariants}
-              className="text-xl text-blue-50 mb-10 leading-relaxed max-w-2xl drop-shadow-lg font-medium"
+              className="text-2xl text-white mb-10 leading-relaxed max-w-2xl font-bold drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]"
             >
               Cooch Behar Government Engineering College provides a platform for
               students to excel in technical education, research, and holistic
@@ -236,7 +237,7 @@ const Hero = () => {
 
             <motion.div
               variants={itemVariants}
-              className="flex flex-wrap gap-4 mt-57"
+              className="flex flex-wrap gap-4 mt-55"
             >
               <Link
                 href="/about"
@@ -252,32 +253,38 @@ const Hero = () => {
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.8 }}
-            className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-white/10"
+            className="flex gap-12 mt-10 pt-10 border-t border-white/10"
           >
             <div className="text-white group cursor-default">
               <div className="flex items-center space-x-2 mb-2 group-hover:scale-105 transition-transform duration-300">
-                <GraduationCap className="w-6 h-6 text-blue-300 drop-shadow-[0_0_8px_rgba(147,197,253,0.5)]" />
-                <span className="text-3xl font-bold drop-shadow-md">5+</span>
+                <GraduationCap className="w-6 h-6 text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
+                <span className="text-3xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  5+
+                </span>
               </div>
-              <p className="text-sm text-blue-200 uppercase tracking-widest font-semibold opacity-80 group-hover:opacity-100 transition-opacity">
+              <p className="text-sm text-blue-100 uppercase tracking-widest font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                 Departments
               </p>
             </div>
             <div className="text-white group cursor-default">
               <div className="flex items-center space-x-2 mb-2 group-hover:scale-105 transition-transform duration-300">
-                <Users className="w-6 h-6 text-blue-300 drop-shadow-[0_0_8px_rgba(147,197,253,0.5)]" />
-                <span className="text-3xl font-bold drop-shadow-md">1200+</span>
+                <Users className="w-6 h-6 text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
+                <span className="text-3xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  1200+
+                </span>
               </div>
-              <p className="text-sm text-blue-200 uppercase tracking-widest font-semibold opacity-80 group-hover:opacity-100 transition-opacity">
+              <p className="text-sm text-blue-100 uppercase tracking-widest font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                 Students
               </p>
             </div>
             <div className="text-white group cursor-default">
               <div className="flex items-center space-x-2 mb-2 group-hover:scale-105 transition-transform duration-300">
-                <Building2 className="w-6 h-6 text-blue-300 drop-shadow-[0_0_8px_rgba(147,197,253,0.5)]" />
-                <span className="text-3xl font-bold drop-shadow-md">10+</span>
+                <Building2 className="w-6 h-6 text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
+                <span className="text-3xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
+                  10+
+                </span>
               </div>
-              <p className="text-sm text-blue-200 uppercase tracking-widest font-semibold opacity-80 group-hover:opacity-100 transition-opacity">
+              <p className="text-sm text-blue-100 uppercase tracking-widest font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
                 Laboratories
               </p>
             </div>

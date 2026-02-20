@@ -48,7 +48,7 @@ export default function Home() {
       role: "HOD & Assistant Professor",
       dept: "Electrical Engineering",
       message:
-        "The TPO Cell emphasizes student success, faculty dedication, industry collaboration, and the college’s commitment to strong training and placement outcomes.",
+        "The TPO Cell promotes student success through dedicated faculty,industry Alliance,& effective training and placement outcomes.",
       image: "https://cgec.org.in/img/Faculty/Somen_P.jpg",
     },
     // Adding more leaders for carousel
@@ -279,13 +279,13 @@ export default function Home() {
                     />
                   </div>
                   <div className="relative z-10">
-                    <h3 className="text-lg font-bold mb-1 leading-tight">
+                    <h3 className="text-lg font-bold mb-1 leading-tight min-h-[3.5rem] flex items-end pb-1">
                       {leader.name}
                     </h3>
-                    <p className="text-blue-600 font-semibold text-[10px] mb-4 group-hover:text-blue-300 uppercase tracking-wider">
+                    <p className="text-blue-600 font-semibold text-[10px] mb-4 group-hover:text-blue-300 uppercase tracking-wider min-h-[2rem] flex items-center">
                       {leader.role}
                     </p>
-                    <p className="text-gray-600 text-sm leading-relaxed italic group-hover:text-gray-100 line-clamp-4">
+                    <p className="text-gray-600 text-sm leading-relaxed italic group-hover:text-gray-100 line-clamp-4 min-h-[6rem]">
                       &quot;{leader.message}&quot;
                     </p>
                   </div>
@@ -452,7 +452,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-12">
             <div className="lg:w-1/2 space-y-6">
-              <h2 className="text-3xl font-extrabold text-gray-900 leading-tight uppercase tracking-tight">
+              <h2 className="text-5xl font-extrabold text-gray-900 leading-tight uppercase tracking-tight">
                 WORLD-CLASS FACILITIES FOR <br />
                 <span className="text-blue-600">FUTURE ENGINEERS</span>
               </h2>
@@ -477,10 +477,10 @@ export default function Home() {
                       <div className="w-1.5 h-1.5 rounded-full bg-blue-600"></div>
                     </div>
                     <div>
-                      <h4 className="font-bold text-sm text-gray-900">
+                      <h4 className="font-bold text-xl text-gray-900">
                         {feature.title}
                       </h4>
-                      <p className="text-xs text-gray-500">{feature.desc}</p>
+                      <p className="text-base text-gray-500">{feature.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -489,24 +489,68 @@ export default function Home() {
             <div className="lg:w-1/2 relative scale-90">
               <div className="relative z-10 grid grid-cols-2 gap-4">
                 <div className="space-y-4 pt-8">
-                  <div className="aspect-square bg-blue-600 rounded-2xl p-6 text-white flex flex-col justify-end">
-                    <div className="text-3xl font-bold">21+</div>
-                    <div className="text-[10px] font-medium uppercase tracking-wider">
-                      Acres Campus
+                  {/* 21+ Acres Campus */}
+                  <div className="aspect-square relative rounded-2xl overflow-hidden group shadow-lg">
+                    <Image
+                      src="https://senior-turquoise-aqjtekif9d.edgeone.app/41686705-52d3-4eaf-b9b0-659478904ae3%20(1).png"
+                      alt="CGEC Campus"
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/40 to-transparent flex flex-col justify-end p-6 text-white">
+                      <div className="text-4xl font-bold mb-1">21+</div>
+                      <div className="text-xs font-bold uppercase tracking-widest opacity-90">
+                        Acres Campus
+                      </div>
                     </div>
                   </div>
-                  <div className="aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-50"></div>
+
+                  {/* 5 B.Tech Programs */}
+                  <div className="aspect-[4/3] relative rounded-2xl overflow-hidden group shadow-lg">
+                    <Image
+                      src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&q=80&w=1000"
+                      alt="Engineering Departments"
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/40 to-transparent flex flex-col justify-end p-6 text-white">
+                      <div className="text-4xl font-bold mb-1">5</div>
+                      <div className="text-xs font-bold uppercase tracking-widest opacity-90">
+                        B.Tech Programs
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div className="space-y-4">
-                  <div className="aspect-[4/3] bg-gray-100 rounded-2xl overflow-hidden">
-                    <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-100"></div>
+                  {/* 3 Hostels */}
+                  <div className="aspect-[4/3] relative rounded-2xl overflow-hidden group shadow-lg">
+                    <Image
+                      src="data:image/jpeg;base64,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"
+                      alt="Student Hostels"
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/40 to-transparent flex flex-col justify-end p-6 text-white">
+                      <div className="text-4xl font-bold mb-1">3</div>
+                      <div className="text-xs font-bold uppercase tracking-widest opacity-90">
+                        Hostels
+                      </div>
+                    </div>
                   </div>
-                  <div className="aspect-square bg-blue-900 rounded-2xl p-6 text-white flex flex-col justify-end">
-                    <div className="text-3xl font-bold">300+</div>
-                    <div className="text-[10px] font-medium uppercase tracking-wider">
-                      Computers
+
+                  {/* 300+ Computers */}
+                  <div className="aspect-square relative rounded-2xl overflow-hidden group shadow-lg">
+                    <Image
+                      src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop"
+                      alt="Computer Labs"
+                      fill
+                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/40 to-transparent flex flex-col justify-end p-6 text-white">
+                      <div className="text-4xl font-bold mb-1">300+</div>
+                      <div className="text-xs font-bold uppercase tracking-widest opacity-90">
+                        Computers
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -523,7 +567,7 @@ export default function Home() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
             {[
               { label: "Faculty Members", value: "60+" },
-              { label: "Graduated Students", value: "1500+" },
+              { label: "Graduated Students", value: "15000+" },
               { label: "Highest Package", value: "21 LPA" },
               { label: "Campus Area", value: "21 Acres" },
             ].map((stat, i) => (

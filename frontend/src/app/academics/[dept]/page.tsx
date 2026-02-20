@@ -1,4 +1,3 @@
-
 "use client";
 
 import React, { useState } from "react";
@@ -49,16 +48,28 @@ export default function DepartmentPage() {
       <div className="bg-gray-100 py-4 border-b border-gray-200">
         <div className="container mx-auto px-4">
           <div className="flex items-center text-sm text-gray-600">
-            <Link href="/" className="hover:text-blue-600">Home</Link>
+            <Link href="/" className="hover:text-blue-600">
+              Home
+            </Link>
             <ChevronRight className="w-4 h-4 mx-2" />
-            <Link href="/academics" className="hover:text-blue-600">Academics</Link>
+            <Link href="/academics" className="hover:text-blue-600">
+              Academics
+            </Link>
             <ChevronRight className="w-4 h-4 mx-2" />
             <span className="font-semibold text-gray-900">{dept.name}</span>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8">
+      <div className="container mx-auto px-4 py-8 max-w-7xl">
+        {/* Department Title */}
+        <div className="mb-12 text-center">
+          <h1 className="text-base md:text-lg lg:text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 mb-4 tracking-tight">
+            Welcome to {dept.name} Department
+          </h1>
+          <div className="h-1.5 w-32 bg-gradient-to-r from-blue-600 to-blue-400 mx-auto rounded-full shadow-sm"></div>
+        </div>
+
         {/* Department Navigation Tabs */}
         <div className="mb-8 overflow-x-auto">
           <div className="flex border-b-2 border-blue-900 min-w-max">
@@ -94,10 +105,10 @@ export default function DepartmentPage() {
                 <div className="prose prose-lg max-w-none text-gray-800 font-medium">
                   <p>{dept.home.paragraphs[0]}</p>
                 </div>
-                
+
                 {/* Main Content with Image */}
                 <div className="flex flex-col lg:flex-row gap-8 items-start">
-                  <div className="w-full lg:w-1/2 relative h-[300px] lg:h-[400px] rounded-xl overflow-hidden shadow-lg border border-gray-200">
+                  <div className="w-full lg:w-1/4 relative h-[180px] lg:h-[220px] rounded-xl overflow-hidden shadow-lg border border-gray-200 shrink-0">
                     <Image
                       src={dept.home.image}
                       alt={`${dept.name} Lab`}
@@ -105,37 +116,47 @@ export default function DepartmentPage() {
                       className="object-cover"
                     />
                   </div>
-                  <div className="w-full lg:w-1/2 prose prose-lg text-gray-700">
-                     {dept.home.paragraphs.slice(1, 3).map((p, i) => (
-                        <p key={i} className="mb-4">{p}</p>
-                     ))}
+                  <div className="w-full lg:w-3/4 prose prose-lg text-gray-700">
+                    {dept.home.paragraphs.slice(1, 3).map((p, i) => (
+                      <p key={i} className="mb-4">
+                        {p}
+                      </p>
+                    ))}
                   </div>
                 </div>
 
                 {/* Additional Content */}
                 <div className="prose prose-lg max-w-none text-gray-700">
-                   {dept.home.paragraphs.slice(3).map((p, i) => (
-                      <p key={i} className="mb-4">{p}</p>
-                   ))}
+                  {dept.home.paragraphs.slice(3).map((p, i) => (
+                    <p key={i} className="mb-4">
+                      {p}
+                    </p>
+                  ))}
                 </div>
               </div>
             )}
 
             {activeTab === "hod" && (
               <div className="flex flex-col md:flex-row gap-8 items-start bg-gray-50 p-8 rounded-2xl border border-gray-200 shadow-sm">
-                <div className="w-full md:w-1/3 relative h-[300px] rounded-xl overflow-hidden shadow-md">
-                   <Image
-                      src={dept.hodMessage.image}
-                      alt={dept.hodMessage.name}
-                      fill
-                      className="object-cover"
-                    />
+                <div className="shrink-0 relative w-full md:w-auto h-[250px] md:h-[220px] aspect-[4/5] rounded-xl overflow-hidden shadow-lg border border-gray-100 mx-auto md:mx-0">
+                  <Image
+                    src={dept.hodMessage.image}
+                    alt={dept.hodMessage.name}
+                    fill
+                    className="object-cover"
+                  />
                 </div>
-                <div className="w-full md:w-2/3">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">{dept.hodMessage.name}</h2>
-                  <h3 className="text-blue-600 font-medium mb-6 uppercase tracking-wide">Head of Department</h3>
+                <div className="flex-1">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                    {dept.hodMessage.name}
+                  </h2>
+                  <h3 className="text-blue-600 font-medium mb-6 uppercase tracking-wide">
+                    Head of Department
+                  </h3>
                   <div className="prose prose-lg text-gray-700 relative pl-8 border-l-4 border-blue-600">
-                    <span className="absolute -top-6 -left-6 text-6xl text-blue-200 font-serif">"</span>
+                    <span className="absolute -top-6 -left-6 text-6xl text-blue-200 font-serif">
+                      "
+                    </span>
                     <p className="relative z-10 italic leading-relaxed">
                       {dept.hodMessage.message}
                     </p>
@@ -145,77 +166,132 @@ export default function DepartmentPage() {
             )}
 
             {activeTab === "faculty" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {dept.faculty.map((member, i) => (
-                  <div key={i} className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 hover:shadow-xl transition-all group">
-                    <div className="relative h-72 w-full overflow-hidden">
-                      <Image
-                        src={member.image}
-                        alt={member.name}
-                        fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
-                      />
-                    </div>
-                    <div className="p-6 border-t border-gray-100">
-                      <h3 className="text-xl font-bold text-gray-900 mb-1">{member.name}</h3>
-                      <p className="text-blue-600 font-medium text-sm uppercase tracking-wide">{member.role}</p>
-                    </div>
-                  </div>
-                ))}
+              <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-gray-50 text-gray-700 font-bold uppercase tracking-wider text-xs border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-4 w-32 text-center">Photo</th>
+                      <th className="px-6 py-4">Faculty Name</th>
+                      <th className="px-6 py-4">Experience (in Years)</th>
+                      <th className="px-6 py-4">Designation</th>
+                      <th className="px-6 py-4">Qualification</th>
+                      <th className="px-6 py-4">Specialization</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {dept.faculty.map((member, i) => (
+                      <tr
+                        key={i}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-6 py-4">
+                          <div className="relative w-24 h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm mx-auto">
+                            <Image
+                              src={member.image}
+                              alt={member.name}
+                              fill
+                              className="object-cover object-top"
+                            />
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 font-bold text-gray-900">
+                          {member.name}
+                        </td>
+                        <td className="px-6 py-4 text-gray-700">
+                          {member.experience || "-"}
+                        </td>
+                        <td className="px-6 py-4 text-blue-600 font-medium">
+                          {member.role}
+                        </td>
+                        <td className="px-6 py-4 text-gray-700">
+                          {member.qualification || "-"}
+                        </td>
+                        <td className="px-6 py-4 text-gray-700 leading-relaxed max-w-xs">
+                          {member.specialization || "-"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
 
             {activeTab === "lab" && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {dept.labs.map((lab, i) => (
-                  <div key={i} className="group relative overflow-hidden rounded-2xl shadow-lg h-64">
-                    <Image
-                      src={lab.image}
-                      alt={lab.name}
-                      fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex flex-col justify-end p-6 text-white">
-                      <h3 className="text-2xl font-bold mb-2">{lab.name}</h3>
-                      <p className="text-gray-200 text-sm line-clamp-2">{lab.description}</p>
-                    </div>
-                  </div>
-                ))}
+              <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
+                <table className="w-full text-sm text-left">
+                  <thead className="bg-gray-50 text-gray-700 font-bold uppercase tracking-wider text-xs border-b border-gray-200">
+                    <tr>
+                      <th className="px-6 py-4 w-16 text-center">Sl. No.</th>
+                      <th className="px-6 py-4 w-1/4">Laboratory Name</th>
+                      <th className="px-6 py-4">Details</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {dept.labs.map((lab, i) => (
+                      <tr
+                        key={i}
+                        className="hover:bg-gray-50 transition-colors"
+                      >
+                        <td className="px-6 py-4 text-center font-medium text-gray-500">
+                          {i + 1}
+                        </td>
+                        <td className="px-6 py-4 font-bold text-gray-900">
+                          {lab.name}
+                        </td>
+                        <td className="px-6 py-4 text-gray-700 leading-relaxed">
+                          {lab.description || "-"}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             )}
-            
+
             {activeTab === "syllabus" && (
-               <div className="bg-blue-50 border border-blue-100 rounded-xl p-12 text-center max-w-2xl mx-auto">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Course Syllabus</h3>
-                  <p className="text-gray-600 mb-8">Download the comprehensive syllabus for the B.Tech program in {dept.name}.</p>
-                  <a 
-                    href={dept.syllabus} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30"
-                  >
-                    Download PDF Syllabus
-                  </a>
-               </div>
+              <div className="bg-blue-50 border border-blue-100 rounded-xl p-12 text-center max-w-2xl mx-auto">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Course Syllabus
+                </h3>
+                <p className="text-gray-600 mb-8">
+                  Download the comprehensive syllabus for the B.Tech program in{" "}
+                  {dept.name}.
+                </p>
+                <a
+                  href={dept.syllabus}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center px-8 py-4 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30"
+                >
+                  Download PDF Syllabus
+                </a>
+              </div>
             )}
-            
+
             {activeTab === "research" && (
-               <div className="prose prose-lg max-w-none text-gray-700">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">Research & Publications</h3>
-                  <p>{dept.research}</p>
-               </div>
+              <div className="prose prose-lg max-w-none text-gray-700">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 pb-2 border-b border-gray-200">
+                  Research & Publications
+                </h3>
+                <p>{dept.research}</p>
+              </div>
             )}
 
             {activeTab === "wall" && (
-               <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Department Wall Magazine</h3>
-                  <div className="p-6 bg-yellow-50 rounded-lg border border-yellow-100">
-                    <h4 className="text-xl font-bold text-yellow-800 mb-2">"{dept.wallMagazine}"</h4>
-                    <p className="text-yellow-700">
-                      Our department's annual magazine showcasing student creativity, technical articles, and achievements.
-                    </p>
-                  </div>
-               </div>
+              <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm">
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  Department Wall Magazine
+                </h3>
+                <div className="p-6 bg-yellow-50 rounded-lg border border-yellow-100">
+                  <h4 className="text-xl font-bold text-yellow-800 mb-2">
+                    "{dept.wallMagazine}"
+                  </h4>
+                  <p className="text-yellow-700">
+                    Our department's annual magazine showcasing student
+                    creativity, technical articles, and achievements.
+                  </p>
+                </div>
+              </div>
             )}
           </motion.div>
         </AnimatePresence>

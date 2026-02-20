@@ -9,33 +9,101 @@ import { cn } from "@/lib/utils";
 const CATEGORIES = ["NOTICE", "TENDER", "NEWS", "RECRUITMENT"];
 
 const NOTICES = [
+  // NOTICE
   {
     id: 1,
-    title: "Odd Semester Examination Form Fill-up 2025-26",
-    date: "Feb 12, 2026",
+    title:
+      "Notice for Approved list contains selected students for WBFS (Full Freeship/ Half freeship) 2025-26 for 2nd year students.",
+    date: "2026-01-29",
     category: "NOTICE",
     isNew: true,
   },
   {
     id: 2,
-    title: "Placement Drive: Tata Consultancy Services (TCS) for 2026 Batch",
-    date: "Feb 10, 2026",
-    category: "RECRUITMENT",
+    title:
+      "Status of applications for decentralized counselling of B.Tech 3rd Semester(Lateral Entry) candidates",
+    date: "2026-01-28",
+    category: "NOTICE",
     isNew: true,
   },
   {
     id: 3,
-    title: "Workshop on Artificial Intelligence and Machine Learning",
-    date: "Feb 08, 2026",
+    title:
+      "NOTICE FOR ADMISSION THROUGH DECENTRALIZED COUNSELLING IN THE 2nd YEAR (LATERAL ENTRY) OF B. TECH COURSES AGAINST VACANCY 2024",
+    date: "2026-01-24",
+    category: "NOTICE",
+    isNew: true,
+  },
+  {
+    id: 4,
+    title:
+      "NOTICE FOR REQUIREMENT OF VISITING FACULTY FOR THE EVEN SEMESTER 2026.",
+    date: "2025-12-30",
+    category: "NOTICE",
+    isNew: false,
+  },
+  // TENDER
+  {
+    id: 5,
+    title:
+      "Notice inviting Quotation for Jungle Cutting and Cleaning of Sewerages of college campus",
+    date: "2026-02-12",
+    category: "TENDER",
+    isNew: true,
+  },
+  {
+    id: 6,
+    title:
+      "Notice Inviting Quotation for supply of various Items for CGEC Annual Sports Meet 2026.",
+    date: "2026-01-29",
+    category: "TENDER",
+    isNew: true,
+  },
+  {
+    id: 7,
+    title:
+      "Notice Inviting Quotation for supply of CCTV and Electrical Items for Conduct of Various Semester Examination at College Campus.",
+    date: "2026-01-15",
+    category: "TENDER",
+    isNew: false,
+  },
+  {
+    id: 8,
+    title:
+      "Notice Inviting Quotation for the supply of Refreshments for Admission 2025",
+    date: "2025-08-26",
+    category: "TENDER",
+    isNew: false,
+  },
+  // NEWS
+  {
+    id: 9,
+    title: "Induction Programme Final Brochure 2.0",
+    date: "2021-10-27",
     category: "NEWS",
     isNew: false,
   },
   {
-    id: 4,
-    title: "Hostel Admission Notice for First Year Students",
-    date: "Feb 05, 2026",
-    category: "NOTICE",
+    id: 10,
+    title: "Student Induction Programme 2021 Invitation and Schedule",
+    date: "2021-09-14",
+    category: "NEWS",
     isNew: false,
+  },
+  {
+    id: 11,
+    title: "AJANTRIK 2K21",
+    date: "2021-09-13",
+    category: "NEWS",
+    isNew: false,
+  },
+  // RECRUITMENT
+  {
+    id: 12,
+    title: "Placement Drive: Tata Consultancy Services (TCS) for 2026 Batch",
+    date: "Feb 10, 2026",
+    category: "RECRUITMENT",
+    isNew: true,
   },
 ];
 
