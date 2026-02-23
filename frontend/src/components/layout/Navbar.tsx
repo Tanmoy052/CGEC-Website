@@ -26,39 +26,39 @@ export default function Navbar() {
     <>
       <nav
         className={cn(
-          "fixed top-0 w-full z-50 transition-all duration-300",
+          "fixed top-0 w-full z-50 transition-all duration-300 flex items-center",
           scrolled
-            ? "bg-white/90 backdrop-blur-md shadow-md py-2"
-            : "bg-transparent py-4",
+            ? "bg-white/90 backdrop-blur-md shadow-md h-20"
+            : "bg-transparent h-24",
         )}
       >
-        <div className="container mx-auto px-4 flex justify-between items-center">
+        <div className="container mx-auto px-4 h-full flex justify-between items-center pb-2">
           {/* Logo */}
-          <Link href="/" className="flex items-center group">
-            <div className="relative h-12 w-32 overflow-hidden shrink-0">
+          <Link href="/" className="flex items-center h-full group">
+            <div className="relative h-20 w-59 overflow-hidden shrink-0 flex items-center justify-center">
               <Image
                 src="https://cgec.org.in/img/cgec_logo.png"
                 alt="CGEC Logo"
                 fill
-                className="object-contain transform group-hover:scale-105 transition-transform duration-300"
+                className="object-contain transform group-hover:scale-105 transition-transform duration-300 block"
                 priority
               />
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-1">
+          <div className="hidden lg:flex items-center gap-1 h-full">
             {NAV_LINKS.map((link) => (
               <div
                 key={link.label}
-                className="relative group/dropdown"
+                className="relative group/dropdown h-full flex items-center"
                 onMouseEnter={() => setActiveDropdown(link.label)}
                 onMouseLeave={() => setActiveDropdown(null)}
               >
                 {link.children ? (
                   <button
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 flex items-center space-x-1 uppercase",
+                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 flex items-center gap-1 uppercase leading-none",
                       scrolled
                         ? pathname.startsWith(link.href)
                           ? "text-blue-600 bg-blue-50"
@@ -80,7 +80,7 @@ export default function Navbar() {
                   <a
                     href={link.href}
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 uppercase",
+                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 uppercase leading-none flex items-center",
                       scrolled
                         ? pathname === link.href
                           ? "text-blue-600 bg-blue-50"
@@ -96,7 +96,7 @@ export default function Navbar() {
                   <Link
                     href={link.href}
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 uppercase",
+                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 uppercase leading-none flex items-center",
                       scrolled
                         ? pathname === link.href
                           ? "text-blue-600 bg-blue-50"
@@ -143,8 +143,11 @@ export default function Navbar() {
                 )}
               </div>
             ))}
-            <a href="https://cgec-sms-portal.vercel.app/" className="ml-4">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg hover:shadow-blue-200 active:scale-95">
+            <a
+              href="https://cgec-sms-portal.vercel.app/"
+              className="ml-4 h-full flex items-center"
+            >
+              <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg hover:shadow-blue-200 active:scale-95 flex items-center justify-center">
                 Portal
               </button>
             </a>

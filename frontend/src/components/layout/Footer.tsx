@@ -5,6 +5,7 @@ import {
   Twitter,
   Linkedin,
   Instagram,
+  Youtube,
   Mail,
   Phone,
   MapPin,
@@ -15,7 +16,7 @@ const Footer = () => {
   return (
     <footer className="bg-gray-900 text-gray-300 pt-16 pb-8">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 mb-12">
           {/* College Info */}
           <div className="space-y-6">
             <Link href="/" className="flex items-center space-x-2">
@@ -30,40 +31,56 @@ const Footer = () => {
             </p>
             <div className="flex space-x-4">
               <a
-                href="#"
+                href="https://www.facebook.com/cgecofficialwb"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all"
               >
                 <Facebook className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://x.com/cgecofficialwb"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-400 hover:text-white transition-all"
               >
                 <Twitter className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/school/cgecofficial/posts/?feedView=all"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-blue-700 hover:text-white transition-all"
               >
                 <Linkedin className="w-5 h-5" />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/cgecofficialwb/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-pink-600 hover:text-white transition-all"
               >
                 <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://www.youtube.com/@cgecofficialwb"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-red-600 hover:text-white transition-all"
+              >
+                <Youtube className="w-5 h-5" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
-          <div>
+          <div className="lg:pl-8">
             <h3 className="text-white font-bold text-lg mb-6">Quick Links</h3>
             <ul className="space-y-4">
               <li>
                 <Link
                   href="/admission"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Admission 2026
                 </Link>
@@ -71,7 +88,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/academics"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Academic Calendar
                 </Link>
@@ -79,7 +96,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/placement"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Placement Cell
                 </Link>
@@ -87,7 +104,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/notices"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   College Notices
                 </Link>
@@ -95,7 +112,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/tenders"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Tenders
                 </Link>
@@ -110,7 +127,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/academics/cse"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Computer Science
                 </Link>
@@ -118,7 +135,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/academics/ece"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Electronics & Comm.
                 </Link>
@@ -126,7 +143,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/academics/ee"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Electrical Engineering
                 </Link>
@@ -134,7 +151,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/academics/me"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Mechanical Engineering
                 </Link>
@@ -142,10 +159,87 @@ const Footer = () => {
               <li>
                 <Link
                   href="/academics/ce"
-                  className="hover:text-blue-500 transition-colors"
+                  className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Civil Engineering
                 </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* External Links */}
+          <div>
+            <h3 className="text-white font-bold text-lg mb-6">QUICK LINK</h3>
+            <ul className="space-y-3 text-sm">
+              <li>
+                <a
+                  href="https://banglaruchchashiksha.wb.gov.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-500 hover:underline transition-colors"
+                >
+                  Banglar Uchchashiksha
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://wbjeeb.nic.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-500 hover:underline transition-colors"
+                >
+                  WBJEE Board
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://makautwb.ac.in/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-blue-500 hover:underline transition-colors"
+                >
+                  MAKAUT
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="hover:text-blue-500 hover:underline transition-colors"
+                >
+                  Forum
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="hover:text-blue-500 hover:underline transition-colors"
+                >
+                  Online Grievance Redressal
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="hover:text-blue-500 hover:underline transition-colors block leading-tight"
+                >
+                  AICTE Suggested Books (Indian Authors)
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="hover:text-blue-500 hover:underline transition-colors"
+                >
+                  AICTE Mandatory Disclosure
+                </a>
+              </li>
+              <li>
+                <a
+                  href="#"
+                  className="hover:text-blue-500 hover:underline transition-colors"
+                >
+                  AICTE Approval
+                </a>
               </li>
             </ul>
           </div>
@@ -176,22 +270,16 @@ const Footer = () => {
           <p>
             © {new Date().getFullYear()} {COLLEGE_NAME}. All Rights Reserved.
           </p>
-          <div className="flex space-x-6">
-            <Link
-              href="/privacy"
-              className="hover:text-white transition-colors"
-            >
-              Privacy Policy
-            </Link>
-            <Link href="/terms" className="hover:text-white transition-colors">
-              Terms of Use
-            </Link>
-            <Link
-              href="/sitemap"
-              className="hover:text-white transition-colors"
-            >
-              Sitemap
-            </Link>
+          <div className="flex space-x-6 text-gray-400">
+            <span>
+              Designed & Developed by{" "}
+              <Link
+                href="/"
+                className="hover:text-white hover:underline transition-colors text-blue-400 font-medium"
+              >
+                CGEC
+              </Link>
+            </span>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ export interface DepartmentData {
   };
   hodMessage: {
     name: string;
-    message: string;
+    message: string | string[];
     image: string;
   };
   faculty: {
@@ -19,15 +19,31 @@ export interface DepartmentData {
     experience?: string;
     qualification?: string;
     specialization?: string;
+    cvLink?: string;
   }[];
   labs: {
     name: string;
     description: string;
     image?: string;
   }[];
-  syllabus: string; // Link to PDF or description
-  research: string;
-  wallMagazine: string;
+  syllabus: {
+    semester: string;
+    pdfLink: string;
+  }[]; // List of syllabi
+  research: {
+    facultyName: string;
+    publications: {
+      title: string;
+      authors: string;
+      journal: string;
+      year: string;
+    }[];
+  }[];
+  wallMagazine: {
+    name: string;
+    description: string;
+    images: string[];
+  };
 }
 
 export const departments: Record<string, DepartmentData> = {
@@ -50,7 +66,7 @@ export const departments: Record<string, DepartmentData> = {
     hodMessage: {
       name: "Prof. Somen Mondal",
       message:
-        "As the Head of the Department, I welcome you to the Department of Computer Science and Engineering. Our mission is to provide quality education and foster research in the field of computer science.",
+        "It is a pleasure to be head of the department of Computer Science & Engineering. The department offers 4 year's BTech degree in Computer Science & Engineering. The department is equipped with all modern tools of teaching like virtual class room, digital board, and projector. The aim of the department is to provide high quality education along with training the students with all the new advancements in the computers field. The department places emphasis on all the important aspects of computers such as Algorithm Design, Advance database systems, Computer Programming, networking, mobile networks, Operational research, Theory of computation , Computer Graphics and many more. The department also takes initiative to improve the soft skills, analytical capabilities and verbal communication of the students so that they can face the competition in the corporate world confidently. The scope of computer science is endless. The students of the computer science and engineering are highly demanded by the recruiters of the top companies. The department provides platform for the students and We are confident that our Student will emerge as assets not only to this institution and to the organization they belong, but also to the country at large.",
       image: "https://cgec.org.in/img/Faculty/Somen_P.jpg",
     },
     faculty: [
@@ -62,6 +78,7 @@ export const departments: Record<string, DepartmentData> = {
         specialization:
           "Cloud Computing, Advanced Cryptography & Network Security",
         image: "https://cgec.org.in/img/Faculty/Somen_P.jpg",
+        cvLink: "/data/cse/cv/somen.pdf",
       },
       {
         name: "Mr. Arnab Gain",
@@ -71,6 +88,7 @@ export const departments: Record<string, DepartmentData> = {
         specialization:
           "Computer Vision, Deep Learning, Formal Language and Automata Theory, Design and analysis of algorithm",
         image: "https://cgec.org.in/img/Faculty/423-A.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Mr. Shahid Ali",
@@ -79,6 +97,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "BSC, PDIT, PGDSE",
         specialization: "COMPUTER Applications, C,C++, Java,VB",
         image: "https://cgec.org.in/img/Faculty/ii.jpg",
+        cvLink: "/data/cse/cv/shahid_ali.pdf",
       },
       {
         name: "Mr. Pranab Kumar Mallick",
@@ -86,8 +105,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "7 YEARS",
         qualification: "B.TECH M.TECH, CSE",
         specialization: "Data Structure, Image Processing, Soft Computing",
-        image:
-          "https://ui-avatars.com/api/?name=Pranab+Kumar+Mallick&background=random",
+        image: "https://cgec.org.in/img/Faculty/Mama.jpg",
+        cvLink: "/data/cse/cv/pranab.pdf",
       },
       {
         name: "Mr. Umakanta Bera",
@@ -96,17 +115,27 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "B.Tech.",
         specialization:
           "Data Structure, Python, C, Java, Computer Architecture",
+        image: "https://cgec.org.in/img/Faculty/CSE_Umakanta_Bera.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
+      },
+      {
+        name: "Prof. Supriyo Banerjee",
+        role: "Assistant Professor",
+        experience: "10 Years",
+        qualification: "B.Tech, M.Tech",
+        specialization: "-",
         image:
-          "https://ui-avatars.com/api/?name=Umakanta+Bera&background=random",
+          "https://ui-avatars.com/api/?name=Supriyo+Banerjee&background=random",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Dr. Prabir Kr. Naskar",
         role: "Assistant Professor",
-        experience: "-",
+        experience: "9 Years",
         qualification: "B.Tech, M.Tech, Ph.D",
         specialization: "-",
-        image:
-          "https://ui-avatars.com/api/?name=Prabir+Kr+Naskar&background=random",
+        image: "https://cgec.org.in/img/Faculty/PrabirNaskar_cse.jpg.jpeg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
     labs: [
@@ -136,10 +165,123 @@ export const departments: Record<string, DepartmentData> = {
           "This lab is equipped with 36 computers (i5 processor, 8GB RAM, Ubuntu Linux/Windows 8.1 Operating System) and 1 LCD projector. This Lab used to perform Internet Technology Lab, Software Engg. Lab, AI Lab, DBMS Lab according to MAKAUT curriculum.",
       },
     ],
-    syllabus: "https://makautwb.ac.in/syllabus/CSE_New_Syllabus_2018.pdf",
-    research:
-      "Our faculty and students are actively involved in research in AI, ML, and IoT.",
-    wallMagazine: "TechBytes - The annual wall magazine of CSE department.",
+    syllabus: [
+      {
+        semester: "1st & 2nd Semester(New AICTE Syllabus)",
+        pdfLink: "/data/cse/AllSem_cse.pdf",
+      },
+      {
+        semester: "3rd semester(New Syllabus)",
+        pdfLink: "/data/cse/CSE_SEM3.pdf",
+      },
+      {
+        semester: "4th semester(New Syllabus)",
+        pdfLink: "/data/cse/CSE_SEM4.pdf",
+      },
+      {
+        semester: "5th semester(New Syllabus)",
+        pdfLink: "/data/cse/CSE_SEM5.pdf",
+      },
+      {
+        semester: "6th semester(New Syllabus)",
+        pdfLink: "/data/cse/CSE_SEM6.pdf",
+      },
+      {
+        semester: "7th semester(New Syllabus)",
+        pdfLink: "/data/cse/CSE_SEM7.pdf",
+      },
+      {
+        semester: "8th semester(New Syllabus)",
+        pdfLink: "/data/cse/CSE_SEM8.pdf",
+      },
+      {
+        semester: "OLD Syllabus(2017-21 batch)",
+        pdfLink: "/data/cse/CSE_OLD.pdf",
+      },
+    ],
+    research: [
+      {
+        facultyName: "Dr. Sudip Kumar Adhikari",
+        publications: [
+          {
+            title:
+              "Conditional spatial fuzzy C-means clustering algorithm for segmentation of MRI images",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal: "Applied soft computing 34, 758-769",
+            year: "2015",
+          },
+          {
+            title:
+              "A spatial fuzzy c-means algorithm with application to mri image segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Advances in Pattern Recognition (ICAPR), 2015 Eighth International ..",
+            year: "2015",
+          },
+          {
+            title:
+              "Segmentation of MRI brain images by incorporating intensity inhomogeneity and spatial information using probabilistic fuzzy c-means clustering algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal:
+              "Communications, Devices and Intelligent Systems (CODIS), 2012 International ...",
+            year: "2012",
+          },
+          {
+            title:
+              "A modified fuzzy C-means algorithm using scale control spatial information for MRI image segmentation in the presence of noise",
+            authors: "JK Sing, SK Adhikari, DK Basu",
+            journal: "Journal of Chemometrics 29 (9), 492-505",
+            year: "2015",
+          },
+          {
+            title:
+              "A nonparametric method for intensity inhomogeneity correction in MRI brain images by fusion of Gaussian surfaces",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal: "Signal, Image and Video Processing 9 (8), 1945-1954",
+            year: "2015",
+          },
+          {
+            title:
+              "Conditional Spatial Fuzzy C-means Clustering Algorithm with Application in MRI Image Segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Information Systems Design and Intelligent Applications, 539-547",
+            year: "2015",
+          },
+          {
+            title:
+              "On estimation of bias field in MRI images: polynomial vs Gaussian surface fitting method",
+            authors: "S Kahali, SK Adhikari, JK Sing",
+            journal: "Journal of Chemometrics 30 (10), 602-620",
+            year: "2016",
+          },
+          {
+            title: "On estimation of bias field in MRI images",
+            authors: "JK Sing, SK Adhikari, S Kahali",
+            journal:
+              "Computer Graphics, Vision and Information Security (CGVIS), 2015 IEEE ...",
+            year: "2015",
+          },
+          {
+            title:
+              "Bias field estimation and segmentation of MRI images using a Spatial Fuzzy C-means algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu",
+            journal:
+              "2016 2nd International Conference on Control, Instrumentation, Energy ...",
+            year: "2016",
+          },
+        ],
+      },
+    ],
+    wallMagazine: {
+      name: "The Wall",
+      description:
+        "'The Wall' is a platform created for the students of the Computer Science Department, Cooch Behar Government Engineering College (CGEC) to express unspoken words through their artwork. 'The Wall Magazine' showcases an elegant collection of literature and art made by the creative students of the CSE Department, CGEC. Student life is often considered to be pandemonium. While overcoming our hardships, we unknowingly imbibe beautiful hobbies and interests. The Wall Magazine admires surreal thoughts and unusual palettes. We encourage students to adore and display their creative and introspective sides.",
+      images: [
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web1.jpg",
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web2.jpg",
+      ],
+    },
   },
   ece: {
     id: "ece",
@@ -149,17 +291,22 @@ export const departments: Record<string, DepartmentData> = {
       "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop",
     home: {
       paragraphs: [
-        "The Department of Electronics and Communication Engineering is dedicated to providing students with a strong foundation in electronics and communication systems. The department focuses on bridging the gap between theoretical knowledge and practical application.",
-        "We offer state-of-the-art laboratories and research facilities to help students explore the latest advancements in the field. Our curriculum is designed to keep pace with the rapidly evolving technology landscape.",
-        "The department has a team of highly qualified and experienced faculty members who are committed to the holistic development of students.",
+        "The Department of Electronics and Communication Engineering is dedicated to providing students with a strong foundation in electronics and communication systems. The department focuses on bridging the gap between theoretical knowledge and practical application, ensuring students are well-versed in both fundamental concepts and modern engineering practices.",
+        "We offer state-of-the-art laboratories and research facilities to help students explore the latest advancements in the field, including VLSI Design, Embedded Systems, IoT, and Advanced Communication Networks. Our curriculum is designed to keep pace with the rapidly evolving technology landscape, integrating industry-relevant tools and methodologies.",
+        "The department has a team of highly qualified and experienced faculty members who are committed to the holistic development of students. They actively mentor students in research projects, encouraging publication in reputed journals and participation in national and international conferences.",
+        "Beyond academics, we foster a vibrant learning environment through technical workshops, seminars, and the 'Robotica' club. The department also emphasizes the importance of soft skills and professional ethics, ensuring that our graduates are well-rounded professionals ready to take on leadership roles in top-tier technology companies and public sector organizations.",
       ],
       image:
         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvWA03NHsb7dweLdgPcEtyjmt1mlUHfbRu1g&s",
     },
     hodMessage: {
       name: "Dr.Sourav Chakraborty",
-      message:
-        "Welcome to the ECE Department. We strive to create an environment that encourages innovation and critical thinking.",
+      message: [
+        "Welcome you all in the glorifying Department of Electronics and Communication Engineering of Cooch Behar Government Engineering College. The department is located in a surrounding of awesome scenic beauty at the bank of Torsha River and enriched with state of the art facilities, smart class rooms, and highly qualified faculty and staff members. Though the department is comparatively a new entrant as it is a wing of a new Government Engineering College of West Bengal, still it works in line with the objective of addressing critical scientific and technological challenges of the Industries, Business Houses and Global Academia as a whole. The department promises with the dormant potential of its outstanding human and material resources to stand out in the crowd of many great contributors of the nation in the same fraternity.",
+        "The department is empowered with highly skilled faculty and technical assistants along with more than 250 seat capacities of students in four years of the undergraduate course. The eminent group of faculty members is pursuing their post PhD research work in different fields like semiconductor devices, system on chip testing, robotics and soft computing, image analysis etc. The department apart from its undergraduate program has a future plan of offering a post graduate program once the college is promoted to a university. The department is equipped with smart classrooms where long distance in and out lecture programs could be carried out. To improve the quality of teaching-learning process the department is about to promote NPTEL web and video lecture resources available both to teacher and student community through Local Area Network and Wi-Fi Internet facilities",
+        "The students are also very much enthusiastic and passionate about the development programs of the department. Apart from their academic performances they have shown interests in co-curricular activities like setting up a Robotica Club to explore the cutting edge technologies on Robotics. They do have a plan to organize a national level Tech-Feast every year to promote latest developments in the field of Electronics and Communication. We have a plan to organize national and International conferences, seminars and workshops every year to increase expertize in the field of all concerned. Some grooming programs of the students for increasing their employability are also to be exercised in near future.",
+        "I, from the desk of Head of the Department, take the pride and opportunity to invite all the interested intelligentsia to be a part of the promotional noble venture of this department and thus enriching resources to fulfill our mission and vision.",
+      ],
       image: "https://cgec.org.in/img/Faculty/sourav.png",
     },
     faculty: [
@@ -169,7 +316,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "17 years 6 months",
         qualification: "Ph.D in Engineering",
         specialization: "Digital electronic circuits, Microprocessor",
-        image: "https://ui-avatars.com/api/?name=Gautam+Das&background=random",
+        image: "https://cgec.org.in/img/Faculty/gdsir.jpg",
+        cvLink: "/data/ece/cv/gautam_das.pdf",
       },
       {
         name: "Mr. Soumik Sarkar",
@@ -177,8 +325,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "5 years",
         qualification: "B.Tech from Jalpaiguri Government Engineering College",
         specialization: "Solid State Devices, Analog Electronics",
-        image:
-          "https://ui-avatars.com/api/?name=Soumik+Sarkar&background=random",
+        image: "https://cgec.org.in/img/Faculty/Soumik_phto.jpg",
+        cvLink: "/data/ece/cv/soumik_sarkar.pdf",
       },
       {
         name: "Mr. Avisek Nandi",
@@ -187,8 +335,8 @@ export const departments: Record<string, DepartmentData> = {
         qualification:
           "DIPLOMA IN ELECTRONICS & TELECOMMUNICATION ENGINEERING FROM KALNA GOVT POLYTECHNIC",
         specialization: "ELECRONICS SYSTEM IN POWER ELECTRONICS FIELD",
-        image:
-          "https://ui-avatars.com/api/?name=Avisek+Nandi&background=random",
+        image: "https://cgec.org.in/img/Faculty/ECE_Avshek.bmp",
+        cvLink: "/data/ece/cv/avisek_nandi.pdf",
       },
       {
         name: "Dr. Palash Das",
@@ -198,6 +346,7 @@ export const departments: Record<string, DepartmentData> = {
         specialization:
           "Gallium Nitride Compound Semiconductor based High Electron Mobility Transistor, HRXRD",
         image: "https://cgec.org.in/img/Faculty/ECEpalashDas.jpg",
+        cvLink: "/data/ece/cv/palash_das.pdf",
       },
       {
         name: "Mr. Rajib Das",
@@ -205,7 +354,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "Teaching: 6",
         qualification: "M.E.Tel.E, B. Tech",
         specialization: "Control Systems, Signal Processing",
-        image: "https://ui-avatars.com/api/?name=Rajib+Das&background=random",
+        image: "https://cgec.org.in/img/Faculty/RAJIB%20Das.JPG",
+        cvLink: "/data/ece/cv/rajib_das.pdf",
       },
       {
         name: "Dr. Sourav Chakraborty",
@@ -215,6 +365,7 @@ export const departments: Record<string, DepartmentData> = {
         specialization:
           "VLSI design, Signal Processing, Wireless system architecture design, Analog circuit design",
         image: "https://cgec.org.in/img/Faculty/sourav.png",
+        cvLink: "/data/ece/cv/sourav_chakraborty.pdf",
       },
       {
         name: "Mr. Abhijit Sarma",
@@ -223,8 +374,8 @@ export const departments: Record<string, DepartmentData> = {
         qualification:
           "Diploma in Electronics and Telecommunication Engineering",
         specialization: "-",
-        image:
-          "https://ui-avatars.com/api/?name=Abhijit+Sarma&background=random",
+        image: "https://cgec.org.in/img/Faculty/abhijit_ece01082024.jpeg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
     labs: [
@@ -250,10 +401,123 @@ export const departments: Record<string, DepartmentData> = {
         description: "-",
       },
     ],
-    syllabus: "https://makautwb.ac.in/syllabus/ECE_New_Syllabus_2018.pdf",
-    research:
-      "Research areas include VLSI, Signal Processing, and Communication Systems.",
-    wallMagazine: "ElectroWaves",
+    syllabus: [
+      {
+        semester: "1st & 2nd Semester(New AICTE Syllabus)",
+        pdfLink: "/data/ece/BTECH_all dept_1st year.pdf",
+      },
+      {
+        semester: "3rd semester(New Syllabus)",
+        pdfLink: "/data/ece/ECE_SEM3.pdf",
+      },
+      {
+        semester: "4th semester(New Syllabus)",
+        pdfLink: "/data/ece/ECE_SEM4.pdf",
+      },
+      {
+        semester: "5th semester(New Syllabus)",
+        pdfLink: "/data/ece/ECE_SEM5.pdf",
+      },
+      {
+        semester: "6th semester(New Syllabus)",
+        pdfLink: "/data/ece/ECE_SEM6.pdf",
+      },
+      {
+        semester: "7th semester(New Syllabus)",
+        pdfLink: "/data/ece/ECE_SEM7.pdf",
+      },
+      {
+        semester: "8th semester(New Syllabus)",
+        pdfLink: "/data/ece/ECE_SEM8.pdf",
+      },
+      {
+        semester: "OLD Syllabus(2017-21 batch)",
+        pdfLink: "/data/ece/ECE_OLD.pdf",
+      },
+    ],
+    research: [
+      {
+        facultyName: "Dr. Sudip Kumar Adhikari",
+        publications: [
+          {
+            title:
+              "Conditional spatial fuzzy C-means clustering algorithm for segmentation of MRI images",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal: "Applied soft computing 34, 758-769",
+            year: "2015",
+          },
+          {
+            title:
+              "A spatial fuzzy c-means algorithm with application to mri image segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Advances in Pattern Recognition (ICAPR), 2015 Eighth International ..",
+            year: "2015",
+          },
+          {
+            title:
+              "Segmentation of MRI brain images by incorporating intensity inhomogeneity and spatial information using probabilistic fuzzy c-means clustering algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal:
+              "Communications, Devices and Intelligent Systems (CODIS), 2012 International ...",
+            year: "2012",
+          },
+          {
+            title:
+              "A modified fuzzy C-means algorithm using scale control spatial information for MRI image segmentation in the presence of noise",
+            authors: "JK Sing, SK Adhikari, DK Basu",
+            journal: "Journal of Chemometrics 29 (9), 492-505",
+            year: "2015",
+          },
+          {
+            title:
+              "A nonparametric method for intensity inhomogeneity correction in MRI brain images by fusion of Gaussian surfaces",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal: "Signal, Image and Video Processing 9 (8), 1945-1954",
+            year: "2015",
+          },
+          {
+            title:
+              "Conditional Spatial Fuzzy C-means Clustering Algorithm with Application in MRI Image Segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Information Systems Design and Intelligent Applications, 539-547",
+            year: "2015",
+          },
+          {
+            title:
+              "On estimation of bias field in MRI images: polynomial vs Gaussian surface fitting method",
+            authors: "S Kahali, SK Adhikari, JK Sing",
+            journal: "Journal of Chemometrics 30 (10), 602-620",
+            year: "2016",
+          },
+          {
+            title: "On estimation of bias field in MRI images",
+            authors: "JK Sing, SK Adhikari, S Kahali",
+            journal:
+              "Computer Graphics, Vision and Information Security (CGVIS), 2015 IEEE ...",
+            year: "2015",
+          },
+          {
+            title:
+              "Bias field estimation and segmentation of MRI images using a Spatial Fuzzy C-means algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu",
+            journal:
+              "2016 2nd International Conference on Control, Instrumentation, Energy ...",
+            year: "2016",
+          },
+        ],
+      },
+    ],
+    wallMagazine: {
+      name: "ElectroWaves",
+      description:
+        "'ElectroWaves' is a platform created for the students of the Electronics and Communication Engineering Department, Cooch Behar Government Engineering College (CGEC) to express unspoken words through their artwork. 'The Wall Magazine' showcases an elegant collection of literature and art made by the creative students of the ECE Department, CGEC. Student life is often considered to be pandemonium. While overcoming our hardships, we unknowingly imbibe beautiful hobbies and interests. The Wall Magazine admires surreal thoughts and unusual palettes. We encourage students to adore and display their creative and introspective sides.",
+      images: [
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web1.jpg",
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web2.jpg",
+      ],
+    },
   },
   me: {
     id: "me",
@@ -263,17 +527,21 @@ export const departments: Record<string, DepartmentData> = {
       "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?w=800&auto=format&fit=crop",
     home: {
       paragraphs: [
-        "The Mechanical Engineering Department aims to produce competent mechanical engineers who can contribute to the industrial growth of the nation. We focus on imparting sound technical knowledge and practical skills.",
-        "Our workshops and laboratories are equipped with modern machinery and tools to provide hands-on training to students.",
-        "The department encourages students to participate in various technical competitions and project exhibitions.",
+        "The Mechanical Engineering Department aims to produce competent mechanical engineers who can contribute to the industrial growth of the nation. We focus on imparting sound technical knowledge and practical skills in core areas such as Thermal Engineering, Design, Manufacturing, and Robotics.",
+        "Our workshops and laboratories are equipped with modern machinery and tools to provide hands-on training to students. From traditional machining to advanced CNC programming and CAD/CAM simulations, we ensure our students are industry-ready and capable of handling complex engineering challenges.",
+        "The department encourages students to participate in various technical competitions and project exhibitions. Students are actively involved in designing innovative mechanical systems, including electric vehicles and automated machinery, under the guidance of expert faculty.",
+        "We strive to create an environment that fosters innovation and creativity, empowering students to design and develop sustainable mechanical systems for the future. Our graduates are well-prepared for diverse careers in automotive, aerospace, energy, and manufacturing sectors, as well as for higher studies and research.",
       ],
       image:
         "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?w=800&auto=format&fit=crop",
     },
     hodMessage: {
       name: "Prof. Prasenjit Das",
-      message:
-        "Welcome to the Mechanical Engineering Department. We are committed to excellence in engineering education.",
+      message: [
+        "Mechanical engineers develop state-of-the-art technologies and exhilarating solutions for the mankind. We attempt to provide our students with a cheerful, productive and satisfying experience of studies to explore the amazing world of mechanical engineering.",
+        "Our objective is not merely to produce professionals capable to serve their own needs but endeavour to serve the society with great concern for human values. Our devoted faculties and staff render their utmost efforts to ensure that all our young students have a strong education with leadership, management and teaming skills, internship experience, and involvement in student activities. We feel proud to be a part of the department where our beloved students for their latest achievements in different cocurricular activities in versatile domain of sports and culture. We entrust that accentuating these areas will make our young students well-qualified to take leadership roles and team spirit in the future.",
+        "With this, we welcome you all to Mechanical Engineering at the Department of Mechanical Engineering, Cooch Behar Government Engineering College.",
+      ],
       image: "https://cgec.org.in/img/Faculty/ME_Prasenjit.jpg",
     },
     faculty: [
@@ -286,6 +554,7 @@ export const departments: Record<string, DepartmentData> = {
         specialization:
           "Design and thermal optimization of chemical process, I.C. engines",
         image: "https://cgec.org.in/img/Faculty/ME_Sushovan_Chatterjee.jpg",
+        cvLink: "/data/me/cv/sushovan_chatterjee.pdf",
       },
       {
         name: "Mr. Gyan Tshering Lepcha",
@@ -294,8 +563,8 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "B.Tech(JGEC), MBA(NBU), MTech(JGEC)",
         specialization:
           "Production Engineering, Design, Automobile Engineering, Thermal Power Engineering",
-        image:
-          "https://ui-avatars.com/api/?name=Gyan+Tshering+Lepcha&background=random",
+        image: "https://cgec.org.in/img/Faculty/ME_GTL.jpg",
+        cvLink: "/data/me/cv/gyan_tshering_lepcha.pdf",
       },
       {
         name: "Prof. Prasenjit Das",
@@ -304,6 +573,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "Master of Engineering In Mechanical Engineering",
         specialization: "Machine Design",
         image: "https://cgec.org.in/img/Faculty/ME_Prasenjit.jpg",
+        cvLink: "/data/me/cv/prasenjit_das.pdf",
       },
       {
         name: "Mr. Provas Barua",
@@ -311,8 +581,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "9 Years of Experience",
         qualification: "DIPLOMA MECHANICAL ENGINEERING",
         specialization: "Quality Control",
-        image:
-          "https://ui-avatars.com/api/?name=Provas+Barua&background=random",
+        image: "https://cgec.org.in/img/Faculty/ME_Provas.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Mr. Nikhilesh Das",
@@ -320,8 +590,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "03 Years (As of 2024)",
         qualification: "Diploma in mechanical engineering",
         specialization: "-",
-        image:
-          "https://ui-avatars.com/api/?name=Nikhilesh+Das&background=random",
+        image: "https://cgec.org.in/img/Faculty/nikhil_me01082024.jpeg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Mr. Ziaul Rahaman",
@@ -329,8 +599,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "03 Years (As of 2024)",
         qualification: "Diploma in Mechanical Engineering",
         specialization: "-",
-        image:
-          "https://ui-avatars.com/api/?name=Ziaul+Rahaman&background=random",
+        image: "https://cgec.org.in/img/Faculty/ziaul_me01082024.jpeg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Mr. Sudipta Roy",
@@ -338,7 +608,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "12 Years",
         qualification: "B.Tech(JGEC), MME(JU), PhD(JU) (Pursuing)",
         specialization: "Production Engineering, Composite",
-        image: "https://ui-avatars.com/api/?name=Sudipta+Roy&background=random",
+        image: "https://cgec.org.in/img/Faculty/sudipta_roy.jpeg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Dr. Masud Rana",
@@ -346,7 +617,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "4 years",
         qualification: "M.E from IIEST Shibpur, Ph.D",
         specialization: "Machine Design, Biomechanics",
-        image: "https://ui-avatars.com/api/?name=Masud+Rana&background=random",
+        image: "https://cgec.org.in/img/Faculty/Masud_me.jpeg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Dr. Sanchayan Mukherjee",
@@ -356,8 +628,8 @@ export const departments: Record<string, DepartmentData> = {
           "B.M.E. (1st Class Hons., JU), M.E. (1st Class with Distinction, BITS Pilani), Ph.D. (Engineering, JU",
         specialization:
           "Heat Transfer, Refrigeration and Air-conditioning, Sediment Transport",
-        image:
-          "https://ui-avatars.com/api/?name=Sanchayan+Mukherjee&background=random",
+        image: "https://cgec.org.in/img/Faculty/SanchayanMukherjeeSir_me.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
     labs: [
@@ -387,9 +659,123 @@ export const departments: Record<string, DepartmentData> = {
         description: "Computer-aided design and manufacturing.",
       },
     ],
-    syllabus: "https://makautwb.ac.in/syllabus/ME_New_Syllabus_2018.pdf",
-    research: "Focus areas: Thermal Engineering, Design, and Manufacturing.",
-    wallMagazine: "Mechanix",
+    syllabus: [
+      {
+        semester: "1st & 2nd Semester(New AICTE Syllabus)",
+        pdfLink: "/data/me/BTECH_all dept_1st year.pdf",
+      },
+      {
+        semester: "3rd semester(New Syllabus)",
+        pdfLink: "/data/me/ME_SEM3.pdf",
+      },
+      {
+        semester: "4th semester(New Syllabus)",
+        pdfLink: "/data/me/ME_SEM4.pdf",
+      },
+      {
+        semester: "5th semester(New Syllabus)",
+        pdfLink: "/data/me/ME_SEM5.pdf",
+      },
+      {
+        semester: "6th semester(New Syllabus)",
+        pdfLink: "/data/me/ME_SEM6.pdf",
+      },
+      {
+        semester: "7th semester(New Syllabus)",
+        pdfLink: "/data/me/ME_SEM7.pdf",
+      },
+      {
+        semester: "8th semester(New Syllabus)",
+        pdfLink: "/data/me/ME_SEM8.pdf",
+      },
+      {
+        semester: "OLD Syllabus(2017-21 batch)",
+        pdfLink: "https://makautwb.ac.in/syllabus/ME_New_Syllabus_2018.pdf",
+      },
+    ],
+    research: [
+      {
+        facultyName: "Dr. Sudip Kumar Adhikari",
+        publications: [
+          {
+            title:
+              "Conditional spatial fuzzy C-means clustering algorithm for segmentation of MRI images",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal: "Applied soft computing 34, 758-769",
+            year: "2015",
+          },
+          {
+            title:
+              "A spatial fuzzy c-means algorithm with application to mri image segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Advances in Pattern Recognition (ICAPR), 2015 Eighth International ..",
+            year: "2015",
+          },
+          {
+            title:
+              "Segmentation of MRI brain images by incorporating intensity inhomogeneity and spatial information using probabilistic fuzzy c-means clustering algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal:
+              "Communications, Devices and Intelligent Systems (CODIS), 2012 International ...",
+            year: "2012",
+          },
+          {
+            title:
+              "A modified fuzzy C-means algorithm using scale control spatial information for MRI image segmentation in the presence of noise",
+            authors: "JK Sing, SK Adhikari, DK Basu",
+            journal: "Journal of Chemometrics 29 (9), 492-505",
+            year: "2015",
+          },
+          {
+            title:
+              "A nonparametric method for intensity inhomogeneity correction in MRI brain images by fusion of Gaussian surfaces",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal: "Signal, Image and Video Processing 9 (8), 1945-1954",
+            year: "2015",
+          },
+          {
+            title:
+              "Conditional Spatial Fuzzy C-means Clustering Algorithm with Application in MRI Image Segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Information Systems Design and Intelligent Applications, 539-547",
+            year: "2015",
+          },
+          {
+            title:
+              "On estimation of bias field in MRI images: polynomial vs Gaussian surface fitting method",
+            authors: "S Kahali, SK Adhikari, JK Sing",
+            journal: "Journal of Chemometrics 30 (10), 602-620",
+            year: "2016",
+          },
+          {
+            title: "On estimation of bias field in MRI images",
+            authors: "JK Sing, SK Adhikari, S Kahali",
+            journal:
+              "Computer Graphics, Vision and Information Security (CGVIS), 2015 IEEE ...",
+            year: "2015",
+          },
+          {
+            title:
+              "Bias field estimation and segmentation of MRI images using a Spatial Fuzzy C-means algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu",
+            journal:
+              "2016 2nd International Conference on Control, Instrumentation, Energy ...",
+            year: "2016",
+          },
+        ],
+      },
+    ],
+    wallMagazine: {
+      name: "Mechanix",
+      description:
+        "'Mechanix' is a platform created for the students of the Mechanical Engineering Department, Cooch Behar Government Engineering College (CGEC) to express unspoken words through their artwork. 'The Wall Magazine' showcases an elegant collection of literature and art made by the creative students of the ME Department, CGEC. Student life is often considered to be pandemonium. While overcoming our hardships, we unknowingly imbibe beautiful hobbies and interests. The Wall Magazine admires surreal thoughts and unusual palettes. We encourage students to adore and display their creative and introspective sides.",
+      images: [
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web1.jpg",
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web2.jpg",
+      ],
+    },
   },
   ee: {
     id: "ee",
@@ -399,17 +785,22 @@ export const departments: Record<string, DepartmentData> = {
       "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?w=800&auto=format&fit=crop",
     home: {
       paragraphs: [
-        "The Electrical Engineering Department is one of the core departments of the college. We aim to provide a strong foundation in electrical engineering principles and applications.",
-        "Our curriculum covers a wide range of topics including power systems, control systems, and electrical machines.",
-        "We emphasize practical learning through our well-equipped laboratories.",
+        "The Electrical Engineering Department is one of the core departments of the college. We aim to provide a strong foundation in electrical engineering principles and applications, preparing students to solve complex problems in the power and energy sectors.",
+        "Our curriculum covers a wide range of topics including Power Systems, Control Systems, Electrical Machines, and Power Electronics. We continuously update our syllabus to include emerging trends like Smart Grids, Renewable Energy Systems, and Electric Vehicle Technology.",
+        "We emphasize practical learning through our well-equipped laboratories, where students gain hands-on experience with modern equipment and simulation tools. This practical exposure is complemented by industrial visits and internships that provide real-world insights.",
+        "The department is committed to promoting research and development in emerging areas of electrical engineering, encouraging students to contribute to technological advancements. Our alumni have successfully secured positions in prestigious PSUs, core electrical industries, and research organizations worldwide.",
       ],
       image:
         "https://images.unsplash.com/photo-1544724569-5f546fd6f2b5?q=80&w=1000&auto=format&fit=crop",
     },
     hodMessage: {
       name: "Prof. Atanu Maji",
-      message:
-        "The EE Department welcomes you. We aim to shape the future of electrical engineering through quality education.",
+      message: [
+        "Welcome to the Department of Electrical Engineering of Cooch Behar Government Engineering College. The department is continuously making efforts to impart cutting edge knowledge. The department is running Under Graduate programs.",
+        "Our UG program has always been known to be one of the best in the institution. The department developing state of art laboratories, such as Electric Circuit Theory Laboratory, Electrical Machines Laboratory-I, Electrical &Electronics Measurement Laboratory, Electrical Machines Laboratory-II, Power System Laboratory, Control Systems Laboratory, Simulation Laboratory, Power Electronics Laboratory, & Electric Drives Laboratory and most of the labs are equipped with modern instruments.",
+        "Faculty member and Technical stuff of our department are always involved in cutting edge research apart from passionate teaching. We are proud to have an exceptionally dedicated, motivated & experienced faculty and Technical Stuff as our Electrical Engineering family members. We constantly look or bright enthusiastic students who have passion to participate in all our activities & promote them to the level of leaders.",
+        "Finally, our department has a long valued tradition of striving for excellence in whatever we do. I hope we will be able to maintain this in future too.",
+      ],
       image: "https://cgec.org.in/img/Faculty/EE_Atanu.jpg",
     },
     faculty: [
@@ -419,8 +810,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "3 YEARS",
         qualification: "B.Tech.,M.Tech.",
         specialization: "Power Electronics & Drives",
-        image:
-          "https://ui-avatars.com/api/?name=Sk+Rabiul+Hossain&background=random",
+        image: "https://cgec.org.in/img/Faculty/Rabiul.jpg",
+        cvLink: "/data/ee/cv/rabiul_hossain.pdf",
       },
       {
         name: "Prof. Atanu Maji",
@@ -429,6 +820,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "B.Tech., M.E.",
         specialization: "Power System",
         image: "https://cgec.org.in/img/Faculty/EE_Atanu.jpg",
+        cvLink: "/data/ee/cv/atanu_maji.pdf",
       },
       {
         name: "Mr. Tanumay Halder",
@@ -436,8 +828,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "7 Years",
         qualification: "B.Tech., M.E.",
         specialization: "ILLUMINATION ENGINEERING",
-        image:
-          "https://ui-avatars.com/api/?name=Tanumay+Halder&background=random",
+        image: "https://cgec.org.in/img/Faculty/EE_Tanumoy.jpg",
+        cvLink: "/data/ee/cv/tanumay_halder.pdf",
       },
       {
         name: "Mr. Sujay Sarkar",
@@ -447,6 +839,7 @@ export const departments: Record<string, DepartmentData> = {
         specialization: "-",
         image:
           "https://ui-avatars.com/api/?name=Sujay+Sarkar&background=random",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Mr. Deepjyoti Santra",
@@ -454,8 +847,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "7 years",
         qualification: "M.TECH",
         specialization: "ELECTRICAL MACHINE",
-        image:
-          "https://ui-avatars.com/api/?name=Deepjyoti+Santra&background=random",
+        image: "https://cgec.org.in/img/Faculty/DeepjyotiSantra_ee.jpeg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Dr. Goutam Kumar Panda",
@@ -463,8 +856,17 @@ export const departments: Record<string, DepartmentData> = {
         experience: "Teaching 31years , industrial 2years",
         qualification: "B.E.( Electrical), M.E.E, Ph.D",
         specialization: "Electrical Machines and Drives",
-        image:
-          "https://ui-avatars.com/api/?name=Goutam+Kumar+Panda&background=random",
+        image: "https://cgec.org.in/img/Faculty/GoutamPandaSir_ee.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
+      },
+      {
+        name: "	Mr. Sk Mafizul Islam",
+        role: "Associate Professor",
+        experience: "26 Years",
+        qualification: "B. E. (Electrical Engg), M. Tech(Electrical Engg)",
+        specialization: "Power System",
+        image: "https://cgec.org.in/img/Faculty/Prof._Mafizul_Islam_ee.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
     labs: [
@@ -513,9 +915,123 @@ export const departments: Record<string, DepartmentData> = {
         description: "-",
       },
     ],
-    syllabus: "https://makautwb.ac.in/syllabus/EE_New_Syllabus_2018.pdf",
-    research: "Research in Power Systems and Renewable Energy.",
-    wallMagazine: "Electra",
+    syllabus: [
+      {
+        semester: "1st & 2nd Semester(New AICTE Syllabus)",
+        pdfLink: "/data/ee/BTECH_all dept_1st year.pdf",
+      },
+      {
+        semester: "3rd semester(New Syllabus)",
+        pdfLink: "/data/ee/EE_SEM3.pdf",
+      },
+      {
+        semester: "4th semester(New Syllabus)",
+        pdfLink: "/data/ee/EE_SEM4.pdf",
+      },
+      {
+        semester: "5th semester(New Syllabus)",
+        pdfLink: "/data/ee/EE_SEM5.pdf",
+      },
+      {
+        semester: "6th semester(New Syllabus)",
+        pdfLink: "/data/ee/EE_SEM6.pdf",
+      },
+      {
+        semester: "7th semester(New Syllabus)",
+        pdfLink: "/data/ee/EE_SEM7.pdf",
+      },
+      {
+        semester: "8th semester(New Syllabus)",
+        pdfLink: "/data/ee/EE_SEM8.pdf",
+      },
+      {
+        semester: "OLD Syllabus(2017-21 batch)",
+        pdfLink: "/data/ee/EE_OLD.pdf",
+      },
+    ],
+    research: [
+      {
+        facultyName: "Dr. Sudip Kumar Adhikari",
+        publications: [
+          {
+            title:
+              "Conditional spatial fuzzy C-means clustering algorithm for segmentation of MRI images",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal: "Applied soft computing 34, 758-769",
+            year: "2015",
+          },
+          {
+            title:
+              "A spatial fuzzy c-means algorithm with application to mri image segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Advances in Pattern Recognition (ICAPR), 2015 Eighth International ..",
+            year: "2015",
+          },
+          {
+            title:
+              "Segmentation of MRI brain images by incorporating intensity inhomogeneity and spatial information using probabilistic fuzzy c-means clustering algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal:
+              "Communications, Devices and Intelligent Systems (CODIS), 2012 International ...",
+            year: "2012",
+          },
+          {
+            title:
+              "A modified fuzzy C-means algorithm using scale control spatial information for MRI image segmentation in the presence of noise",
+            authors: "JK Sing, SK Adhikari, DK Basu",
+            journal: "Journal of Chemometrics 29 (9), 492-505",
+            year: "2015",
+          },
+          {
+            title:
+              "A nonparametric method for intensity inhomogeneity correction in MRI brain images by fusion of Gaussian surfaces",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal: "Signal, Image and Video Processing 9 (8), 1945-1954",
+            year: "2015",
+          },
+          {
+            title:
+              "Conditional Spatial Fuzzy C-means Clustering Algorithm with Application in MRI Image Segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Information Systems Design and Intelligent Applications, 539-547",
+            year: "2015",
+          },
+          {
+            title:
+              "On estimation of bias field in MRI images: polynomial vs Gaussian surface fitting method",
+            authors: "S Kahali, SK Adhikari, JK Sing",
+            journal: "Journal of Chemometrics 30 (10), 602-620",
+            year: "2016",
+          },
+          {
+            title: "On estimation of bias field in MRI images",
+            authors: "JK Sing, SK Adhikari, S Kahali",
+            journal:
+              "Computer Graphics, Vision and Information Security (CGVIS), 2015 IEEE ...",
+            year: "2015",
+          },
+          {
+            title:
+              "Bias field estimation and segmentation of MRI images using a Spatial Fuzzy C-means algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu",
+            journal:
+              "2016 2nd International Conference on Control, Instrumentation, Energy ...",
+            year: "2016",
+          },
+        ],
+      },
+    ],
+    wallMagazine: {
+      name: "Electra",
+      description:
+        "'Electra' is a platform created for the students of the Electrical Engineering Department, Cooch Behar Government Engineering College (CGEC) to express unspoken words through their artwork. 'The Wall Magazine' showcases an elegant collection of literature and art made by the creative students of the EE Department, CGEC. Student life is often considered to be pandemonium. While overcoming our hardships, we unknowingly imbibe beautiful hobbies and interests. The Wall Magazine admires surreal thoughts and unusual palettes. We encourage students to adore and display their creative and introspective sides.",
+      images: [
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web1.jpg",
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web2.jpg",
+      ],
+    },
   },
   ce: {
     id: "ce",
@@ -525,17 +1041,20 @@ export const departments: Record<string, DepartmentData> = {
       "https://www.msruas.ac.in/uploads/blogs/btech-in-civil-engineering-your-pathway-to-monumental-success.webp",
     home: {
       paragraphs: [
-        "The Civil Engineering Department is committed to producing skilled civil engineers who can contribute to infrastructure development. We focus on both theoretical and practical aspects of civil engineering.",
-        "Our labs are equipped with the latest testing equipment for materials, soil, and structures.",
-        "We encourage students to take up projects that address real-world challenges.",
+        "The Civil Engineering Department is committed to producing skilled civil engineers who can contribute to infrastructure development. We focus on both theoretical and practical aspects of civil engineering, covering disciplines such as Structural Engineering, Geotechnical Engineering, Transportation, and Environmental Engineering.",
+        "Our labs are equipped with the latest testing equipment for materials, soil, and structures, allowing students to conduct rigorous experiments and analysis. We also emphasize field expertise through survey camps and site visits, which are integral parts of our curriculum.",
+        "We encourage students to take up projects that address real-world challenges, such as sustainable construction practices, disaster mitigation, and smart city development. Our faculty members actively involve students in consultancy projects, providing them with valuable industry exposure.",
+        "Our goal is to mold socially responsible civil engineers who can design and execute infrastructure projects that are safe, sustainable, and beneficial to society. We strive to instill a sense of professional ethics and environmental stewardship in our graduates.",
       ],
       image:
         "https://images.unsplash.com/photo-1590579491624-f98f36d4c763?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
     },
     hodMessage: {
       name: "Prof. Biren Gurung",
-      message:
-        "Welcome to the Civil Engineering Department. We are dedicated to building a sustainable future.",
+      message: [
+        "Welcome you all in the department of Civil Engineering bearing the social responsibility of paramount importance. As Civil Engineering being one of the core and most fundamental engineering branches which is fully dedicated to the teaching-learning philosophy of the Foundation. We take it as our moral and social responsibility to imbibe the state of the art technological information to be forwarded to the students of Civil Engineering. In the modern world of construction we witness every day as a day of new construction method, material and skill due to the continuous developments and technological advancements in the field. Therefore a bridge must be put in place in proper manner to fill the gap between learning and implementation. A highly qualified and experienced group of faculty members in this department are on their toes to accomplish the need of the department and society at large.",
+        "I, from the desk of HOD of Civil Engineering take this opportunity to invite the best talent to fulfill our mission and vision at the outset.",
+      ],
       image: "https://cgec.org.in/img//Faculty/Biren%20Gurung.jpg",
     },
     faculty: [
@@ -546,6 +1065,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "BE, M.Tech",
         specialization: "Structure",
         image: "https://cgec.org.in/img//Faculty/Biren%20Gurung.jpg",
+        cvLink: "/data/ce/cv/biren_gurung.pdf",
       },
       {
         name: "Dr. Kingshuk Dan",
@@ -555,6 +1075,7 @@ export const departments: Record<string, DepartmentData> = {
         specialization:
           "Soil mechanics, Highway and Transportation engineering",
         image: "https://cgec.org.in/img/Faculty/Kingshuk%20Dan.jpg",
+        cvLink: "/data/ce/cv/kingshuk_dan.pdf",
       },
       {
         name: "Mr. Md Asif Sk",
@@ -562,7 +1083,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "4 years",
         qualification: "B.Tech, M.E.",
         specialization: "Water Resources Engineering, Hydraulic Structures",
-        image: "https://ui-avatars.com/api/?name=Md+Asif+Sk&background=random",
+        image: "https://cgec.org.in/img/Faculty/asif.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Mr. Shyamal Ghosh",
@@ -572,8 +1094,8 @@ export const departments: Record<string, DepartmentData> = {
           "Ph D, M. E (Structural Engineering) BESU, B.Tech. (Civil Engineering) JGEC",
         specialization:
           "Structural Dynamics and Earthquake Engineering, Reliability Analysis, Structural Engineering, Finite Element Analysis",
-        image:
-          "https://ui-avatars.com/api/?name=Shyamal+Ghosh&background=random",
+        image: "https://cgec.org.in/img/Faculty/shyamalSir_ce.jpeg",
+        cvLink: "/data/ce/cv/shyamal_ghosh.pdf",
       },
       {
         name: "Mr. Ansarul Seikh",
@@ -581,8 +1103,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "03 Years (As of 2024)",
         qualification: "Diploma in Civil Engineering Department",
         specialization: "-",
-        image:
-          "https://ui-avatars.com/api/?name=Ansarul+Seikh&background=random",
+        image: "https://cgec.org.in/img/Faculty/ansarul_ce01082024.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Mr. Chhandamay Ray",
@@ -590,8 +1112,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "5 years",
         qualification: "M. Tech",
         specialization: "Soil Mechanics & Foundation Engineering",
-        image:
-          "https://ui-avatars.com/api/?name=Chhandamay+Ray&background=random",
+        image: "https://cgec.org.in/img/Faculty/ChhandamayRay_ce.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
       {
         name: "Mr. Mithun Mandal",
@@ -599,8 +1121,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "5 years",
         qualification: "M.Tech",
         specialization: "Geotechnical Engineering",
-        image:
-          "https://ui-avatars.com/api/?name=Mithun+Mandal&background=random",
+        image: "https://cgec.org.in/img/Faculty/MithunMandal_ce.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
     labs: [
@@ -629,10 +1151,123 @@ export const departments: Record<string, DepartmentData> = {
         description: "Soil properties and foundation engineering.",
       },
     ],
-    syllabus: "https://makautwb.ac.in/syllabus/CE_New_Syllabus_2018.pdf",
-    research:
-      "Research in Structural Engineering and Environmental Engineering.",
-    wallMagazine: "Construct",
+    syllabus: [
+      {
+        semester: "1st & 2nd Semester(New AICTE Syllabus)",
+        pdfLink: "/data/ce/BTECH_all dept_1st year.pdf",
+      },
+      {
+        semester: "3rd semester(New Syllabus)",
+        pdfLink: "/data/ce/CE_SEM3.pdf",
+      },
+      {
+        semester: "4th semester(New Syllabus)",
+        pdfLink: "/data/ce/CE_SEM4.pdf",
+      },
+      {
+        semester: "5th semester(New Syllabus)",
+        pdfLink: "/data/ce/CE_SEM5.pdf",
+      },
+      {
+        semester: "6th semester(New Syllabus)",
+        pdfLink: "/data/ce/CE_SEM6.pdf",
+      },
+      {
+        semester: "7th semester(New Syllabus)",
+        pdfLink: "/data/ce/CE_SEM7.pdf",
+      },
+      {
+        semester: "8th semester(New Syllabus)",
+        pdfLink: "/data/ce/CE_SEM8.pdf",
+      },
+      {
+        semester: "OLD Syllabus(2017-21 batch)",
+        pdfLink: "/data/ce/CE_OLD.pdf",
+      },
+    ],
+    research: [
+      {
+        facultyName: "Dr. Sudip Kumar Adhikari",
+        publications: [
+          {
+            title:
+              "Conditional spatial fuzzy C-means clustering algorithm for segmentation of MRI images",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal: "Applied soft computing 34, 758-769",
+            year: "2015",
+          },
+          {
+            title:
+              "A spatial fuzzy c-means algorithm with application to mri image segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Advances in Pattern Recognition (ICAPR), 2015 Eighth International ..",
+            year: "2015",
+          },
+          {
+            title:
+              "Segmentation of MRI brain images by incorporating intensity inhomogeneity and spatial information using probabilistic fuzzy c-means clustering algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal:
+              "Communications, Devices and Intelligent Systems (CODIS), 2012 International ...",
+            year: "2012",
+          },
+          {
+            title:
+              "A modified fuzzy C-means algorithm using scale control spatial information for MRI image segmentation in the presence of noise",
+            authors: "JK Sing, SK Adhikari, DK Basu",
+            journal: "Journal of Chemometrics 29 (9), 492-505",
+            year: "2015",
+          },
+          {
+            title:
+              "A nonparametric method for intensity inhomogeneity correction in MRI brain images by fusion of Gaussian surfaces",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal: "Signal, Image and Video Processing 9 (8), 1945-1954",
+            year: "2015",
+          },
+          {
+            title:
+              "Conditional Spatial Fuzzy C-means Clustering Algorithm with Application in MRI Image Segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Information Systems Design and Intelligent Applications, 539-547",
+            year: "2015",
+          },
+          {
+            title:
+              "On estimation of bias field in MRI images: polynomial vs Gaussian surface fitting method",
+            authors: "S Kahali, SK Adhikari, JK Sing",
+            journal: "Journal of Chemometrics 30 (10), 602-620",
+            year: "2016",
+          },
+          {
+            title: "On estimation of bias field in MRI images",
+            authors: "JK Sing, SK Adhikari, S Kahali",
+            journal:
+              "Computer Graphics, Vision and Information Security (CGVIS), 2015 IEEE ...",
+            year: "2015",
+          },
+          {
+            title:
+              "Bias field estimation and segmentation of MRI images using a Spatial Fuzzy C-means algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu",
+            journal:
+              "2016 2nd International Conference on Control, Instrumentation, Energy ...",
+            year: "2016",
+          },
+        ],
+      },
+    ],
+    wallMagazine: {
+      name: "Construct",
+      description:
+        "'Construct' is a platform created for the students of the Civil Engineering Department, Cooch Behar Government Engineering College (CGEC) to express unspoken words through their artwork. 'The Wall Magazine' showcases an elegant collection of literature and art made by the creative students of the CE Department, CGEC. Student life is often considered to be pandemonium. While overcoming our hardships, we unknowingly imbibe beautiful hobbies and interests. The Wall Magazine admires surreal thoughts and unusual palettes. We encourage students to adore and display their creative and introspective sides.",
+      images: [
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web1.jpg",
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web2.jpg",
+      ],
+    },
   },
   bsh: {
     id: "bsh",
@@ -642,17 +1277,21 @@ export const departments: Record<string, DepartmentData> = {
       "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
     home: {
       paragraphs: [
-        "The Department of Basic Science & Humanities plays a pivotal role in laying the foundation for engineering education. It comprises Physics, Chemistry, Mathematics, and Humanities.",
-        "The department aims to provide a strong conceptual basis in fundamental sciences which is essential for understanding engineering principles.",
-        "We also focus on enhancing the communication skills and soft skills of students to prepare them for the corporate world.",
+        "The Department of Basic Science & Humanities plays a pivotal role in laying the foundation for engineering education. It comprises Physics, Chemistry, Mathematics, and Humanities, fostering an interdisciplinary approach that connects fundamental scientific principles with engineering applications.",
+        "The department aims to provide a strong conceptual basis in fundamental sciences which is essential for understanding engineering principles. Through rigorous coursework and laboratory sessions, we nurture the analytical and problem-solving skills of our students, preparing them for the complex challenges of core engineering disciplines.",
+        "We also focus on enhancing the communication skills and soft skills of students to prepare them for the corporate world. Our Humanities section offers training in professional ethics, organizational behavior, and effective communication, ensuring that students develop into confident and articulate professionals.",
+        "The Basic Science & Humanities department is committed to providing a holistic education that prepares students for success in their future careers. We encourage scientific inquiry and cultural activities, helping students develop a well-rounded personality that balances academic excellence with social responsibility.",
       ],
       image:
         "https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
     },
     hodMessage: {
       name: "Prof. Madhuchandra Bhaduri",
-      message:
-        "Welcome to the Basic Science & Humanities Department. We are dedicated to providing a strong scientific foundation for future engineers.",
+      message: [
+        "It gives me immense pleasure to present brief report of Department of Basic Science & Humanities. Since, the Basic Science & Humanities subjects are the foundation subjects for all the branches of engineering and technology, Department of Basic Science & Humanities imparts to build a firm base as part of the Engineering Education. The BS & H department plays a vital role in teaching basic sciences courses as prescribed by the curriculum of the Maulana Abul Kalam Azad University of Technology B.Tech program.",
+        "The Department enhances knowledge in subjects like Engineering Mathematics, Engineering Physics, Engineering Chemistry, Communication skill, Engineering Economics etc. Well educated, talented and dedicated Faculty and Staff Members are the backbone of this department.",
+        "The teaching module comprises of lectures, tutorials and practicals along with various other initiatives. Faculty members perform the role of a perfect facilitator as Mentor to each section. The methodology adopted in the classroom teaching is based on the application of innovation strategies, comprehensive lectures, regular assignments and active interaction between teachers and students. The purpose of inducing the subjects of Basic Science & Humanities in Engineering study is to lay a solid foundation of basic concepts for innovative future with limitless opportunities. Therefore, the department acts as an active catalyst to develop perfect approach to unlock their hidden talent, personality and communication skills to fulfill the needs of young engineers.",
+      ],
       image: "https://cgec.org.in/img/Faculty/MADHUCHANDRA%20BHADURI%20.jpg",
     },
     faculty: [
@@ -662,8 +1301,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "11 Years (As of 2024)",
         qualification: "M. Sc in Mathematics from IIT Bombay",
         specialization: "Complex Analysis, Topology",
-        image:
-          "https://ui-avatars.com/api/?name=Mohammad+Salim&background=random",
+        image: "https://cgec.org.in/img/Faculty/Md_salim.jpg",
+        cvLink: "/data/bsh/cv/mohammad_salim.pdf",
       },
       {
         name: "Ms. Madhuchandra Bhaduri",
@@ -672,6 +1311,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "M.A., M.PHIL(Economics)",
         specialization: "International Trade, Agricultural Economics",
         image: "https://cgec.org.in/img/Faculty/MADHUCHANDRA%20BHADURI%20.jpg",
+        cvLink: "/data/bsh/cv/madhuchandra_bhaduri.pdf",
       },
       {
         name: "Mr. Soumik Roy",
@@ -679,7 +1319,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "5 Years",
         qualification: "B.Sc Hons Mathematics, M.Sc Applied Mathematics",
         specialization: "Operation Research",
-        image: "https://ui-avatars.com/api/?name=Soumik+Roy&background=random",
+        image: "https://cgec.org.in/img/Faculty/Soumik_Roy.jpeg",
+        cvLink: "/data/bsh/cv/soumik_roy.pdf",
       },
       {
         name: "Dr. Madhumita Dhar",
@@ -687,8 +1328,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "6 Years",
         qualification: "PhD",
         specialization: "Nuclear Physics",
-        image:
-          "https://ui-avatars.com/api/?name=Madhumita+Dhar&background=random",
+        image: "https://cgec.org.in/img/Faculty/MDhar.jpg",
+        cvLink: "/data/bsh/cv/madhumita_dhar.pdf",
       },
       {
         name: "Dr. Samik Nag",
@@ -697,6 +1338,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "MSc, PhD (IACS)",
         specialization: "Inorganic Chemistry",
         image: "https://cgec.org.in/img/Faculty/CHE_Samik_Nag.jpg",
+        cvLink: "/data/bsh/cv/samik_nag.pdf",
       },
       {
         name: "Mr. Arghya Chakraborty",
@@ -704,8 +1346,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "6 years",
         qualification: "M.A. in ENGLISH, UGC - NET",
         specialization: "N.A.",
-        image:
-          "https://ui-avatars.com/api/?name=Arghya+Chakraborty&background=random",
+        image: "https://cgec.org.in/img/Faculty/Arghya_Sir.jpg",
+        cvLink: "/data/bsh/cv/arghya_chakraborty.pdf",
       },
       {
         name: "Dr. Tanmay Choudhury",
@@ -713,8 +1355,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "4 years",
         qualification: "B.Sc. (H), M.Sc., Ph.D.",
         specialization: "Cryptography",
-        image:
-          "https://ui-avatars.com/api/?name=Tanmay+Choudhury&background=random",
+        image: "https://cgec.org.in/img/Faculty/Tanmay_bs.jpeg",
+        cvLink: "/data/bsh/cv/tanmay_choudhury.pdf",
       },
       {
         name: "Dr. Biplab Maity",
@@ -722,8 +1364,8 @@ export const departments: Record<string, DepartmentData> = {
         experience: "11 years",
         qualification: "Ph.D",
         specialization: "Plasma Physics",
-        image:
-          "https://ui-avatars.com/api/?name=Biplab+Maity&background=random",
+        image: "https://cgec.org.in/img/Faculty/BiplabMaity_bsh.jpg",
+        cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
     labs: [
@@ -747,8 +1389,94 @@ export const departments: Record<string, DepartmentData> = {
           "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80",
       },
     ],
-    syllabus: "https://makautwb.ac.in/syllabus/BSH_New_Syllabus_2018.pdf",
-    research: "Research in Applied Physics, Chemistry, and Mathematics.",
-    wallMagazine: "Spectrum",
+    syllabus: [
+      {
+        semester: "1st & 2nd Semester(New AICTE Syllabus)",
+        pdfLink: "/data/bsh/BTECH_all dept_1st year.pdf",
+      },
+    ],
+    research: [
+      {
+        facultyName: "Dr. Sudip Kumar Adhikari",
+        publications: [
+          {
+            title:
+              "Conditional spatial fuzzy C-means clustering algorithm for segmentation of MRI images",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal: "Applied soft computing 34, 758-769",
+            year: "2015",
+          },
+          {
+            title:
+              "A spatial fuzzy c-means algorithm with application to mri image segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Advances in Pattern Recognition (ICAPR), 2015 Eighth International ..",
+            year: "2015",
+          },
+          {
+            title:
+              "Segmentation of MRI brain images by incorporating intensity inhomogeneity and spatial information using probabilistic fuzzy c-means clustering algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal:
+              "Communications, Devices and Intelligent Systems (CODIS), 2012 International ...",
+            year: "2012",
+          },
+          {
+            title:
+              "A modified fuzzy C-means algorithm using scale control spatial information for MRI image segmentation in the presence of noise",
+            authors: "JK Sing, SK Adhikari, DK Basu",
+            journal: "Journal of Chemometrics 29 (9), 492-505",
+            year: "2015",
+          },
+          {
+            title:
+              "A nonparametric method for intensity inhomogeneity correction in MRI brain images by fusion of Gaussian surfaces",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri, PK Saha",
+            journal: "Signal, Image and Video Processing 9 (8), 1945-1954",
+            year: "2015",
+          },
+          {
+            title:
+              "Conditional Spatial Fuzzy C-means Clustering Algorithm with Application in MRI Image Segmentation",
+            authors: "SK Adhikari, JK Sing, DK Basu, M Nasipuri",
+            journal:
+              "Information Systems Design and Intelligent Applications, 539-547",
+            year: "2015",
+          },
+          {
+            title:
+              "On estimation of bias field in MRI images: polynomial vs Gaussian surface fitting method",
+            authors: "S Kahali, SK Adhikari, JK Sing",
+            journal: "Journal of Chemometrics 30 (10), 602-620",
+            year: "2016",
+          },
+          {
+            title: "On estimation of bias field in MRI images",
+            authors: "JK Sing, SK Adhikari, S Kahali",
+            journal:
+              "Computer Graphics, Vision and Information Security (CGVIS), 2015 IEEE ...",
+            year: "2015",
+          },
+          {
+            title:
+              "Bias field estimation and segmentation of MRI images using a Spatial Fuzzy C-means algorithm",
+            authors: "SK Adhikari, JK Sing, DK Basu",
+            journal:
+              "2016 2nd International Conference on Control, Instrumentation, Energy ...",
+            year: "2016",
+          },
+        ],
+      },
+    ],
+    wallMagazine: {
+      name: "Spectrum",
+      description:
+        "'Spectrum' is a platform created for the students of the Basic Science and Humanities Department, Cooch Behar Government Engineering College (CGEC) to express unspoken words through their artwork. 'The Wall Magazine' showcases an elegant collection of literature and art made by the creative students of the BSH Department, CGEC. Student life is often considered to be pandemonium. While overcoming our hardships, we unknowingly imbibe beautiful hobbies and interests. The Wall Magazine admires surreal thoughts and unusual palettes. We encourage students to adore and display their creative and introspective sides.",
+      images: [
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web1.jpg",
+        "https://cgec.org.in/img/wall_magazine/Wall_magazine_2021-22_web2.jpg",
+      ],
+    },
   },
 };
