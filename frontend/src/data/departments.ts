@@ -64,14 +64,14 @@ export const departments: Record<string, DepartmentData> = {
       image: "https://cgec.org.in/img/labimage/LabCSE1.jpg",
     },
     hodMessage: {
-      name: "Prof. Somen Mondal",
+      name: "Dr. Somen Mondal",
       message:
         "It is a pleasure to be head of the department of Computer Science & Engineering. The department offers 4 year's BTech degree in Computer Science & Engineering. The department is equipped with all modern tools of teaching like virtual class room, digital board, and projector. The aim of the department is to provide high quality education along with training the students with all the new advancements in the computers field. The department places emphasis on all the important aspects of computers such as Algorithm Design, Advance database systems, Computer Programming, networking, mobile networks, Operational research, Theory of computation , Computer Graphics and many more. The department also takes initiative to improve the soft skills, analytical capabilities and verbal communication of the students so that they can face the competition in the corporate world confidently. The scope of computer science is endless. The students of the computer science and engineering are highly demanded by the recruiters of the top companies. The department provides platform for the students and We are confident that our Student will emerge as assets not only to this institution and to the organization they belong, but also to the country at large.",
       image: "https://cgec.org.in/img/Faculty/Somen_P.jpg",
     },
     faculty: [
       {
-        name: "Mr. Somen Mondal",
+        name: "Dr. Somen Mondal",
         role: "HOD and Assistant Professor",
         experience: "09 Years",
         qualification: "B.Tech., M.Tech.",
