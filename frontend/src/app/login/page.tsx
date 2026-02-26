@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { toast, Toaster } from "react-hot-toast";
+import { API_URL } from "@/lib/constants";
 
 const LoginPage = () => {
   const [role, setRole] = useState("STUDENT");
@@ -25,12 +26,26 @@ const LoginPage = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const response = await fetch(`${API_URL}/auth/login`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, role }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        toast.success(`Welcome back! Logging in as ${data.name}`);
+        // In real app: localStorage.setItem('token', data.token); router.push('/dashboard');
+      } else {
+        toast.error(data.message || "Login failed");
+      }
+    } catch (error) {
+      toast.error("An error occurred during login");
+    } finally {
       setIsLoading(false);
-      toast.success(`Welcome back! Logging in as ${role}`);
-      // In real app: router.push('/dashboard')
-    }, 1500);
+    }
   };
 
   return (

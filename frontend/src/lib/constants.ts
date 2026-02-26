@@ -60,3 +60,5 @@ export const COLORS = {
   secondary: "#1d4ed8", // Blue 700
   accent: "#f59e0b", // Amber 500
 };
+
+export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
