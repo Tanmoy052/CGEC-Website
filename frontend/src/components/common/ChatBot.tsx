@@ -37,7 +37,7 @@ const ChatBot = () => {
     const messageText = customInput || input;
     if (!messageText.trim()) return;
 
-    const userMessage = { role: "user", content: messageText };
+    const userMessage = { role: "user", content: messageText, suggestions: [] };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setShowSuggestions(false);
@@ -49,13 +49,15 @@ const ChatBot = () => {
         "I'm sorry, I don't have specific information about that. For the most accurate and updated details, please refer to the official CGEC website at https://cgec.org.in/ or contact the college administrative office.";
       let suggestions: string[] = [];
 
-      const lowerInput = messageText.toLowerCase();
+      const lowerInput = messageText.toLowerCase().trim();
 
       // 1. GREETINGS & SYSTEM ROLE
       if (
-        lowerInput.includes("hello") ||
-        lowerInput.includes("hi") ||
-        lowerInput.includes("hey")
+        lowerInput === "hello" ||
+        lowerInput === "hi" ||
+        lowerInput === "hey" ||
+        lowerInput.startsWith("hi ") ||
+        lowerInput.startsWith("hello ")
       ) {
         botResponse = `### Welcome to CGEC Smart Assistant
         
@@ -71,6 +73,26 @@ I am here to provide you with comprehensive information regarding:
 
 How can I assist you today?`;
         suggestions = ["Admission 2025", "Departments", "Campus Tour"];
+      }
+
+      // 5. FEES & STRUCTURE
+      else if (
+        lowerInput === "fees" ||
+        lowerInput === "fee" ||
+        lowerInput.includes("fee structure") ||
+        lowerInput.includes("cost") ||
+        lowerInput.includes("money") ||
+        lowerInput.includes("fees details")
+      ) {
+        botResponse = `### Subsidized Fee Structure (Government Norms)
+
+As a government college, CGEC offers high-quality education at low costs:
+
+• **B.Tech CSE/ECE:** ₹1,000/- Per Month (Semester Fees).
+• **B.Tech EE/ME/CE:** ₹500/- Per Month (Semester Fees).
+• **Hostel Fees:** Approx. ₹14,700 - ₹15,000 per year (Including Security & Mess).
+• **Payment:** All payments are handled via official government portals or Demand Draft.`;
+        suggestions = ["Admission Process", "Scholarships", "Hostel Details"];
       }
 
       // 2. INSTITUTIONAL IDENTITY & ABOUT
@@ -98,7 +120,33 @@ How can I assist you today?`;
 
       // 3. LEADERSHIP, HOD, TPO & TEACHERS
       else if (
-        lowerInput.includes("hod") ||
+        lowerInput === "hod" ||
+        lowerInput.includes("heads of department") ||
+        lowerInput.includes("hods")
+      ) {
+        botResponse = `### Official Heads of Departments (HODs) at CGEC
+
+Based on the latest institutional records from **cgec.org.in**, our departments are led by:
+
+• **Mechanical Engineering (ME):** **Dr. Sushovan Chatterjee** (Principal & HOD)
+  > *"Excellent facilities are available to prepare students as professional Mechanical Engineers with a focus on innovation."*
+
+• **Electronics & Comm. Engg. (ECE):** **Dr. Sourav Chakraborty** (HOD)
+  > *"Our students at CGEC are sufficiently adaptive engineers with an absolute entrepreneurial mindset."*
+
+• **Civil Engineering (CE):** **Prof. Biren Gurung** (HOD)
+  > *"The aim is to impart sound knowledge of theory with exposure to practical knowledge through laboratories."*
+
+• **Computer Science & Engineering (CSE):** **Dr. Somen Mondal** (HOD)
+
+• **Electrical Engineering (EE):** **Prof. Atanu Maji** (HOD)
+
+• **Basic Science & Humanities (BSH):** **Dr. Samik Nag** (Chemistry & Physics)
+  > *"Basic knowledge of Physics, Chemistry, and Mathematics is essential to make a perfect engineer."*
+
+These leaders oversee academic quality, research, and laboratory development in their respective branches.`;
+        suggestions = ["Principal's Message", "Faculty Details", "Departments"];
+      } else if (
         lowerInput.includes("tpo") ||
         lowerInput.includes("teacher") ||
         lowerInput.includes("faculty") ||
@@ -138,21 +186,21 @@ Our institution is guided by experienced academicians:
 CGEC follows the **MAKAUT** curriculum. Below are the complete details for all academic departments:
 
 **1. Computer Science & Engineering (CSE)**
-• **HOD:** Prof. Atanu Maji.
+• **HOD:** Dr. Somen Mondal.
 • **Key Faculty:** Prof. Arnab Gain (Assistant Professor).
 • **Focus:** Software Dev, AI/ML, Cybersecurity, Cloud Computing.
 • **Labs:** AI Lab, Networking Lab, Programming Lab, Data Structure Lab.
 • **Student Quote:** *"The coding culture here is growing rapidly. Seniors are very helpful and the placement cell works tirelessly."* - Subhojit Gorain.
 
 **2. Electronics & Communication Engineering (ECE)**
-• **Key Faculty:** Dr. Palash Das (Assistant Professor).
+• **Key Faculty:** Dr. Sourav Chakraborty (HOD).
 • **Focus:** VLSI Design, Embedded Systems, 5G, Digital Signal Processing.
 • **Labs:** Communication Lab, VLSI Lab, Microprocessor Lab, DSP Lab.
 • **Student Quote:** *"The ECE department at CGEC is known for its strong emphasis on practical learning."* - Pritam Laskar.
 
 **3. Electrical Engineering (EE)**
-• **HODs:** Dr. Sourav Chakraborty and Prof. Atanu Maji.
-• **Key Faculty:** Dr. Somen Mondal (HOD & TPO Head).
+• **HOD:** Prof. Atanu Maji.
+• **Key Faculty:** Dr. Somen Mondal (TPO Head).
 • **Focus:** Smart Grids, Power Electronics, Machines, Control Systems.
 • **Labs:** Electrical Machine Lab, Power System Lab, Control Lab, Circuit Theory Lab.
 • **Student Quote:** *"The EE department is known for its hands-on approach to learning."* - Arpan Maity.
@@ -165,7 +213,7 @@ CGEC follows the **MAKAUT** curriculum. Below are the complete details for all a
 • **Academic Quote:** *"Excellent facilities in terms of equipment and staff are available to prepare students as professional engineers."* - Dr. Sushovan Chatterjee.
 
 **5. Civil Engineering (CE)**
-• **Leadership:** Dr. Kingshuk Dan (Registrar I/C).
+• **Leadership:** Prof. Biren Gurung (HOD).
 • **Key Faculty:** Prof. Chhandamay Ray (TPO Rep).
 • **Focus:** Structural Analysis, Geotechnical, Surveying, Urban Planning.
 • **Labs:** Concrete Lab, Surveying Lab, Soil Mechanics Lab, Environmental Lab.
@@ -191,7 +239,7 @@ CGEC follows the **MAKAUT** curriculum. Below are the complete details for all a
         
 The CSE department at CGEC is a hub of innovation and technical excellence.
 
-• **HOD:** Prof. Atanu Maji.
+• **HOD:** Dr. Somen Mondal.
 • **Key Faculty:** Prof. Arnab Gain (Assistant Professor).
 • **Focus Areas:** Software Development, Artificial Intelligence (AI), Machine Learning (ML), and Cybersecurity.
 • **Labs:** Programming Lab, Networking Lab, AI Lab, and Data Structure Lab.
@@ -206,22 +254,23 @@ The CSE department at CGEC is a hub of innovation and technical excellence.
         
 The ECE department focuses on cutting-edge communication and electronic systems.
 
+• **HOD:** Dr. Sourav Chakraborty.
 • **Key Faculty:** Dr. Palash Das (Assistant Professor).
 • **Focus Areas:** VLSI Design, Embedded Systems, Digital Signal Processing (DSP), and 5G Communication.
 • **Labs:** Communication Lab, VLSI Lab, Microprocessor Lab, and DSP Lab.
 • **Student Insight:** *"The ECE department at CGEC is known for its strong emphasis on practical learning."* - Pritam Laskar (ECE Student).
-• **Carrier Paths:** VLSI Design, Network Engineering, and IoT Development.`;
+• **Carrier Paths:** VLSI Design, Network Engineering, and IoT Developer.`;
         suggestions = ["ECE Labs", "ECE Faculty", "VLSI Research"];
       } else if (
-        lowerInput.includes("ee") ||
-        lowerInput.includes("electrical")
+        lowerInput === "ee" ||
+        lowerInput.includes("electrical engineering")
       ) {
         botResponse = `### Electrical Engineering (EE)
         
 The EE department provides a strong foundation in power systems and electrical machines.
 
-• **HODs:** Dr. Sourav Chakraborty and Prof. Atanu Maji.
-• **Key Faculty:** Dr. Somen Mondal (HOD & TPO Head).
+• **HOD:** Prof. Atanu Maji.
+• **Key Faculty:** Dr. Somen Mondal (TPO Head).
 • **Focus Areas:** Smart Grids, Power Electronics, Machines, and Control Systems.
 • **Labs:** Electrical Machine Lab, Power System Lab, and Control Lab.
 • **Student Insight:** *"The EE department is known for its hands-on approach to learning. We work on real-world projects."* - Arpan Maity (EE Student).`;
@@ -248,7 +297,7 @@ The ME department focuses on thermodynamics, manufacturing, and design.
         
 The CE department excels in infrastructure and structural engineering.
 
-• **Leadership:** Dr. Kingshuk Dan (Registrar I/C & Assistant Professor).
+• **Leadership:** Prof. Biren Gurung (HOD).
 • **Key Faculty:** Prof. Chhandamay Ray (TPO Rep).
 • **Focus Areas:** Structural Analysis, Geotechnical Engineering, Surveying, and Urban Planning.
 • **Labs:** Concrete Lab, Surveying Lab, Soil Mechanics Lab, and Environmental Lab.
@@ -268,24 +317,6 @@ The BSH department provides the foundational knowledge for all engineering disci
 • **Labs:** Physics Lab, Chemistry Lab, and Language Lab.
 • **Importance:** Ensuring students have a solid conceptual foundation before entering core engineering.`;
         suggestions = ["Physics Lab", "Language Lab", "BSH Faculty"];
-      }
-
-      // 5. FEES & STRUCTURE
-      else if (
-        lowerInput.includes("fee") ||
-        lowerInput.includes("structure") ||
-        lowerInput.includes("cost") ||
-        lowerInput.includes("money")
-      ) {
-        botResponse = `### Subsidized Fee Structure (Government Norms)
-
-As a government college, CGEC offers high-quality education at low costs:
-
-• **B.Tech CSE/ECE:** ₹1,000/- Per Month (Semester Fees).
-• **B.Tech EE/ME/CE:** ₹500/- Per Month (Semester Fees).
-• **Hostel Fees:** Approx. ₹14,700 - ₹15,000 per year (Including Security & Mess).
-• **Payment:** All payments are handled via official government portals or Demand Draft.`;
-        suggestions = ["Admission Process", "Scholarships", "Hostel Details"];
       }
 
       // 6. ADMISSION PROCESS

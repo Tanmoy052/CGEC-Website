@@ -34,7 +34,7 @@ const Hero = () => {
   }, []);
 
   // Variants for the 3D Cube Rotation + Scale Effect
-  const slideVariants = {
+  const slideVariants: any = {
     enter: (direction: number) => ({
       x: direction > 0 ? "100%" : "-100%",
       rotateY: direction > 0 ? 45 : -45,
@@ -92,7 +92,7 @@ const Hero = () => {
   };
 
   // Staggered text animation variants
-  const containerVariants = {
+  const containerVariants: any = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -103,7 +103,7 @@ const Hero = () => {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: any = {
     hidden: { y: 20, opacity: 0 },
     visible: {
       y: 0,
