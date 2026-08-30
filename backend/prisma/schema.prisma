@@ -25,27 +25,88 @@ model User {
 }
 
 model Notice {
-  id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  title       String
-  content     String
-  category    String
-  priority    String   @default("NORMAL")
-  expiryDate  DateTime?
-  attachment  String?
-  authorId    String   @db.ObjectId
-  department  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  title               String
+  content             String
+  category            String    @default("General") // General, Academic, Tender, Recruitment
+  priority            String    @default("NORMAL")  // NORMAL, HIGH, URGENT
+  expiryDate          DateTime?
+  attachment          String?
+  attachmentPublicId  String?   // Cloudinary public_id for the attachment
+  authorId            String?
+  authorName          String?
+  department          String?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 }
 
 model Faculty {
-  id             String   @id @default(auto()) @map("_id") @db.ObjectId
-  name           String
-  designation    String
-  department     String
-  specialization String[]
-  qualifications String[]
-  image          String?
-  email          String   @unique
-  publications   String[]
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  name              String
+  designation       String
+  department        String    // CSE, ECE, EE, ME, CE, BSH
+  email             String    @unique
+  phone             String?
+  experience        String?
+  specialization    String[]  @default([])
+  qualifications    String[]  @default([])
+  image             String?
+  imagePublicId     String?   // Cloudinary public_id for the photo
+  cvLink            String?
+  cvPublicId        String?   // Cloudinary public_id for the CV PDF
+  publications      String[]  @default([])
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+}
+
+model Syllabus {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  department      String   // CSE, ECE, EE, ME, CE, BSH
+  semester        String   // 1st, 2nd, 3rd, 4th, 5th, 6th, 7th, 8th, All
+  title           String
+  description     String?
+  pdfLink         String
+  pdfPublicId     String?  // Cloudinary public_id for the PDF
+  academicYear    String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Lab {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  department      String   // CSE, ECE, EE, ME, CE
+  name            String
+  description     String
+  image           String?
+  imagePublicId   String?  // Cloudinary public_id for the lab photo
+  roomNumber      String?
+  facultyInCharge String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Gallery {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  category        String   @default("Campus") // Campus, Events, Sports, Labs, Cultural
+  imageUrl        String
+  imagePublicId   String?  // Cloudinary public_id for the gallery image
+  description     String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model WallMagazine {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  edition         String?  // e.g. "Vol. 1", "2025 Edition", "Winter 2025"
+  year            String?  // e.g. "2025"
+  description     String?
+  imageUrl        String   // cover image or page scan
+  imagePublicId   String?  // Cloudinary public_id for the cover image
+  pdfLink         String?  // optional PDF download
+  pdfPublicId     String?  // Cloudinary public_id for the PDF
+  department      String?  // optional department tag
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 }

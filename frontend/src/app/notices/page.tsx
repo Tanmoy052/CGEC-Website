@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -11,6 +11,7 @@ import {
   Tag,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { API_URL } from "@/lib/constants";
 
 const CATEGORIES = ["All", "NOTICE", "TENDER", "NEWS", "RECRUITMENT"];
 
@@ -140,13 +141,39 @@ const NOTICES_DATA = [
 const NoticePage = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+  const [dbNotices, setDbNotices] = useState<any[]>([]);
 
-  const filteredNotices = NOTICES_DATA.filter((notice) => {
+  useEffect(() => {
+    fetch(`${API_URL}/public/notices`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const formatted = data.map((n) => ({
+            id: n.id,
+            title: n.title,
+            category: (n.category || "NOTICE").toUpperCase(),
+            date: n.createdAt ? new Date(n.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Feb 2026",
+            priority: n.priority || "NORMAL",
+            desc: n.content,
+            file: n.attachment || null,
+          }));
+          setDbNotices(formatted);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  // Prefer live database notices, fallback to static defaults
+  const allNotices = dbNotices.length > 0 ? dbNotices : NOTICES_DATA;
+
+  const filteredNotices = allNotices.filter((notice) => {
     const matchesCategory =
-      activeCategory === "All" || notice.category === activeCategory;
+      activeCategory === "All" ||
+      notice.category === activeCategory ||
+      (activeCategory === "NOTICE" && (notice.category === "GENERAL" || notice.category === "ACADEMIC"));
     const matchesSearch =
       notice.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      notice.desc.toLowerCase().includes(searchQuery.toLowerCase());
+      (notice.desc && notice.desc.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 

@@ -1,12 +1,18 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { MessageSquare, X, Send, Bot, User, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const ChatBot = () => {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
   const [messages, setMessages] = useState([
     {
       role: "bot",

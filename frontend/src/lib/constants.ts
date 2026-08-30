@@ -50,6 +50,7 @@ export const NAV_LINKS = [
     ],
   },
   { label: "Library", href: "https://www.cgeclibrary.org.in/" },
+  { label: "Gallery", href: "/gallery" },
   { label: "Placement", href: "/placement" },
   { label: "Notices", href: "/notices" },
   { label: "Contact", href: "/contact" },

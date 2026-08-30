@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import {
   Facebook,
   Twitter,
@@ -13,6 +16,11 @@ import {
 import { COLLEGE_NAME, COLLEGE_SHORT_NAME } from "@/lib/constants";
 
 const Footer = () => {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer className="bg-gray-900 text-gray-300 pt-16 pb-8">
       <div className="container mx-auto px-4">

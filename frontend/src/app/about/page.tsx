@@ -78,9 +78,10 @@ const AboutPage = () => {
             >
               <div className="rounded-3xl overflow-hidden shadow-2xl relative h-[500px]">
                 <Image
-                  src="https://cgec.org.in/img/slider/5.jpg"
-                  alt="College Campus"
+                  src="/img/about_img.webp"
+                  alt="Cooch Behar Government Engineering College Campus"
                   fill
+                  priority
                   className="object-cover"
                 />
               </div>

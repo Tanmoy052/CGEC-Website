@@ -33,3 +33,7 @@ Thumbs.db
 
 # Prisma
 /backend/prisma/generated
+
+# User-uploaded media (stored on Cloudinary, not in git)
+frontend/public/uploads/*
+!frontend/public/uploads/.gitkeep

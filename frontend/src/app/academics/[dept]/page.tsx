@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { departments } from "@/data/departments";
 import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, ExternalLink, Newspaper } from "lucide-react";
+import { API_URL } from "@/lib/constants";
 
 const tabs = [
   { id: "home", label: "HOME" },
@@ -20,10 +21,88 @@ const tabs = [
 
 export default function DepartmentPage() {
   const params = useParams();
-  const deptSlug = params.dept as string;
-  const dept = departments[deptSlug];
+  const deptSlug = (params.dept as string) || "";
+  const dept = departments[deptSlug.toLowerCase()];
 
   const [activeTab, setActiveTab] = useState("home");
+  const [dbFaculty, setDbFaculty] = useState<any[]>([]);
+  const [dbSyllabus, setDbSyllabus] = useState<any[]>([]);
+  const [dbLabs, setDbLabs] = useState<any[]>([]);
+  const [dbWallMagazines, setDbWallMagazines] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!deptSlug) return;
+    const deptUpper = deptSlug.toUpperCase();
+
+    // Fetch dynamic faculty
+    fetch(`${API_URL}/public/faculty?department=${deptUpper}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDbFaculty(
+            data.map((f) => ({
+              name: f.name,
+              role: f.designation,
+              experience: f.experience || "-",
+              qualification: Array.isArray(f.qualifications) ? f.qualifications.join(", ") : f.qualifications || "-",
+              specialization: Array.isArray(f.specialization) ? f.specialization.join(", ") : f.specialization || "-",
+              image: f.image || "/img/Faculty/Somen_P.jpg",
+              cvLink: f.cvLink || "",
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+
+    // Fetch dynamic syllabus
+    fetch(`${API_URL}/public/syllabus?department=${deptUpper}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDbSyllabus(
+            data.map((s) => ({
+              semester: s.semester,
+              pdfLink: s.pdfLink,
+              title: s.title,
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+
+    // Fetch dynamic labs
+    fetch(`${API_URL}/public/labs?department=${deptUpper}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setDbLabs(
+            data.map((l) => ({
+              name: l.name,
+              description: l.description,
+              image: l.image,
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+
+    // Fetch dynamic wall magazines
+    fetch(`${API_URL}/public/wall-magazine`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          const deptMags = data.filter(
+            (m) =>
+              !m.department ||
+              m.department.toUpperCase() === deptUpper ||
+              m.department.toUpperCase() === "ALL" ||
+              m.department.toUpperCase() === deptSlug.toUpperCase()
+          );
+          setDbWallMagazines(deptMags);
+        }
+      })
+      .catch(() => {});
+  }, [deptSlug]);
 
   // If department not found, show 404
   if (!dept) {
@@ -35,6 +114,11 @@ export default function DepartmentPage() {
       </div>
     );
   }
+
+  // Prefer live database lists if available, fallback to static defaults
+  const allFaculty = dbFaculty.length > 0 ? dbFaculty : dept.faculty;
+  const allSyllabus = dbSyllabus.length > 0 ? dbSyllabus : dept.syllabus;
+  const allLabs = dbLabs.length > 0 ? dbLabs : dept.labs;
 
   // Generate dynamic tab labels
   const dynamicTabs = tabs.map((tab) => ({
@@ -77,7 +161,7 @@ export default function DepartmentPage() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`px-6 py-4 text-sm font-bold uppercase tracking-wider transition-colors whitespace-nowrap ${
+                className={`px-6 py-4 text-sm font-bold uppercase tracking-wider transition-colors whitespace-nowrap cursor-pointer ${
                   activeTab === tab.id
                     ? "bg-blue-600 text-white border-t-2 border-l-2 border-r-2 border-blue-600 rounded-t-lg relative -mb-[2px]"
                     : "text-gray-600 hover:text-blue-800 hover:bg-gray-50"
@@ -113,6 +197,7 @@ export default function DepartmentPage() {
                       src={dept.home.image}
                       alt={`${dept.name} Lab`}
                       fill
+                      priority
                       className="object-cover"
                     />
                   </div>
@@ -155,7 +240,7 @@ export default function DepartmentPage() {
                   </h3>
                   <div className="prose prose-lg text-gray-700 relative pl-8 border-l-4 border-blue-600 font-medium">
                     <span className="absolute -top-6 -left-6 text-6xl text-blue-200 font-serif">
-                      "
+                      &ldquo;
                     </span>
                     {Array.isArray(dept.hodMessage.message) ? (
                       dept.hodMessage.message.map((msg, i) => (
@@ -190,18 +275,21 @@ export default function DepartmentPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {dept.faculty.map((member, i) => (
+                    {allFaculty.map((member, i) => (
                       <tr
                         key={i}
                         className="hover:bg-gray-50 transition-colors"
                       >
                         <td className="px-6 py-4">
-                          <div className="relative w-24 h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm mx-auto">
-                            <Image
-                              src={member.image}
+                          <div className="relative w-24 h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm mx-auto bg-gray-100">
+                            {/* eslint-disable-next-line @next/next/no-img-element */}
+                            <img
+                              src={member.image || "/img/Faculty/Somen_P.jpg"}
                               alt={member.name}
-                              fill
-                              className="object-cover object-top"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).src = "/img/Faculty/Somen_P.jpg";
+                              }}
+                              className="w-full h-full object-cover object-top"
                             />
                           </div>
                         </td>
@@ -209,9 +297,12 @@ export default function DepartmentPage() {
                           {member.cvLink ? (
                             <a
                               href={member.cvLink}
-                              className="text-blue-600 hover:underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline inline-flex items-center gap-1"
                             >
-                              {member.name}
+                              <span>{member.name}</span>
+                              <ExternalLink className="w-3 h-3" />
                             </a>
                           ) : (
                             member.name
@@ -237,29 +328,34 @@ export default function DepartmentPage() {
             )}
 
             {activeTab === "lab" && (
-              <div className="overflow-x-auto bg-white rounded-xl shadow-sm border border-gray-200">
+              <div className="overflow-x-auto bg-white rounded-2xl shadow-sm border border-gray-200">
                 <table className="w-full text-sm text-left">
                   <thead className="bg-gray-50 text-gray-700 font-bold uppercase tracking-wider text-xs border-b border-gray-200">
                     <tr>
-                      <th className="px-6 py-4 w-16 text-center">Sl. No.</th>
-                      <th className="px-6 py-4 w-1/4">Laboratory Name</th>
-                      <th className="px-6 py-4">Details</th>
+                      <th className="px-6 py-4 w-20 text-center">SL. NO.</th>
+                      <th className="px-6 py-4 w-1/4">LABORATORY NAME</th>
+                      <th className="px-6 py-4">DETAILS</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {dept.labs.map((lab, i) => (
+                    {allLabs.map((lab, i) => (
                       <tr
                         key={i}
                         className="hover:bg-gray-50 transition-colors"
                       >
-                        <td className="px-6 py-4 text-center font-medium text-gray-500">
+                        <td className="px-6 py-5 text-center font-medium text-gray-500 align-top">
                           {i + 1}
                         </td>
-                        <td className="px-6 py-4 font-bold text-gray-900">
+                        <td className="px-6 py-5 font-bold text-gray-900 align-top">
                           {lab.name}
                         </td>
-                        <td className="px-6 py-4 text-gray-700 leading-relaxed">
+                        <td className="px-6 py-5 text-gray-700 leading-relaxed align-top">
                           {lab.description || "-"}
+                          {lab.roomNumber && (
+                            <span className="block text-xs text-gray-500 mt-1 font-medium">
+                              📍 {lab.roomNumber}
+                            </span>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -279,7 +375,7 @@ export default function DepartmentPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {dept.syllabus.map((item, i) => (
+                    {allSyllabus.map((item, i) => (
                       <tr
                         key={i}
                         className="hover:bg-gray-50 transition-colors"
@@ -288,11 +384,13 @@ export default function DepartmentPage() {
                           {i + 1}
                         </td>
                         <td className="px-6 py-4 font-bold text-gray-900">
-                          {item.semester}
+                          {item.title ? `${item.semester} - ${item.title}` : item.semester}
                         </td>
                         <td className="px-6 py-4 text-center">
                           <a
                             href={item.pdfLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
                             className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 transition-colors"
                           >
                             PDF
@@ -348,7 +446,7 @@ export default function DepartmentPage() {
                                   {pub.journal}
                                 </p>
                               </td>
-                              <td className="px-6 py-4 text-center font-medium text-gray-700 align-top pt-5">
+                              <td className="px-6 py-4 text-center font-bold text-blue-600 align-top pt-5">
                                 {pub.year}
                               </td>
                             </tr>
@@ -362,30 +460,85 @@ export default function DepartmentPage() {
             )}
 
             {activeTab === "wall" && (
-              <div className="bg-white border border-gray-200 rounded-xl p-8 shadow-sm space-y-8">
-                <div className="bg-blue-50/50 p-6 rounded-lg border border-blue-100">
-                  <p className="text-gray-800 leading-relaxed text-lg font-medium text-justify">
+              <div className="space-y-8">
+                <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-800 text-white p-8 rounded-2xl shadow-md">
+                  <h2 className="text-2xl font-bold mb-2">
+                    {dept.wallMagazine.name}
+                  </h2>
+                  <p className="text-blue-100 text-base max-w-3xl">
                     {dept.wallMagazine.description}
                   </p>
                 </div>
 
-                <div className="grid grid-cols-1 gap-8">
-                  {dept.wallMagazine.images.map((img, idx) => (
-                    <div
-                      key={idx}
-                      className="relative w-full rounded-xl overflow-hidden shadow-lg border-4 border-amber-100"
-                    >
-                      <Image
-                        src={img}
-                        alt={`${dept.wallMagazine.name} - ${idx + 1}`}
-                        width={1200}
-                        height={800}
-                        className="w-full h-auto object-cover"
-                        unoptimized
-                      />
+                {dbWallMagazines.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {dbWallMagazines.map((mag) => (
+                      <div
+                        key={mag.id}
+                        className="bg-white rounded-2xl border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between group"
+                      >
+                        <div>
+                          <div className="relative h-64 w-full bg-slate-900 overflow-hidden">
+                            <Image
+                              src={mag.imageUrl || "/img/hero/slider-2.jpg"}
+                              alt={mag.title}
+                              fill
+                              className="object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                            {mag.edition && (
+                              <span className="absolute top-3 left-3 px-3 py-1 text-xs font-bold bg-blue-600/90 backdrop-blur-md text-white rounded-lg shadow-sm">
+                                {mag.edition}
+                              </span>
+                            )}
+                            {mag.year && (
+                              <span className="absolute top-3 right-3 px-3 py-1 text-xs font-bold bg-black/60 backdrop-blur-md text-white rounded-lg">
+                                {mag.year}
+                              </span>
+                            )}
+                            <div className="absolute bottom-3 left-3 right-3">
+                              <h3 className="text-white font-bold text-lg leading-snug drop-shadow-md">
+                                {mag.title}
+                              </h3>
+                            </div>
+                          </div>
+
+                          <div className="p-5">
+                            {mag.description && (
+                              <p className="text-gray-600 text-sm leading-relaxed mb-4">
+                                {mag.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+
+                        {mag.pdfLink && (
+                          <div className="px-5 pb-5 pt-0">
+                            <a
+                              href={mag.pdfLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white rounded-xl font-bold text-xs transition-all duration-200"
+                            >
+                              <span>Read / Download Magazine PDF</span>
+                              <ExternalLink className="w-3.5 h-3.5" />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className="bg-white rounded-2xl border border-dashed border-gray-300 p-12 text-center space-y-3">
+                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+                      <Newspaper className="w-6 h-6" />
                     </div>
-                  ))}
-                </div>
+                    <h3 className="text-gray-900 font-bold text-lg">No Wall Magazines Published Yet</h3>
+                    <p className="text-gray-500 text-sm max-w-md mx-auto">
+                      Technical wall magazine editions for this department will appear here once uploaded by department administrators.
+                    </p>
+                  </div>
+                )}
               </div>
             )}
           </motion.div>

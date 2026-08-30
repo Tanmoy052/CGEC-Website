@@ -29,7 +29,7 @@ export default function Home() {
       dept: "Mechanical Engineering",
       message:
         "Excellent facilities in terms of equipment and staffs are available to prepare students as professional Mechanical Engineers.",
-      image: "https://cgec.org.in/img/Faculty/ME_Sushovan_Chatterjee.jpg",
+      image: "/img/Faculty/ME_Sushovan_Chatterjee.jpg",
     },
     {
       name: "Dr. Palash Das",
@@ -37,7 +37,7 @@ export default function Home() {
       dept: "Electronics & Comm. Engg.",
       message:
         "I believe that someone's adaptive nature is one of the reasons behind his success. Our students are sufficiently adaptive.",
-      image: "https://cgec.org.in/img/Faculty/ECEpalashDas.jpg",
+      image: "/img/Faculty/ECEpalashDas.jpg",
     },
     {
       name: "Dr. Kingshuk Dan",
@@ -45,7 +45,7 @@ export default function Home() {
       dept: "Civil Engineering",
       message:
         "The aim of the department is to impart the students a sound knowledge of the theory of civil engineering subjects.",
-      image: "https://cgec.org.in/img/Faculty/Kingshuk%20Dan.jpg",
+      image: "/img/Faculty/Kingshuk%20Dan.jpg",
     },
     {
       name: "Dr. Somen Mondal  (TPO Head)",
@@ -53,7 +53,7 @@ export default function Home() {
       dept: "Electrical Engineering",
       message:
         "The TPO Cell promotes student success through dedicated faculty,industry Alliance,& effective training and placement outcomes.",
-      image: "https://cgec.org.in/img/Faculty/Somen_P.jpg",
+      image: "/img/Faculty/Somen_P.jpg",
     },
     // Adding more leaders for carousel
     {
@@ -62,7 +62,7 @@ export default function Home() {
       dept: "Computer Science & Engg.",
       message:
         "Our department is committed to excellence in teaching and research in the field of computer science and technology.",
-      image: "https://cgec.org.in/img/Faculty/423-A.jpg",
+      image: "/img/Faculty/423-A.jpg",
     },
     {
       name: "Dr. Sourav Chakraborty",
@@ -70,7 +70,7 @@ export default function Home() {
       dept: "Electrical Engineering",
       message:
         "We focus on providing a strong foundation in electrical systems and power electronics for sustainable future.",
-      image: "https://cgec.org.in/img/Faculty/sourav.png",
+      image: "/img/Faculty/sourav.png",
     },
     // Adding more leaders for carousel
     {
@@ -79,7 +79,7 @@ export default function Home() {
       dept: "Computer Science & Engg.",
       message:
         " As HOD (EE), I am committed to academic excellence, practical learning, and preparing our students for successful careers.",
-      image: "https://cgec.org.in/img/Faculty/EE_Atanu.jpg",
+      image: "/img/Faculty/EE_Atanu.jpg",
     },
     {
       name: "Dr. Samik Nag",
@@ -87,7 +87,7 @@ export default function Home() {
       dept: "Physics",
       message:
         "Basic sciences form the backbone of engineering. We ensure our students have a solid conceptual foundation.",
-      image: "https://cgec.org.in/img/Faculty/CHE_Samik_Nag.jpg",
+      image: "/img/Faculty/CHE_Samik_Nag.jpg",
     },
   ];
 

@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ChatBot from "@/components/common/ChatBot";
+import MainLayout from "@/components/layout/MainLayout";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,7 @@ export default function RootLayout({
     <html lang="en" className="scroll-smooth">
       <body className={`${inter.className} antialiased bg-white text-gray-900`}>
         <Navbar />
-        <main className="min-h-screen pt-20">{children}</main>
+        <MainLayout>{children}</MainLayout>
         <ChatBot />
         <Footer />
       </body>

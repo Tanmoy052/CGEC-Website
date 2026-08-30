@@ -1,311 +1,260 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   GraduationCap,
   Building2,
   Users,
   ChevronLeft,
   ChevronRight,
+  ArrowRight,
+  Sparkles,
 } from "lucide-react";
 
-const heroImages = [
-  "https://cgec.org.in/img/slider/cgec_acdemic.jpeg",
-  "https://cgec.org.in/img/slider/3.jpg",
-  "https://cgec.org.in/img/slider/5.jpg",
-  "https://www.cgecsportsclub.in/web/image/909-9b45cf31/IMG20231002155319%20-%20SOUMYAJIT_%20BHUNIA_CE.webp",
-  "https://www.collegebatch.com/static/clg-gallery/coochbehar-government-engineering-college-cooch-behar-329253.webp",
-  "https://media.licdn.com/dms/image/v2/C561BAQEPhsvRkXzwrA/company-background_10000/company-background_10000/0/1598857517758/official_cgec_cover?e=2147483647&v=beta&t=A8UG8KjpX25C16ZD5Ee6-N0zgWy7DfeTiKbEOEzLd9U",
+interface HeroSlide {
+  image: string;
+  tag: string;
+  title: string;
+  description: string;
+}
+
+const slides: HeroSlide[] = [
+  {
+    image: "/img/hero/slider-1.jpg",
+    tag: "Government Engineering Institution",
+    title: "Cooch Behar Government Engineering College",
+    description:
+      "A premier institution providing a platform for students to excel in technical education, research, and holistic engineering innovation.",
+  },
+  {
+    image: "/img/hero/slider-2.jpg",
+    tag: "Excellence in Technology",
+    title: "World-Class Infrastructure & Labs",
+    description:
+      "Equipped with modern laboratories, research centers, and cutting-edge facilities to foster next-generation engineers.",
+  },
+  {
+    image: "/img/hero/slider-3.jpg",
+    tag: "Vibrant Campus Life",
+    title: "Nurturing Future Leaders",
+    description:
+      "A dynamic campus fostering technical excellence, active sports clubs, cultural fests, and holistic personality growth.",
+  },
+  {
+    image: "/img/hero/slider-4.webp",
+    tag: "Academic Excellence",
+    title: "Dedicated Faculty & Research",
+    description:
+      "Mentored by distinguished professors committed to academic rigor, hands-on learning, and industry collaboration.",
+  },
+  {
+    image: "/img/hero/slider-5.jpg",
+    tag: "Career & Placements",
+    title: "Bridging Academics to Industry",
+    description:
+      "Proven track record of placements across top national & global technology giants and premier public sector undertakings.",
+  },
 ];
 
 const Hero = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [direction, setDirection] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [direction, setDirection] = useState(1);
+  const [isPaused, setIsPaused] = useState(false);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setDirection(1);
-      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-    }, 7000);
-
-    return () => clearInterval(interval);
+  const nextSlide = useCallback(() => {
+    setDirection(1);
+    setCurrentIndex((prev) => (prev + 1) % slides.length);
   }, []);
 
-  // Variants for the 3D Cube Rotation + Scale Effect
-  const slideVariants: any = {
-    enter: (direction: number) => ({
-      x: direction > 0 ? "100%" : "-100%",
-      rotateY: direction > 0 ? 45 : -45,
-      scale: 1.1, // Start slightly zoomed in
-      opacity: 0,
-      zIndex: 0,
-      filter: "brightness(0.5) blur(8px)", // Cinematic blur on entry
-    }),
-    center: {
-      zIndex: 1,
-      x: 0,
-      rotateY: 0,
-      scale: 1, // Settle at normal scale
-      opacity: 1,
-      filter: "brightness(1.1) blur(0px)",
-      transition: {
-        x: {
-          type: "spring",
-          stiffness: 5000,
-          damping: 200,
-          duration: 0.000000000000000000000000000000000000001,
-        }, // Instant
-        rotateY: {
-          duration: 0.000000000000000000000000000000000000001,
-          ease: "linear",
-        },
-        scale: { duration: 7, ease: "linear" }, // Keep the slow zoom effect
-        opacity: { duration: 0.8 },
-        filter: { duration: 0.8 },
-      },
-    },
-    exit: (direction: number) => ({
-      zIndex: 0,
-      x: direction < 0 ? "100%" : "-100%",
-      rotateY: direction < 0 ? 45 : -45,
-      scale: 0.9, // Shrink slightly on exit
-      opacity: 0,
-      filter: "brightness(0.5) blur(8px)",
-      transition: {
-        x: {
-          type: "spring",
-          stiffness: 5000,
-          damping: 200,
-          duration: 0.000000000000000000000000000000000000001,
-        },
-        rotateY: {
-          duration: 0.000000000000000000000000000000000000001,
-          ease: "linear",
-        },
-        scale: { duration: 0.000000000000000000000000000000000000001 },
-        opacity: { duration: 0.000000000000000000000000000000000000001 },
-        filter: { duration: 0.000000000000000000000000000000000000001 },
-      },
-    }),
-  };
-
-  // Staggered text animation variants
-  const containerVariants: any = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.000000000000000000000000000000000000001,
-        delayChildren: 0.000000000000000000000000000000000000001,
-      },
-    },
-  };
-
-  const itemVariants: any = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        type: "spring",
-        stiffness: 5000,
-        damping: 200,
-        duration: 0.000000000000000000000000000000000000001,
-      },
-    },
-  };
-
-  const nextSlide = () => {
-    setDirection(1);
-    setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
-  };
-
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setDirection(-1);
-    setCurrentImageIndex((prev) =>
-      prev === 0 ? heroImages.length - 1 : prev - 1,
-    );
-  };
+    setCurrentIndex((prev) => (prev === 0 ? slides.length - 1 : prev - 1));
+  }, []);
 
   const goToSlide = (index: number) => {
-    setDirection(index > currentImageIndex ? 1 : -1);
-    setCurrentImageIndex(index);
+    setDirection(index > currentIndex ? 1 : -1);
+    setCurrentIndex(index);
   };
+
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(() => {
+      nextSlide();
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [nextSlide, isPaused]);
 
   return (
     <section
-      className="relative h-[90vh] flex items-center overflow-hidden bg-black"
-      style={{ perspective: "1500px" }} // Deeper perspective for more wow factor
+      className="relative min-h-[92vh] flex items-center overflow-hidden bg-slate-950 text-white"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
     >
-      {/* Background Carousel */}
-      <AnimatePresence initial={false} custom={direction}>
-        <motion.div
-          key={currentImageIndex}
-          custom={direction}
-          variants={slideVariants}
-          initial="enter"
-          animate="center"
-          exit="exit"
-          className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat origin-center backface-hidden"
-          style={{
-            backgroundImage: `url("${heroImages[currentImageIndex]}")`,
-            backgroundSize: heroImages[currentImageIndex].includes("329254")
-              ? "contain"
-              : "cover",
-            backgroundColor: "#000",
-          }}
-        >
-          {/* Inner Vignette for cinematic depth - Soft Blue Tint */}
-          <div className="absolute inset-0 bg-blue-500/10 mix-blend-multiply" />
-        </motion.div>
-      </AnimatePresence>
+      {/* Background Slides with smooth crossfade & Ken Burns effect */}
+      <div className="absolute inset-0 z-0 overflow-hidden">
+        <AnimatePresence initial={false} custom={direction}>
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0, scale: 1.08 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{
+              opacity: { duration: 1.1, ease: "easeInOut" },
+              scale: { duration: 6, ease: "easeOut" },
+            }}
+            className="absolute inset-0"
+          >
+            <Image
+              src={slides[currentIndex].image}
+              alt={slides[currentIndex].title}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover object-center"
+            />
+          </motion.div>
+        </AnimatePresence>
 
-      {/* Dynamic Overlay with animated gradient - Enhanced Beautiful Blue Tint */}
-      <motion.div
-        animate={{
-          backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"],
-        }}
-        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-        className="absolute inset-0 z-0 bg-gradient-to-r from-blue-600/30 via-sky-400/20 to-blue-600/30 bg-[length:200%_200%] pointer-events-none mix-blend-color-dodge"
-      />
-      {/* Additional blue wash for unified tint */}
-      <div className="absolute inset-0 z-0 bg-blue-600/20 pointer-events-none mix-blend-color" />
-
-      {/* Progress Bar */}
-      <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10 z-30">
-        <motion.div
-          key={currentImageIndex}
-          initial={{ width: "0%" }}
-          animate={{ width: "100%" }}
-          transition={{ duration: 7, ease: "linear" }}
-          className="h-full bg-blue-500 shadow-[0_0_10px_rgba(59,130,246,0.8)]"
-        />
+        {/* Multi-layered Cinematic Gradients for Rich Contrast & Readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/65 to-slate-950/30 z-[1]" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-transparent to-slate-950/50 z-[1]" />
+        <div className="absolute inset-0 bg-blue-950/20 mix-blend-color-dodge z-[1] pointer-events-none" />
       </div>
 
-      {/* Navigation Arrows (Glassmorphism) */}
+      {/* Main Content Area */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10 pt-24 pb-16">
+        <div className="max-w-3xl">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 mb-6 text-xs sm:text-sm font-semibold tracking-wider text-blue-200 uppercase bg-blue-900/60 border border-blue-500/40 rounded-full backdrop-blur-md shadow-lg">
+                <Sparkles className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+                <span>{slides[currentIndex].tag}</span>
+              </div>
+
+              {/* Heading */}
+              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight mb-5 drop-shadow-md">
+                {slides[currentIndex].title}
+              </h1>
+
+              {/* Description */}
+              <p className="text-base sm:text-lg md:text-xl text-slate-200 mb-8 leading-relaxed max-w-2xl font-medium drop-shadow">
+                {slides[currentIndex].description}
+              </p>
+
+              {/* Call-to-Action Buttons */}
+              <div className="flex flex-wrap items-center gap-4 mb-10">
+                <Link
+                  href="/about"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-semibold transition-all duration-200 shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:shadow-[0_0_25px_rgba(37,99,235,0.6)] hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <span>Explore Campus</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+
+                <Link
+                  href="/admission"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 backdrop-blur-md rounded-xl font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <span>Admissions 2026</span>
+                </Link>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Key Stats Counter */}
+          <div className="grid grid-cols-3 gap-4 sm:gap-8 pt-8 border-t border-white/15 max-w-xl">
+            <div className="group cursor-default">
+              <div className="flex items-center space-x-2.5 mb-1.5">
+                <div className="p-2 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 group-hover:scale-110 transition-transform">
+                  <GraduationCap className="w-5 h-5" />
+                </div>
+                <span className="text-2xl sm:text-3xl font-extrabold text-white">5+</span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-300 font-medium tracking-wide">
+                B.Tech Departments
+              </p>
+            </div>
+
+            <div className="group cursor-default">
+              <div className="flex items-center space-x-2.5 mb-1.5">
+                <div className="p-2 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 group-hover:scale-110 transition-transform">
+                  <Users className="w-5 h-5" />
+                </div>
+                <span className="text-2xl sm:text-3xl font-extrabold text-white">1200+</span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-300 font-medium tracking-wide">
+                Enrolled Students
+              </p>
+            </div>
+
+            <div className="group cursor-default">
+              <div className="flex items-center space-x-2.5 mb-1.5">
+                <div className="p-2 rounded-lg bg-blue-500/20 text-blue-400 border border-blue-500/30 group-hover:scale-110 transition-transform">
+                  <Building2 className="w-5 h-5" />
+                </div>
+                <span className="text-2xl sm:text-3xl font-extrabold text-white">15+</span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-300 font-medium tracking-wide">
+                Hi-Tech Laboratories
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Glassmorphic Navigation Arrows */}
       <button
         onClick={prevSlide}
-        className="absolute left-8 z-20 p-4 text-white/80 hover:text-white transition-all hidden md:flex items-center justify-center rounded-full bg-transparent hover:bg-white/10 border border-white/30 group"
+        aria-label="Previous Slide"
+        className="absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/40 hover:bg-slate-900/80 text-white/80 hover:text-white border border-white/20 backdrop-blur-md transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg group"
       >
-        <ChevronLeft className="w-10 h-10 group-hover:scale-110 transition-transform" />
-      </button>
-      <button
-        onClick={nextSlide}
-        className="absolute right-8 z-20 p-4 text-white/80 hover:text-white transition-all hidden md:flex items-center justify-center rounded-full bg-transparent hover:bg-white/10 border border-white/30 group"
-      >
-        <ChevronRight className="w-10 h-10 group-hover:scale-110 transition-transform" />
+        <ChevronLeft className="w-6 h-6 sm:w-7 sm:h-7 group-hover:-translate-x-0.5 transition-transform" />
       </button>
 
-      {/* Dots Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 flex space-x-3">
-        {heroImages.map((_, index) => (
+      <button
+        onClick={nextSlide}
+        aria-label="Next Slide"
+        className="absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-20 p-3 rounded-full bg-slate-900/40 hover:bg-slate-900/80 text-white/80 hover:text-white border border-white/20 backdrop-blur-md transition-all duration-200 hover:scale-110 active:scale-95 shadow-lg group"
+      >
+        <ChevronRight className="w-6 h-6 sm:w-7 sm:h-7 group-hover:translate-x-0.5 transition-transform" />
+      </button>
+
+      {/* Bottom Indicators & Progress Bar */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex items-center space-x-2.5 px-4 py-2 rounded-full bg-slate-950/50 backdrop-blur-md border border-white/10">
+        {slides.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
-            className={`h-2 rounded-full transition-all duration-500 ${
-              index === currentImageIndex
-                ? "bg-blue-400 w-8 shadow-[0_0_8px_rgba(96,165,250,0.8)]"
-                : "bg-white/30 w-2 hover:bg-white/50"
+            aria-label={`Go to slide ${index + 1}`}
+            className={`h-2 rounded-full transition-all duration-300 ${
+              index === currentIndex
+                ? "bg-blue-500 w-8 shadow-[0_0_10px_rgba(59,130,246,0.8)]"
+                : "bg-white/30 hover:bg-white/60 w-2"
             }`}
           />
         ))}
       </div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="max-w-3xl">
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <motion.span
-              variants={itemVariants}
-              className="inline-block px-4 py-1.5 mb-6 text-sm font-bold tracking-wider text-white uppercase bg-blue-900/90 border border-blue-500 rounded-full backdrop-blur-md shadow-lg"
-            >
-              New Engineering College
-            </motion.span>
-            <motion.p
-              variants={itemVariants}
-              className="text-2xl text-white mb-10 leading-relaxed max-w-2xl font-bold drop-shadow-[0_4px_4px_rgba(0,0,0,0.8)]"
-            >
-              Cooch Behar Government Engineering College provides a platform for
-              students to excel in technical education, research, and holistic
-              development.
-            </motion.p>
-
-            <motion.div
-              variants={itemVariants}
-              className="flex flex-wrap gap-4 mt-55"
-            >
-              <Link
-                href="/about"
-                className="px-8 py-4 bg-blue-600 text-white border border-blue-500 backdrop-blur-md rounded-xl font-bold hover:bg-blue-700 transition-all hover:border-blue-400 shadow-lg"
-              >
-                Explore Campus
-              </Link>
-            </motion.div>
-          </motion.div>
-
-          {/* Stats Preview */}
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.8 }}
-            className="flex gap-12 mt-10 pt-10 border-t border-white/10"
-          >
-            <div className="text-white group cursor-default">
-              <div className="flex items-center space-x-2 mb-2 group-hover:scale-105 transition-transform duration-300">
-                <GraduationCap className="w-6 h-6 text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
-                <span className="text-3xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                  5+
-                </span>
-              </div>
-              <p className="text-sm text-blue-100 uppercase tracking-widest font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                Departments
-              </p>
-            </div>
-            <div className="text-white group cursor-default">
-              <div className="flex items-center space-x-2 mb-2 group-hover:scale-105 transition-transform duration-300">
-                <Users className="w-6 h-6 text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
-                <span className="text-3xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                  1200+
-                </span>
-              </div>
-              <p className="text-sm text-blue-100 uppercase tracking-widest font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                Students
-              </p>
-            </div>
-            <div className="text-white group cursor-default">
-              <div className="flex items-center space-x-2 mb-2 group-hover:scale-105 transition-transform duration-300">
-                <Building2 className="w-6 h-6 text-blue-400 drop-shadow-[0_0_8px_rgba(96,165,250,0.8)]" />
-                <span className="text-3xl font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                  10+
-                </span>
-              </div>
-              <p className="text-sm text-blue-100 uppercase tracking-widest font-bold drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
-                Laboratories
-              </p>
-            </div>
-          </motion.div>
-        </div>
+      {/* Linear Auto-play Progress Bar at Bottom of Section */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-white/10 z-30">
+        <motion.div
+          key={currentIndex}
+          initial={{ width: "0%" }}
+          animate={{ width: isPaused ? "0%" : "100%" }}
+          transition={{ duration: 6, ease: "linear" }}
+          className="h-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.8)]"
+        />
       </div>
-
-      {/* Scroll Indicator */}
-      <motion.div
-        animate={{ y: [0, 10, 0], opacity: [0.5, 1, 0.5] }}
-        transition={{ duration: 2, repeat: Infinity }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2 text-white/50"
-      >
-        <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center p-1">
-          <motion.div
-            animate={{ y: [0, 12, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="w-1.5 h-1.5 bg-white rounded-full"
-          />
-        </div>
-      </motion.div>
     </section>
   );
 };

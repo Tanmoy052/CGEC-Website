@@ -61,13 +61,13 @@ export const departments: Record<string, DepartmentData> = {
         "The department encourages students to participate in research and live projects under the guidance of faculty members. Students are motivated and encouraged to work on state of the art research and projects. There have been a number of publications in Journals, International and National Conferences faculty members over the last three years. The department aims to provide amenities for the students in every possible way and groom them for a successful life ahead.",
         "The department maintaining its relationship with the different industry and renowned institute for conduct courses to enhance the technical skills of the students and make them industry ready. Students of the department are engaged in research oriented as well as industry oriented projects.",
       ],
-      image: "https://cgec.org.in/img/labimage/LabCSE1.jpg",
+      image: "/img/labs/cse_lab.jpg",
     },
     hodMessage: {
       name: "Dr. Somen Mondal",
       message:
         "It is a pleasure to be head of the department of Computer Science & Engineering. The department offers 4 year's BTech degree in Computer Science & Engineering. The department is equipped with all modern tools of teaching like virtual class room, digital board, and projector. The aim of the department is to provide high quality education along with training the students with all the new advancements in the computers field. The department places emphasis on all the important aspects of computers such as Algorithm Design, Advance database systems, Computer Programming, networking, mobile networks, Operational research, Theory of computation , Computer Graphics and many more. The department also takes initiative to improve the soft skills, analytical capabilities and verbal communication of the students so that they can face the competition in the corporate world confidently. The scope of computer science is endless. The students of the computer science and engineering are highly demanded by the recruiters of the top companies. The department provides platform for the students and We are confident that our Student will emerge as assets not only to this institution and to the organization they belong, but also to the country at large.",
-      image: "https://cgec.org.in/img/Faculty/Somen_P.jpg",
+      image: "/img/Faculty/Somen_P.jpg",
     },
     faculty: [
       {
@@ -77,7 +77,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "B.Tech., M.Tech.",
         specialization:
           "Cloud Computing, Advanced Cryptography & Network Security",
-        image: "https://cgec.org.in/img/Faculty/Somen_P.jpg",
+        image: "/img/Faculty/Somen_P.jpg",
         cvLink: "/data/cse/cv/somen.pdf",
       },
       {
@@ -87,7 +87,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "M.E.",
         specialization:
           "Computer Vision, Deep Learning, Formal Language and Automata Theory, Design and analysis of algorithm",
-        image: "https://cgec.org.in/img/Faculty/423-A.jpg",
+        image: "/img/Faculty/423-A.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -96,7 +96,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "9 yrs",
         qualification: "BSC, PDIT, PGDSE",
         specialization: "COMPUTER Applications, C,C++, Java,VB",
-        image: "https://cgec.org.in/img/Faculty/ii.jpg",
+        image: "/img/Faculty/ii.jpg",
         cvLink: "/data/cse/cv/shahid_ali.pdf",
       },
       {
@@ -105,7 +105,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "7 YEARS",
         qualification: "B.TECH M.TECH, CSE",
         specialization: "Data Structure, Image Processing, Soft Computing",
-        image: "https://cgec.org.in/img/Faculty/Mama.jpg",
+        image: "/img/Faculty/Mama.jpg",
         cvLink: "/data/cse/cv/pranab.pdf",
       },
       {
@@ -115,7 +115,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "B.Tech.",
         specialization:
           "Data Structure, Python, C, Java, Computer Architecture",
-        image: "https://cgec.org.in/img/Faculty/CSE_Umakanta_Bera.jpg",
+        image: "/img/Faculty/CSE_Umakanta_Bera.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -134,7 +134,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "9 Years",
         qualification: "B.Tech, M.Tech, Ph.D",
         specialization: "-",
-        image: "https://cgec.org.in/img/Faculty/PrabirNaskar_cse.jpg.jpeg",
+        image: "/img/Faculty/PrabirNaskar_cse.jpg.jpeg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
@@ -307,7 +307,7 @@ export const departments: Record<string, DepartmentData> = {
         "The students are also very much enthusiastic and passionate about the development programs of the department. Apart from their academic performances they have shown interests in co-curricular activities like setting up a Robotica Club to explore the cutting edge technologies on Robotics. They do have a plan to organize a national level Tech-Feast every year to promote latest developments in the field of Electronics and Communication. We have a plan to organize national and International conferences, seminars and workshops every year to increase expertize in the field of all concerned. Some grooming programs of the students for increasing their employability are also to be exercised in near future.",
         "I, from the desk of Head of the Department, take the pride and opportunity to invite all the interested intelligentsia to be a part of the promotional noble venture of this department and thus enriching resources to fulfill our mission and vision.",
       ],
-      image: "https://cgec.org.in/img/Faculty/sourav.png",
+      image: "/img/Faculty/sourav.png",
     },
     faculty: [
       {
@@ -316,7 +316,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "17 years 6 months",
         qualification: "Ph.D in Engineering",
         specialization: "Digital electronic circuits, Microprocessor",
-        image: "https://cgec.org.in/img/Faculty/gdsir.jpg",
+        image: "/img/Faculty/gdsir.jpg",
         cvLink: "/data/ece/cv/gautam_das.pdf",
       },
       {
@@ -325,7 +325,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "5 years",
         qualification: "B.Tech from Jalpaiguri Government Engineering College",
         specialization: "Solid State Devices, Analog Electronics",
-        image: "https://cgec.org.in/img/Faculty/Soumik_phto.jpg",
+        image: "/img/Faculty/Soumik_phto.jpg",
         cvLink: "/data/ece/cv/soumik_sarkar.pdf",
       },
       {
@@ -335,7 +335,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification:
           "DIPLOMA IN ELECTRONICS & TELECOMMUNICATION ENGINEERING FROM KALNA GOVT POLYTECHNIC",
         specialization: "ELECRONICS SYSTEM IN POWER ELECTRONICS FIELD",
-        image: "https://cgec.org.in/img/Faculty/ECE_Avshek.bmp",
+        image: "/img/Faculty/ECE_Avshek.bmp",
         cvLink: "/data/ece/cv/avisek_nandi.pdf",
       },
       {
@@ -345,7 +345,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "Ph.D. (IIT Kharagpur) M.S. (IIT Kharagpur) B.Tech",
         specialization:
           "Gallium Nitride Compound Semiconductor based High Electron Mobility Transistor, HRXRD",
-        image: "https://cgec.org.in/img/Faculty/ECEpalashDas.jpg",
+        image: "/img/Faculty/ECEpalashDas.jpg",
         cvLink: "/data/ece/cv/palash_das.pdf",
       },
       {
@@ -354,7 +354,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "Teaching: 6",
         qualification: "M.E.Tel.E, B. Tech",
         specialization: "Control Systems, Signal Processing",
-        image: "https://cgec.org.in/img/Faculty/RAJIB%20Das.JPG",
+        image: "/img/Faculty/RAJIB%20Das.JPG",
         cvLink: "/data/ece/cv/rajib_das.pdf",
       },
       {
@@ -364,7 +364,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "Ph.D(Engg), M. Tech, B. Tech",
         specialization:
           "VLSI design, Signal Processing, Wireless system architecture design, Analog circuit design",
-        image: "https://cgec.org.in/img/Faculty/sourav.png",
+        image: "/img/Faculty/sourav.png",
         cvLink: "/data/ece/cv/sourav_chakraborty.pdf",
       },
       {
@@ -374,7 +374,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification:
           "Diploma in Electronics and Telecommunication Engineering",
         specialization: "-",
-        image: "https://cgec.org.in/img/Faculty/abhijit_ece01082024.jpeg",
+        image: "/img/Faculty/abhijit_ece01082024.jpeg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
@@ -542,7 +542,7 @@ export const departments: Record<string, DepartmentData> = {
         "Our objective is not merely to produce professionals capable to serve their own needs but endeavour to serve the society with great concern for human values. Our devoted faculties and staff render their utmost efforts to ensure that all our young students have a strong education with leadership, management and teaming skills, internship experience, and involvement in student activities. We feel proud to be a part of the department where our beloved students for their latest achievements in different cocurricular activities in versatile domain of sports and culture. We entrust that accentuating these areas will make our young students well-qualified to take leadership roles and team spirit in the future.",
         "With this, we welcome you all to Mechanical Engineering at the Department of Mechanical Engineering, Cooch Behar Government Engineering College.",
       ],
-      image: "https://cgec.org.in/img/Faculty/ME_Prasenjit.jpg",
+      image: "/img/Faculty/ME_Prasenjit.jpg",
     },
     faculty: [
       {
@@ -553,7 +553,7 @@ export const departments: Record<string, DepartmentData> = {
           "BME (Hons.) (JU), MME (JU), PhD (IIT Guwahati), MIE (India)",
         specialization:
           "Design and thermal optimization of chemical process, I.C. engines",
-        image: "https://cgec.org.in/img/Faculty/ME_Sushovan_Chatterjee.jpg",
+        image: "/img/Faculty/ME_Sushovan_Chatterjee.jpg",
         cvLink: "/data/me/cv/sushovan_chatterjee.pdf",
       },
       {
@@ -563,7 +563,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "B.Tech(JGEC), MBA(NBU), MTech(JGEC)",
         specialization:
           "Production Engineering, Design, Automobile Engineering, Thermal Power Engineering",
-        image: "https://cgec.org.in/img/Faculty/ME_GTL.jpg",
+        image: "/img/Faculty/ME_GTL.jpg",
         cvLink: "/data/me/cv/gyan_tshering_lepcha.pdf",
       },
       {
@@ -572,7 +572,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "05",
         qualification: "Master of Engineering In Mechanical Engineering",
         specialization: "Machine Design",
-        image: "https://cgec.org.in/img/Faculty/ME_Prasenjit.jpg",
+        image: "/img/Faculty/ME_Prasenjit.jpg",
         cvLink: "/data/me/cv/prasenjit_das.pdf",
       },
       {
@@ -581,7 +581,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "9 Years of Experience",
         qualification: "DIPLOMA MECHANICAL ENGINEERING",
         specialization: "Quality Control",
-        image: "https://cgec.org.in/img/Faculty/ME_Provas.jpg",
+        image: "/img/Faculty/ME_Provas.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -590,7 +590,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "03 Years (As of 2024)",
         qualification: "Diploma in mechanical engineering",
         specialization: "-",
-        image: "https://cgec.org.in/img/Faculty/nikhil_me01082024.jpeg",
+        image: "/img/Faculty/nikhil_me01082024.jpeg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -599,7 +599,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "03 Years (As of 2024)",
         qualification: "Diploma in Mechanical Engineering",
         specialization: "-",
-        image: "https://cgec.org.in/img/Faculty/ziaul_me01082024.jpeg",
+        image: "/img/Faculty/ziaul_me01082024.jpeg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -608,7 +608,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "12 Years",
         qualification: "B.Tech(JGEC), MME(JU), PhD(JU) (Pursuing)",
         specialization: "Production Engineering, Composite",
-        image: "https://cgec.org.in/img/Faculty/sudipta_roy.jpeg",
+        image: "/img/Faculty/sudipta_roy.jpeg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -617,7 +617,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "4 years",
         qualification: "M.E from IIEST Shibpur, Ph.D",
         specialization: "Machine Design, Biomechanics",
-        image: "https://cgec.org.in/img/Faculty/Masud_me.jpeg",
+        image: "/img/Faculty/Masud_me.jpeg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -628,7 +628,7 @@ export const departments: Record<string, DepartmentData> = {
           "B.M.E. (1st Class Hons., JU), M.E. (1st Class with Distinction, BITS Pilani), Ph.D. (Engineering, JU",
         specialization:
           "Heat Transfer, Refrigeration and Air-conditioning, Sediment Transport",
-        image: "https://cgec.org.in/img/Faculty/SanchayanMukherjeeSir_me.jpg",
+        image: "/img/Faculty/SanchayanMukherjeeSir_me.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
@@ -801,7 +801,7 @@ export const departments: Record<string, DepartmentData> = {
         "Faculty member and Technical stuff of our department are always involved in cutting edge research apart from passionate teaching. We are proud to have an exceptionally dedicated, motivated & experienced faculty and Technical Stuff as our Electrical Engineering family members. We constantly look or bright enthusiastic students who have passion to participate in all our activities & promote them to the level of leaders.",
         "Finally, our department has a long valued tradition of striving for excellence in whatever we do. I hope we will be able to maintain this in future too.",
       ],
-      image: "https://cgec.org.in/img/Faculty/EE_Atanu.jpg",
+      image: "/img/Faculty/EE_Atanu.jpg",
     },
     faculty: [
       {
@@ -810,7 +810,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "3 YEARS",
         qualification: "B.Tech.,M.Tech.",
         specialization: "Power Electronics & Drives",
-        image: "https://cgec.org.in/img/Faculty/Rabiul.jpg",
+        image: "/img/Faculty/Rabiul.jpg",
         cvLink: "/data/ee/cv/rabiul_hossain.pdf",
       },
       {
@@ -819,7 +819,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "11 Years",
         qualification: "B.Tech., M.E.",
         specialization: "Power System",
-        image: "https://cgec.org.in/img/Faculty/EE_Atanu.jpg",
+        image: "/img/Faculty/EE_Atanu.jpg",
         cvLink: "/data/ee/cv/atanu_maji.pdf",
       },
       {
@@ -828,7 +828,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "7 Years",
         qualification: "B.Tech., M.E.",
         specialization: "ILLUMINATION ENGINEERING",
-        image: "https://cgec.org.in/img/Faculty/EE_Tanumoy.jpg",
+        image: "/img/Faculty/EE_Tanumoy.jpg",
         cvLink: "/data/ee/cv/tanumay_halder.pdf",
       },
       {
@@ -847,7 +847,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "7 years",
         qualification: "M.TECH",
         specialization: "ELECTRICAL MACHINE",
-        image: "https://cgec.org.in/img/Faculty/DeepjyotiSantra_ee.jpeg",
+        image: "/img/Faculty/DeepjyotiSantra_ee.jpeg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -856,7 +856,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "Teaching 31years , industrial 2years",
         qualification: "B.E.( Electrical), M.E.E, Ph.D",
         specialization: "Electrical Machines and Drives",
-        image: "https://cgec.org.in/img/Faculty/GoutamPandaSir_ee.jpg",
+        image: "/img/Faculty/GoutamPandaSir_ee.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -865,7 +865,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "26 Years",
         qualification: "B. E. (Electrical Engg), M. Tech(Electrical Engg)",
         specialization: "Power System",
-        image: "https://cgec.org.in/img/Faculty/Prof._Mafizul_Islam_ee.jpg",
+        image: "/img/Faculty/Prof._Mafizul_Islam_ee.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
@@ -1074,7 +1074,7 @@ export const departments: Record<string, DepartmentData> = {
         qualification: "B.E., M.E., Ph.D",
         specialization:
           "Soil mechanics, Highway and Transportation engineering",
-        image: "https://cgec.org.in/img/Faculty/Kingshuk%20Dan.jpg",
+        image: "/img/Faculty/Kingshuk%20Dan.jpg",
         cvLink: "/data/ce/cv/kingshuk_dan.pdf",
       },
       {
@@ -1083,7 +1083,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "4 years",
         qualification: "B.Tech, M.E.",
         specialization: "Water Resources Engineering, Hydraulic Structures",
-        image: "https://cgec.org.in/img/Faculty/asif.jpg",
+        image: "/img/Faculty/asif.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -1094,7 +1094,7 @@ export const departments: Record<string, DepartmentData> = {
           "Ph D, M. E (Structural Engineering) BESU, B.Tech. (Civil Engineering) JGEC",
         specialization:
           "Structural Dynamics and Earthquake Engineering, Reliability Analysis, Structural Engineering, Finite Element Analysis",
-        image: "https://cgec.org.in/img/Faculty/shyamalSir_ce.jpeg",
+        image: "/img/Faculty/shyamalSir_ce.jpeg",
         cvLink: "/data/ce/cv/shyamal_ghosh.pdf",
       },
       {
@@ -1103,7 +1103,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "03 Years (As of 2024)",
         qualification: "Diploma in Civil Engineering Department",
         specialization: "-",
-        image: "https://cgec.org.in/img/Faculty/ansarul_ce01082024.jpg",
+        image: "/img/Faculty/ansarul_ce01082024.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -1112,7 +1112,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "5 years",
         qualification: "M. Tech",
         specialization: "Soil Mechanics & Foundation Engineering",
-        image: "https://cgec.org.in/img/Faculty/ChhandamayRay_ce.jpg",
+        image: "/img/Faculty/ChhandamayRay_ce.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
       {
@@ -1121,7 +1121,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "5 years",
         qualification: "M.Tech",
         specialization: "Geotechnical Engineering",
-        image: "https://cgec.org.in/img/Faculty/MithunMandal_ce.jpg",
+        image: "/img/Faculty/MithunMandal_ce.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
     ],
@@ -1292,7 +1292,7 @@ export const departments: Record<string, DepartmentData> = {
         "The Department enhances knowledge in subjects like Engineering Mathematics, Engineering Physics, Engineering Chemistry, Communication skill, Engineering Economics etc. Well educated, talented and dedicated Faculty and Staff Members are the backbone of this department.",
         "The teaching module comprises of lectures, tutorials and practicals along with various other initiatives. Faculty members perform the role of a perfect facilitator as Mentor to each section. The methodology adopted in the classroom teaching is based on the application of innovation strategies, comprehensive lectures, regular assignments and active interaction between teachers and students. The purpose of inducing the subjects of Basic Science & Humanities in Engineering study is to lay a solid foundation of basic concepts for innovative future with limitless opportunities. Therefore, the department acts as an active catalyst to develop perfect approach to unlock their hidden talent, personality and communication skills to fulfill the needs of young engineers.",
       ],
-      image: "https://cgec.org.in/img/Faculty/MADHUCHANDRA%20BHADURI%20.jpg",
+      image: "/img/Faculty/MADHUCHANDRA%20BHADURI%20.jpg",
     },
     faculty: [
       {
@@ -1301,7 +1301,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "11 Years (As of 2024)",
         qualification: "M. Sc in Mathematics from IIT Bombay",
         specialization: "Complex Analysis, Topology",
-        image: "https://cgec.org.in/img/Faculty/Md_salim.jpg",
+        image: "/img/Faculty/Md_salim.jpg",
         cvLink: "/data/bsh/cv/mohammad_salim.pdf",
       },
       {
@@ -1310,7 +1310,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "7 Years",
         qualification: "M.A., M.PHIL(Economics)",
         specialization: "International Trade, Agricultural Economics",
-        image: "https://cgec.org.in/img/Faculty/MADHUCHANDRA%20BHADURI%20.jpg",
+        image: "/img/Faculty/MADHUCHANDRA%20BHADURI%20.jpg",
         cvLink: "/data/bsh/cv/madhuchandra_bhaduri.pdf",
       },
       {
@@ -1319,7 +1319,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "5 Years",
         qualification: "B.Sc Hons Mathematics, M.Sc Applied Mathematics",
         specialization: "Operation Research",
-        image: "https://cgec.org.in/img/Faculty/Soumik_Roy.jpeg",
+        image: "/img/Faculty/Soumik_Roy.jpeg",
         cvLink: "/data/bsh/cv/soumik_roy.pdf",
       },
       {
@@ -1328,7 +1328,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "6 Years",
         qualification: "PhD",
         specialization: "Nuclear Physics",
-        image: "https://cgec.org.in/img/Faculty/MDhar.jpg",
+        image: "/img/Faculty/MDhar.jpg",
         cvLink: "/data/bsh/cv/madhumita_dhar.pdf",
       },
       {
@@ -1337,7 +1337,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "12 years",
         qualification: "MSc, PhD (IACS)",
         specialization: "Inorganic Chemistry",
-        image: "https://cgec.org.in/img/Faculty/CHE_Samik_Nag.jpg",
+        image: "/img/Faculty/CHE_Samik_Nag.jpg",
         cvLink: "/data/bsh/cv/samik_nag.pdf",
       },
       {
@@ -1346,7 +1346,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "6 years",
         qualification: "M.A. in ENGLISH, UGC - NET",
         specialization: "N.A.",
-        image: "https://cgec.org.in/img/Faculty/Arghya_Sir.jpg",
+        image: "/img/Faculty/Arghya_Sir.jpg",
         cvLink: "/data/bsh/cv/arghya_chakraborty.pdf",
       },
       {
@@ -1355,7 +1355,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "4 years",
         qualification: "B.Sc. (H), M.Sc., Ph.D.",
         specialization: "Cryptography",
-        image: "https://cgec.org.in/img/Faculty/Tanmay_bs.jpeg",
+        image: "/img/Faculty/Tanmay_bs.jpeg",
         cvLink: "/data/bsh/cv/tanmay_choudhury.pdf",
       },
       {
@@ -1364,7 +1364,7 @@ export const departments: Record<string, DepartmentData> = {
         experience: "11 years",
         qualification: "Ph.D",
         specialization: "Plasma Physics",
-        image: "https://cgec.org.in/img/Faculty/BiplabMaity_bsh.jpg",
+        image: "/img/Faculty/BiplabMaity_bsh.jpg",
         cvLink: "/data/cv/sample_cv.pdf",
       },
     ],

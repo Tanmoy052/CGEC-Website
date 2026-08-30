@@ -22,6 +22,10 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <>
       <nav
@@ -37,7 +41,7 @@ export default function Navbar() {
           <Link href="/" className="flex items-center h-full group">
             <div className="relative h-20 w-59 overflow-hidden shrink-0 flex items-center justify-center">
               <Image
-                src="https://cgec.org.in/img/cgec_logo.png"
+                src="/img/cgec_logo.png"
                 alt="CGEC Logo"
                 fill
                 className="object-contain transform group-hover:scale-105 transition-transform duration-300 block"
