@@ -1,327 +1,799 @@
 <div align="center">
 
-<img src="frontend/public/cgec_round_logo.ico" alt="CGEC Logo" width="80" />
+<br/>
 
-# 🎓 CGEC Website — Official College Portal
+<img src="frontend/public/cgec_round_logo.ico" alt="CGEC Logo" width="96" height="96" />
+
+<br/>
+
+# CGEC Website — Official College Portal
 
 ### Cooch Behar Government Engineering College
 
-**A modern, full-stack college management system with AI chatbot, admin CMS, Cloudinary media management, and role-based access control.**
+*Established 2016 · Government of West Bengal · MAKAUT Affiliated · AICTE Approved*
 
-[![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-18+-green?style=for-the-badge&logo=node.js)](https://nodejs.org/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
-[![Cloudinary](https://img.shields.io/badge/Cloudinary-Media-3448C5?style=for-the-badge&logo=cloudinary)](https://cloudinary.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=for-the-badge&logo=prisma)](https://www.prisma.io/)
+<br/>
 
----
+[![Next.js](https://img.shields.io/badge/Next.js-15.x-000000?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-ORM-2D3748?style=flat-square&logo=prisma&logoColor=white)](https://www.prisma.io/)
+[![Cloudinary](https://img.shields.io/badge/Cloudinary-Media%20CDN-3448C5?style=flat-square&logo=cloudinary&logoColor=white)](https://cloudinary.com/)
+[![JWT](https://img.shields.io/badge/JWT-Auth-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
-[🌐 Live Website](https://cgec.org.in) · [📋 Admin Panel](#admin-panel) · [🤖 AI Chatbot](#ai-chatbot) · [🚀 Quick Start](#quick-start)
+<br/>
+
+[![License](https://img.shields.io/badge/License-Proprietary-red?style=flat-square)](LICENSE)
+[![Tests](https://img.shields.io/badge/Tests-23%2F23%20Passed-brightgreen?style=flat-square)](README.md#testing)
+[![PRs Welcome](https://img.shields.io/badge/PRs-Internal%20Only-orange?style=flat-square)](README.md)
+
+<br/>
+
+[📖 Documentation](#table-of-contents) · [🚀 Quick Start](#quick-start) · [🌐 Live Site](https://cgec.org.in) · [🐛 Report Issue](https://github.com/Tanmoy052/CGEC-Website/issues)
 
 </div>
 
 ---
 
-## 📌 Overview
+## Table of Contents
 
-The **CGEC Website** is the official web portal for [Cooch Behar Government Engineering College](https://cgec.org.in) — a premier government engineering institution in West Bengal, India, established in 2016 and affiliated with MAKAUT (Maulana Abul Kalam Azad University of Technology).
-
-This full-stack application features:
-- 🎨 **Modern, responsive UI** built with Next.js 15 + Framer Motion animations
-- 🔐 **Secure Admin CMS** with JWT-based authentication
-- ☁️ **Cloudinary-first media pipeline** with automatic cleanup on delete
-- 🤖 **CGEC Smart Assistant** — an AI-powered institutional chatbot
-- 📢 **Dynamic content management** for Faculty, Syllabus, Notices, Gallery, Wall Magazine, and Labs
-
----
-
-## ✨ Key Features
-
-### 🌐 Public Website
-| Feature | Details |
-|---|---|
-| **Home Page** | Hero slider, notice board, quick links, college stats |
-| **About Page** | Principal's message, vision, mission, college history |
-| **Department Pages** | 6 departments: CSE, ECE, EE, ME, CE, BSH — with faculty, labs, syllabus, HOD message, wall magazine |
-| **Placement Page** | TPO message, top recruiters, package records, contact details |
-| **Notices Page** | Categorized notices with priority filter (General, Exam, Recruitment, Scholarship) |
-| **Gallery Page** | Campus photo gallery with Cloudinary-hosted images |
-| **Chatbot** | CGEC Smart Assistant — 30+ topic handlers with rich markdown rendering |
-
-### 🔐 Admin CMS
-| Module | Capabilities |
-|---|---|
-| **Faculty Directory** | Add/Edit/Delete faculty with photo + CV upload |
-| **Syllabus Manager** | Upload department-wise PDF syllabi per semester |
-| **Notices Manager** | Create/edit notices with PDF attachments, priority, and category |
-| **Campus Gallery** | Upload and manage campus photos by category |
-| **Wall Magazine** | Upload cover image + PDF per department edition |
-| **Lab Details** | Manage lab name & description table per department |
-
-### 🤖 AI Chatbot
-The **CGEC Smart Assistant** covers:
-- College profile, vision, mission, history
-- All 6 departments with HOD names, faculty details, lab specs
-- WBJEE/JELET admission process and seat matrix
-- Fee structure and 6 government scholarship portals
-- Placement stats (21 LPA highest), top recruiters, TPO contacts
-- Exam system (CA1–CA4, MAKAUT), academic calendar
-- Transport & directions (train, bus, air)
-- Committee info (Anti-ragging, IQAC, GRC, ICC)
-- Faculty name lookup across all departments
+- [Overview](#overview)
+- [Features](#features)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Quick Start](#quick-start)
+- [Environment Variables](#environment-variables)
+- [Admin Panel](#admin-panel)
+- [Media Management](#media-management)
+- [Database Schema](#database-schema)
+- [API Reference](#api-reference)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [College Information](#college-information)
+- [License](#license)
 
 ---
 
-## 🛠️ Tech Stack
+## Overview
 
-### Frontend
-| Technology | Purpose |
-|---|---|
-| **Next.js 15** | React framework with App Router |
-| **TypeScript** | Type-safe development |
-| **Framer Motion** | Smooth animations & transitions |
-| **Lucide React** | Icon library |
-| **Vanilla CSS** | Custom styling (no Tailwind) |
+The **CGEC Website** is the official digital platform for Cooch Behar Government Engineering College — a premier government engineering institution in West Bengal, India. This production-grade, full-stack web application delivers a seamless experience for students, faculty, and administrators.
 
-### Backend
-| Technology | Purpose |
-|---|---|
-| **Node.js + Express** | REST API server |
-| **TypeScript** | Type-safe server code |
-| **Prisma ORM** | Database access layer |
-| **MongoDB Atlas** | Cloud database |
-| **Cloudinary** | Image/PDF cloud storage |
-| **Multer** | File upload middleware (memory storage) |
-| **JWT** | Authentication tokens |
-| **bcryptjs** | Password hashing |
+The system is built as a **monorepo** containing a **Next.js 15 frontend** and an **Express.js backend API**, connected to **MongoDB Atlas** with **Cloudinary** for scalable media storage.
+
+### What makes it production-ready?
+
+- ✅ **Cloudinary-first delete strategy** — zero orphaned media files
+- ✅ **JWT-secured admin panel** with bcrypt password hashing
+- ✅ **Automated QA suite** — 23/23 tests passing across all modules
+- ✅ **Hot-reload dev environment** — frontend + backend run concurrently
+- ✅ **Type-safe throughout** — TypeScript on both client and server
+- ✅ **SEO optimised** — semantic HTML, meta descriptions, correct heading hierarchy
 
 ---
 
-## 📁 Project Structure
+## Features
+
+### 🌐 Public Portal
+
+<table>
+<thead>
+<tr><th>Page</th><th>Key Features</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Home</strong></td>
+<td>Auto-sliding hero banner, dynamic notice board, college stats, quick-access links</td>
+</tr>
+<tr>
+<td><strong>About</strong></td>
+<td>Principal's message, vision & mission, NAAC profile, institutional history since 2016</td>
+</tr>
+<tr>
+<td><strong>Departments (×6)</strong></td>
+<td>CSE · ECE · EE · ME · CE · BSH — each with HOD message, full faculty roster, lab inventory, semester syllabus PDFs, research publications, and Wall Magazine</td>
+</tr>
+<tr>
+<td><strong>Placement</strong></td>
+<td>TPO message, highest/average packages, top-10 recruiters, department-wise TPO contacts</td>
+</tr>
+<tr>
+<td><strong>Notices</strong></td>
+<td>Filterable notice board: General, Exam, Recruitment, Scholarship — with PDF attachments</td>
+</tr>
+<tr>
+<td><strong>Gallery</strong></td>
+<td>Campus photo gallery with category filter, Cloudinary-served images</td>
+</tr>
+<tr>
+<td><strong>Committees</strong></td>
+<td>Academic, Anti-Ragging, ICC, GRC, IQAC, IIC, SC/ST, Student Counsellor</td>
+</tr>
+</tbody>
+</table>
+
+### 🔐 Admin CMS Dashboard
+
+<table>
+<thead>
+<tr><th>Module</th><th>Capabilities</th></tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Faculty Directory</strong></td>
+<td>Create / Edit / Delete faculty profiles with profile photo + CV PDF upload via Cloudinary</td>
+</tr>
+<tr>
+<td><strong>Syllabus Manager</strong></td>
+<td>Upload department-wise PDF syllabi organised by semester (Sem 1–8 + Old Syllabus)</td>
+</tr>
+<tr>
+<td><strong>Notices & Circulars</strong></td>
+<td>Create categorised notices (priority: High/Normal/Low) with optional PDF attachments</td>
+</tr>
+<tr>
+<td><strong>Campus Gallery</strong></td>
+<td>Upload, categorise, and remove campus photos; real-time preview</td>
+</tr>
+<tr>
+<td><strong>Wall Magazine</strong></td>
+<td>Upload cover image + full-issue PDF per department edition</td>
+</tr>
+<tr>
+<td><strong>Lab Details</strong></td>
+<td>Text-only CRUD table (SL No · Lab Name · Description) — one table per department</td>
+</tr>
+</tbody>
+</table>
+
+### 🤖 CGEC Smart Assistant (AI Chatbot)
+
+An embedded institutional knowledge chatbot with **30+ curated response handlers**:
+
+| Category | Topics Covered |
+|---|---|
+| **Academics** | All 6 departments, HOD names, faculty roster, lab specs, syllabus structure |
+| **Admissions** | WBJEE/JELET process, eligibility, documents, seat matrix |
+| **Fees & Aid** | Government-subsidised fee structure, 6 scholarship portals |
+| **Placements** | 21 LPA highest package, top-10 recruiters, TPO contacts with phone & email |
+| **Exams** | CA1–CA4 system, MAKAUT semester exams, SGPA/CGPA grading, backlogs |
+| **Campus Life** | Hostels, library (7000+ books), sports, canteen, transport directions |
+| **Committees** | Anti-Ragging (national helpline), ICC, IQAC, GRC |
+| **Faculty Search** | Real-time lookup across all departments by faculty name |
+
+---
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        CLIENT (Browser)                          │
+│                    Next.js 15 · TypeScript                       │
+│              Framer Motion · Lucide Icons · CSS                  │
+└────────────────────────────┬────────────────────────────────────┘
+                             │ HTTP REST (fetch)
+                             │ JWT Bearer Token (admin)
+┌────────────────────────────▼────────────────────────────────────┐
+│                      BACKEND API SERVER                          │
+│                  Express.js · TypeScript · Port 5000             │
+│         Multer (Memory Storage) · bcryptjs · JWT                 │
+│                                                                  │
+│   ┌────────────────┐  ┌─────────────────┐  ┌────────────────┐  │
+│   │  Auth Routes   │  │  Admin Routes   │  │ Public Routes  │  │
+│   │ /auth/login    │  │ /admin/*        │  │ /faculty       │  │
+│   │ /auth/register │  │ JWT Protected   │  │ /notices       │  │
+│   └────────────────┘  └─────────────────┘  │ /gallery       │  │
+│                                             │ /wall-magazine │  │
+│                                             └────────────────┘  │
+└───────────┬─────────────────────────────────────┬───────────────┘
+            │ Prisma ORM                           │ Cloudinary SDK
+┌───────────▼──────────┐               ┌───────────▼──────────────┐
+│   MongoDB Atlas      │               │   Cloudinary CDN          │
+│   Database: cgec_website             │   Images · PDFs            │
+│   Collections:        │               │   Auto-cleanup on delete  │
+│   Faculty · Notice   │               │   Public IDs tracked in DB│
+│   Syllabus · Gallery │               └──────────────────────────┘
+│   WallMagazine · Lab │
+│   Admin              │
+└──────────────────────┘
+```
+
+---
+
+## Tech Stack
+
+### Frontend (`/frontend`)
+
+| Technology | Version | Purpose |
+|---|---|---|
+| **Next.js** | 15.x | React framework · App Router · SSR/SSG |
+| **TypeScript** | 5.x | Static typing |
+| **Framer Motion** | 11.x | Animations, transitions, spring physics |
+| **Lucide React** | Latest | Icon set |
+| **Vanilla CSS** | — | Custom responsive styling |
+
+### Backend (`/backend`)
+
+| Technology | Version | Purpose |
+|---|---|---|
+| **Node.js** | 18+ | JavaScript runtime |
+| **Express.js** | 4.x | REST API framework |
+| **TypeScript** | 5.x | Type-safe server code |
+| **Prisma** | 5.x | MongoDB ORM + type-safe queries |
+| **MongoDB Atlas** | — | Cloud NoSQL database |
+| **Cloudinary** | 2.x | Cloud media storage & CDN |
+| **Multer** | 1.x | Multipart file upload (memory storage) |
+| **JSON Web Token** | 9.x | Stateless authentication |
+| **bcryptjs** | 2.x | Password hashing |
+| **CORS** | 2.x | Cross-origin resource sharing |
+
+---
+
+## Project Structure
 
 ```
 CGEC-Website/
-├── frontend/                   # Next.js App (port 3000)
+│
+├── package.json                    ← Root: concurrently runs both servers
+├── .gitignore
+├── README.md
+│
+├── frontend/                       ← Next.js Application (localhost:3000)
 │   ├── public/
-│   │   ├── img/                # Static images (faculty, hero, labs)
-│   │   ├── uploads/            # Runtime uploaded files (gitignored)
-│   │   └── cgec_round_logo.ico
+│   │   ├── cgec_round_logo.ico     ← Sidebar & favicon branding
+│   │   ├── img/
+│   │   │   ├── Faculty/            ← Static faculty photos
+│   │   │   ├── hero/               ← Hero slider images
+│   │   │   └── labs/               ← Lab photos
+│   │   └── uploads/                ← Runtime uploads (gitignored, .gitkeep present)
+│   │
 │   ├── src/
 │   │   ├── app/
-│   │   │   ├── page.tsx        # Home page
-│   │   │   ├── about/          # About page
-│   │   │   ├── academics/[dept]/ # Department pages (CSE, ECE, EE, ME, CE, BSH)
-│   │   │   ├── admin/          # Admin dashboard (protected)
-│   │   │   │   └── login/cgec/ # Admin login route
-│   │   │   ├── gallery/        # Campus gallery
-│   │   │   ├── notices/        # Notices & circulars
-│   │   │   └── placement/      # Placement & TPO
+│   │   │   ├── layout.tsx          ← Root layout (Navbar, Footer, ChatBot)
+│   │   │   ├── page.tsx            ← Home page
+│   │   │   ├── about/page.tsx
+│   │   │   ├── academics/
+│   │   │   │   └── [dept]/page.tsx ← Dynamic: cse|ece|ee|me|ce|bsh
+│   │   │   ├── admin/
+│   │   │   │   ├── page.tsx        ← Admin dashboard (JWT protected client-side)
+│   │   │   │   └── login/cgec/     ← Obscured admin login route
+│   │   │   ├── gallery/page.tsx
+│   │   │   ├── notices/page.tsx
+│   │   │   ├── placement/page.tsx
+│   │   │   └── contact/page.tsx
+│   │   │
 │   │   ├── components/
-│   │   │   ├── common/ChatBot.tsx  # CGEC Smart Assistant
-│   │   │   ├── home/           # Hero, NoticeBoard, etc.
-│   │   │   └── layout/         # Navbar, Footer, MainLayout
-│   │   ├── data/departments.ts # All department data (faculty, labs, syllabus)
-│   │   └── lib/constants.ts    # Navigation links, API URL
+│   │   │   ├── common/
+│   │   │   │   └── ChatBot.tsx     ← CGEC Smart Assistant (30+ handlers)
+│   │   │   ├── home/
+│   │   │   │   ├── Hero.tsx
+│   │   │   │   └── NoticeBoard.tsx
+│   │   │   └── layout/
+│   │   │       ├── Navbar.tsx
+│   │   │       ├── Footer.tsx
+│   │   │       └── MainLayout.tsx
+│   │   │
+│   │   ├── data/
+│   │   │   └── departments.ts      ← Complete static data: faculty, labs, syllabus, HODs
+│   │   │
+│   │   └── lib/
+│   │       ├── constants.ts        ← Nav links, API URL, colour tokens
+│   │       └── utils.ts            ← Helper utilities (cn, etc.)
+│   │
+│   ├── next.config.ts              ← images.unoptimized: true
+│   └── tsconfig.json
 │
-├── backend/                    # Express API (port 5000)
-│   ├── prisma/
-│   │   └── schema.prisma       # MongoDB schema (Faculty, Notice, Syllabus, Gallery, WallMagazine, Lab)
-│   └── src/
-│       ├── controllers/
-│       │   ├── adminController.ts  # CRUD + Cloudinary-first delete
-│       │   ├── authController.ts   # JWT login/register
-│       │   └── uploadController.ts # Multer + Cloudinary upload handler
-│       ├── lib/
-│       │   ├── cloudinary.ts   # Cloudinary SDK config
-│       │   └── seedAllData.ts  # Database seeder
-│       ├── routes/
-│       │   ├── adminRoutes.ts  # Protected admin routes
-│       │   ├── authRoutes.ts   # Auth routes
-│       │   └── publicRoutes.ts # Public API endpoints
-│       └── index.ts            # Express server entry point
-│
-├── package.json                # Root: runs frontend + backend concurrently
-└── .gitignore
+└── backend/                        ← Express API Server (localhost:5000)
+    ├── prisma/
+    │   └── schema.prisma           ← MongoDB schema definitions
+    │
+    └── src/
+        ├── index.ts                ← Server entry: CORS, routes, port binding
+        ├── controllers/
+        │   ├── adminController.ts  ← Full CRUD + Cloudinary-first delete
+        │   ├── authController.ts   ← Login, register, JWT sign/verify
+        │   └── uploadController.ts ← Multer + Cloudinary upload handler
+        ├── lib/
+        │   ├── cloudinary.ts       ← Cloudinary SDK initialisation
+        │   └── seedAllData.ts      ← Seed script for initial data
+        └── routes/
+            ├── adminRoutes.ts      ← Protected: Bearer JWT required
+            ├── authRoutes.ts       ← Public: /login, /register
+            └── publicRoutes.ts     ← Public: faculty, notices, gallery, etc.
 ```
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
-- **Node.js** v18 or higher
-- **MongoDB Atlas** account (free tier works)
-- **Cloudinary** account (free tier works)
 
-### 1. Clone the Repository
+Ensure you have the following installed:
+
+| Tool | Version | Download |
+|---|---|---|
+| **Node.js** | v18 or higher | [nodejs.org](https://nodejs.org/) |
+| **npm** | v9 or higher | Bundled with Node.js |
+| **Git** | Latest | [git-scm.com](https://git-scm.com/) |
+
+You will also need free cloud accounts for:
+- **MongoDB Atlas** — [cloud.mongodb.com](https://cloud.mongodb.com)
+- **Cloudinary** — [cloudinary.com](https://cloudinary.com)
+
+---
+
+### Step 1 — Clone the Repository
+
 ```bash
 git clone https://github.com/Tanmoy052/CGEC-Website.git
 cd CGEC-Website
 ```
 
-### 2. Install All Dependencies
+### Step 2 — Install Dependencies
+
 ```bash
-# Install root + frontend + backend deps in one command
+# Installs root, frontend, and backend dependencies in one command
 npm install
 ```
 
-### 3. Configure Environment Variables
+### Step 3 — Configure Environment Variables
 
-Create `backend/.env`:
+**Backend** — create `backend/.env`:
+
 ```env
-DATABASE_URL="mongodb+srv://<user>:<password>@<cluster>.mongodb.net/cgec_website"
-JWT_SECRET="your_super_secret_jwt_key_here"
+# ── Database ─────────────────────────────────────────────────
+DATABASE_URL="mongodb+srv://<username>:<password>@<cluster>.mongodb.net/cgec_website?retryWrites=true&w=majority"
+
+# ── Authentication ────────────────────────────────────────────
+JWT_SECRET="your-256-bit-secret-key-change-this-in-production"
+
+# ── Server ────────────────────────────────────────────────────
 PORT=5000
+
+# ── Cloudinary ────────────────────────────────────────────────
 CLOUDINARY_CLOUD_NAME=your_cloud_name
 CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-Create `frontend/.env.local`:
+**Frontend** — create `frontend/.env.local`:
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000/api
 ```
 
-### 4. Set Up Database (Prisma)
+### Step 4 — Initialise the Database
+
 ```bash
 cd backend
+
+# Generate Prisma client
 npx prisma generate
+
+# Push schema to MongoDB Atlas
 npx prisma db push
 ```
 
-### 5. Seed Initial Data (Optional)
+### Step 5 — Seed Initial Data *(Optional)*
+
 ```bash
-cd backend
+# From the backend directory
 npx ts-node src/lib/seedAllData.ts
 ```
 
-### 6. Start Development Servers
+### Step 6 — Start Development Servers
+
 ```bash
-# From root — starts both frontend & backend concurrently
+# From the project root — starts both servers concurrently
 npm run dev
 ```
 
-| Server | URL |
-|---|---|
-| 🌐 Frontend | http://localhost:3000 |
-| ⚙️ Backend API | http://localhost:5000 |
+| Service | URL | Notes |
+|---|---|---|
+| 🌐 **Frontend** | http://localhost:3000 | Next.js with hot reload |
+| ⚙️ **Backend API** | http://localhost:5000 | Express with ts-node-dev |
 
 ---
 
-## 🔐 Admin Panel
+## Environment Variables
 
-The admin panel is accessible at:
+| Variable | Required | Description |
+|---|---|---|
+| `DATABASE_URL` | ✅ Backend | MongoDB Atlas connection string |
+| `JWT_SECRET` | ✅ Backend | Secret key for signing JWT tokens |
+| `PORT` | ✅ Backend | API server port (default: 5000) |
+| `CLOUDINARY_CLOUD_NAME` | ✅ Backend | Your Cloudinary cloud name |
+| `CLOUDINARY_API_KEY` | ✅ Backend | Cloudinary API key |
+| `CLOUDINARY_API_SECRET` | ✅ Backend | Cloudinary API secret |
+| `NEXT_PUBLIC_API_URL` | ✅ Frontend | Backend API base URL |
+
+> ⚠️ **Never commit `.env` files.** They are already excluded in `.gitignore`.
+
+---
+
+## Admin Panel
+
+### Accessing the Admin Panel
+
 ```
 http://localhost:3000/admin/login/cgec
 ```
 
-> ⚠️ The admin login route is intentionally obscured (`/admin/login/cgec`) for security. The route is not linked from the public website.
+> 🔒 The admin login path (`/cgec`) is intentionally obscured. It is not linked from the public website navigation to reduce the attack surface.
 
-**Admin Capabilities:**
-- Manage Faculty (photo + CV upload with Cloudinary)
-- Manage Syllabus PDFs per department & semester
-- Manage Notices & Circulars (with PDF attachments)
-- Manage Campus Gallery photos
-- Manage Wall Magazine (cover image + full issue PDF)
-- Manage Department Lab details (name & description table)
+### Security
+
+- Passwords are hashed with **bcryptjs** (salt rounds: 10)
+- Sessions are managed via **JWT Bearer tokens** (stored in memory/localStorage)
+- All admin API routes require a valid `Authorization: Bearer <token>` header
+- Tokens expire after a configurable duration (set in `JWT_SECRET` config)
+
+### Admin Capabilities Summary
+
+```
+Admin Panel
+├── Faculty Directory     → CRUD with photo + CV (Cloudinary)
+├── Syllabus Manager      → PDF upload per department & semester
+├── Notices & Circulars   → Create with priority, category, PDF attachment
+├── Campus Gallery        → Photo upload with category management
+├── Wall Magazine         → Cover image + full PDF per department edition
+└── Lab Details           → Text-only table management per department
+```
 
 ---
 
-## ☁️ Media Management Architecture
+## Media Management
 
-This project follows a **Cloudinary-first delete strategy** to prevent orphaned files:
+This project implements a **Cloudinary-first delete strategy** to guarantee zero orphaned media files.
+
+### Upload Flow
 
 ```
-UPLOAD FLOW:                        DELETE FLOW:
-Admin → Multer (Memory)             Admin → Find MongoDB doc
-      → Cloudinary Upload                 → Get all publicIds
-      → Get { url, publicId }            → Destroy Cloudinary assets
-      → Save to MongoDB                  → Delete MongoDB document
-                                         → Return success
+Admin selects file
+       │
+       ▼
+Multer (memory buffer) ──── no disk writes ──→ Buffer in RAM
+       │
+       ▼
+Cloudinary.upload_stream()
+       │
+       ▼
+{ secure_url, public_id }
+       │
+       ▼
+Save { url, publicId } to MongoDB
+       │
+       ▼
+Return URL to frontend → Display media
 ```
 
-All uploaded files (images, PDFs) are stored in Cloudinary with public IDs saved in the database. On delete, Cloudinary assets are destroyed **before** the database document — ensuring zero orphaned media.
+### Delete Flow (Cloudinary-First)
 
-Local disk files in `frontend/public/uploads/` serve as fallback storage when Cloudinary upload fails, and are also cleaned up on delete.
+```
+Admin clicks Delete
+       │
+       ▼
+Find MongoDB document  ──── publicId retrieved ────┐
+       │                                            │
+       ▼                                            ▼
+Cloudinary.destroy(publicId)          Also removes local fallback
+       │                               file from /public/uploads/
+       ▼                               if path starts with /uploads/
+MongoDB document deleted
+       │
+       ▼
+Return 200 Success → Frontend refreshes
+```
+
+> **Why Cloudinary-first?** If MongoDB is deleted first and Cloudinary deletion fails, the `publicId` reference is permanently lost — making it impossible to clean up the orphaned cloud asset. This order prevents that scenario.
 
 ---
 
-## 📊 Database Schema (Prisma/MongoDB)
+## Database Schema
+
+Managed by **Prisma ORM** against **MongoDB Atlas** (`cgec_website` database).
 
 ```prisma
-model Faculty { id, name, designation, department, email, image, imagePublicId, cvLink, cvPublicId }
-model Syllabus { id, department, semester, title, pdfLink, pdfPublicId }
-model Notice { id, title, content, category, priority, department, attachment, attachmentPublicId }
-model GalleryItem { id, title, category, imageUrl, imagePublicId }
-model WallMagazine { id, title, edition, year, imageUrl, imagePublicId, pdfLink, pdfPublicId, department }
-model Lab { id, name, description, roomNo, department }
-model Admin { id, email, password, name, role }
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+}
+
+model Faculty {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  name            String
+  designation     String
+  department      String
+  email           String?
+  image           String?
+  imagePublicId   String?
+  cvLink          String?
+  cvPublicId      String?
+}
+
+model Syllabus {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  department  String
+  semester    String
+  title       String
+  pdfLink     String?
+  pdfPublicId String?
+}
+
+model Notice {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  title               String
+  content             String
+  category            String
+  priority            String   @default("NORMAL")
+  department          String   @default("ALL")
+  attachment          String?
+  attachmentPublicId  String?
+  createdAt           DateTime @default(now())
+}
+
+model GalleryItem {
+  id              String @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  category        String
+  imageUrl        String
+  imagePublicId   String?
+}
+
+model WallMagazine {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  title           String
+  edition         String?
+  year            String?
+  imageUrl        String?
+  imagePublicId   String?
+  pdfLink         String?
+  pdfPublicId     String?
+  department      String
+}
+
+model Lab {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  roomNo      String?
+  department  String
+}
 ```
 
 ---
 
-## 🧪 QA & Testing
+## API Reference
 
-A full automated test suite covers all 6 admin modules:
+### Authentication
+
+| Method | Endpoint | Auth | Description |
+|---|---|---|---|
+| `POST` | `/api/auth/admin-login` | ❌ | Admin login → returns JWT |
+| `POST` | `/api/auth/admin-register` | ❌ | Create admin account |
+
+### Public API
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/public/faculty` | Get all faculty (optionally filter by `?department=CSE`) |
+| `GET` | `/api/public/notices` | Get all notices |
+| `GET` | `/api/public/gallery` | Get all gallery items |
+| `GET` | `/api/public/wall-magazine` | Get all wall magazine entries |
+| `GET` | `/api/public/labs` | Get all lab records |
+| `GET` | `/api/public/syllabus` | Get all syllabus PDFs |
+
+### Admin API *(JWT Required)*
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `POST` | `/api/admin/upload` | Upload file to Cloudinary |
+| `GET/POST` | `/api/admin/faculty` | List / Create faculty |
+| `PUT/DELETE` | `/api/admin/faculty/:id` | Update / Delete faculty |
+| `GET/POST` | `/api/admin/syllabus` | List / Create syllabus |
+| `PUT/DELETE` | `/api/admin/syllabus/:id` | Update / Delete syllabus |
+| `GET/POST` | `/api/admin/notices` | List / Create notice |
+| `PUT/DELETE` | `/api/admin/notices/:id` | Update / Delete notice |
+| `GET/POST` | `/api/admin/gallery` | List / Create gallery item |
+| `DELETE` | `/api/admin/gallery/:id` | Delete gallery item |
+| `GET/POST` | `/api/admin/wall-magazine` | List / Create magazine |
+| `DELETE` | `/api/admin/wall-magazine/:id` | Delete magazine |
+| `GET/POST` | `/api/admin/labs` | List / Create lab |
+| `PUT/DELETE` | `/api/admin/labs/:id` | Update / Delete lab |
+
+---
+
+## Testing
+
+An automated end-to-end QA suite validates the complete media lifecycle across all admin modules.
+
+### Test Results
 
 ```
-✅ Super Admin Authentication
-✅ Faculty photo & CV upload → create → delete → disk cleanup
-✅ Syllabus PDF upload → create → delete → disk cleanup
-✅ Notice attachment upload → create → delete → disk cleanup
-✅ Gallery photo upload → create → delete → disk cleanup
-✅ Wall Magazine cover+PDF upload → create → delete → disk cleanup
-✅ Department Lab create → delete (text-only, no media)
-
-📊 Total: 23/23 Tests Passed (100%)
+╔══════════════════════════════════════════════════════════════════════════╗
+║   🧹 ALL-SECTIONS MEDIA AUTO-CLEANUP & CRUD QA TEST SUITE               ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║                                                                          ║
+║  Authentication                                                          ║
+║   ✅ Super Admin JWT Authentication                                      ║
+║                                                                          ║
+║  1️⃣  Faculty Directory                                                    ║
+║   ✅ Faculty photo & CV created on disk                                  ║
+║   ✅ Faculty record created in MongoDB                                   ║
+║   ✅ Faculty record deleted from MongoDB                                 ║
+║   ✅ Faculty photo & CV automatically removed from disk                  ║
+║                                                                          ║
+║  2️⃣  Syllabus Manager                                                     ║
+║   ✅ Syllabus PDF created on disk                                        ║
+║   ✅ Syllabus record created in MongoDB                                  ║
+║   ✅ Syllabus record deleted from MongoDB                                ║
+║   ✅ Syllabus PDF automatically removed from disk                        ║
+║                                                                          ║
+║  3️⃣  Notices & Circulars                                                  ║
+║   ✅ Notice attachment created on disk                                   ║
+║   ✅ Notice record created in MongoDB                                    ║
+║   ✅ Notice record deleted from MongoDB                                  ║
+║   ✅ Notice attachment automatically removed from disk                   ║
+║                                                                          ║
+║  4️⃣  Campus Gallery                                                       ║
+║   ✅ Gallery photo created on disk                                       ║
+║   ✅ Gallery item created in MongoDB                                     ║
+║   ✅ Gallery item deleted from MongoDB                                   ║
+║   ✅ Gallery photo automatically removed from disk                       ║
+║                                                                          ║
+║  5️⃣  Wall Magazine                                                        ║
+║   ✅ Magazine cover & PDF created on disk                                ║
+║   ✅ Magazine record created in MongoDB                                  ║
+║   ✅ Magazine record deleted from MongoDB                                ║
+║   ✅ Magazine cover & PDF automatically removed from disk                ║
+║                                                                          ║
+║  6️⃣  Department Labs                                                      ║
+║   ✅ Lab record created in MongoDB                                       ║
+║   ✅ Lab record deleted from MongoDB                                     ║
+║                                                                          ║
+╠══════════════════════════════════════════════════════════════════════════╣
+║   📊 RESULT: 23 / 23 Tests Passed  ·  Coverage: 100%  ·  Failures: 0   ║
+╚══════════════════════════════════════════════════════════════════════════╝
 ```
 
 ---
 
-## 🗺️ Public Routes
+## Deployment
 
-| Route | Page |
-|---|---|
-| `/` | Home |
-| `/about` | About CGEC |
-| `/academics/cse` | CSE Department |
-| `/academics/ece` | ECE Department |
-| `/academics/ee` | EE Department |
-| `/academics/me` | ME Department |
-| `/academics/ce` | CE Department |
-| `/academics/bsh` | BSH Department |
-| `/placement` | Training & Placement |
-| `/gallery` | Campus Gallery |
-| `/notices` | Notices & Circulars |
-| `/contact` | Contact CGEC |
-| `/committee/*` | Various Committees |
-| `/admin/login/cgec` | Admin Login (protected) |
+### Frontend (Vercel — Recommended)
+
+```bash
+# Install Vercel CLI
+npm i -g vercel
+
+# Deploy from frontend directory
+cd frontend
+vercel --prod
+```
+
+Set environment variable in Vercel dashboard:
+```
+NEXT_PUBLIC_API_URL=https://your-backend-domain.com/api
+```
+
+### Backend (Railway / Render / VPS)
+
+```bash
+cd backend
+npm run build      # Compile TypeScript to dist/
+npm start          # Run compiled dist/index.js
+```
+
+Set all backend environment variables on your hosting platform.
+
+### Important — Production Checklist
+
+- [ ] Change `JWT_SECRET` to a strong random 256-bit value
+- [ ] Set `CLOUDINARY_*` credentials for production Cloudinary account
+- [ ] Set `DATABASE_URL` to production MongoDB Atlas cluster
+- [ ] Enable HTTPS on both frontend and backend
+- [ ] Set `NEXT_PUBLIC_API_URL` to the production backend URL
+- [ ] Configure CORS in `backend/src/index.ts` to allow only the production domain
 
 ---
 
-## 🏫 About CGEC
+## Public Routes
 
-**Cooch Behar Government Engineering College (CGEC)**
-- **Established:** 16th August 2016
-- **Governed by:** Higher Education Department, Government of West Bengal
-- **Affiliation:** MAKAUT (Maulana Abul Kalam Azad University of Technology)
-- **Approval:** AICTE Approved
-- **Campus:** 21-acre green campus, Harinchawra, Cooch Behar — 736101, West Bengal
-- **Motto:** *"तमसो मा ज्योतिर्गमय"* — From darkness, lead me to enlightenment
-- **Departments:** CSE · ECE · EE · ME · CE · BSH
-- **Phone:** 03582-233040 | **Email:** principalofficecgec@gmail.com
+| Route | Page | Description |
+|---|---|---|
+| `/` | Home | Hero, notice board, quick links |
+| `/about` | About | Principal's message, institution profile |
+| `/academics/cse` | CSE | Faculty, labs, syllabus, HOD message |
+| `/academics/ece` | ECE | Faculty, labs, syllabus, HOD message |
+| `/academics/ee` | EE | Faculty, labs, syllabus, HOD message |
+| `/academics/me` | ME | Faculty, labs, syllabus, HOD message |
+| `/academics/ce` | CE | Faculty, labs, syllabus, HOD message |
+| `/academics/bsh` | BSH | Faculty, labs, subjects |
+| `/placement` | Placement | TPO message, recruiters, contacts |
+| `/gallery` | Gallery | Campus photo gallery |
+| `/notices` | Notices | Filterable notice board |
+| `/contact` | Contact | Address, phone, email, map |
+| `/committee/*` | Committees | Academic, Anti-Ragging, ICC, GRC, etc. |
+| `/admin/login/cgec` | Admin Login | 🔒 Protected entry point |
+| `/admin` | Admin Dashboard | 🔒 JWT-protected CMS |
 
 ---
 
-## 📜 License
+## College Information
 
-This project is developed for **Cooch Behar Government Engineering College** and is not open-source. All rights reserved.
+<table>
+<tr>
+<td><strong>Institution</strong></td>
+<td>Cooch Behar Government Engineering College (CGEC)</td>
+</tr>
+<tr>
+<td><strong>Established</strong></td>
+<td>16th August 2016</td>
+</tr>
+<tr>
+<td><strong>Governed By</strong></td>
+<td>Higher Education Department, Government of West Bengal</td>
+</tr>
+<tr>
+<td><strong>Affiliation</strong></td>
+<td>MAKAUT — Maulana Abul Kalam Azad University of Technology</td>
+</tr>
+<tr>
+<td><strong>Approval</strong></td>
+<td>AICTE Approved</td>
+</tr>
+<tr>
+<td><strong>Campus</strong></td>
+<td>21-acre green campus, Harinchawra, Cooch Behar — 736101, West Bengal</td>
+</tr>
+<tr>
+<td><strong>Motto</strong></td>
+<td><em>तमसो मा ज्योतिर्गमय</em> — From darkness, lead me to enlightenment</td>
+</tr>
+<tr>
+<td><strong>Departments</strong></td>
+<td>CSE · ECE · EE · ME · CE · BSH</td>
+</tr>
+<tr>
+<td><strong>Phone</strong></td>
+<td>03582-233040</td>
+</tr>
+<tr>
+<td><strong>Email</strong></td>
+<td>principalofficecgec@gmail.com</td>
+</tr>
+<tr>
+<td><strong>Website</strong></td>
+<td><a href="https://cgec.org.in">cgec.org.in</a></td>
+</tr>
+</table>
+
+---
+
+## License
+
+This project is the exclusive property of **Cooch Behar Government Engineering College**. It is developed and maintained for institutional use only. Unauthorised reproduction, distribution, or modification of any part of this project is strictly prohibited.
+
+© 2024–2026 Cooch Behar Government Engineering College. All rights reserved.
 
 ---
 
 <div align="center">
 
-Made with ❤️ for CGEC · [cgec.org.in](https://cgec.org.in)
+<br/>
+
+Built with ❤️ for **Cooch Behar Government Engineering College**
+
+[🌐 cgec.org.in](https://cgec.org.in) · [📧 principalofficecgec@gmail.com](mailto:principalofficecgec@gmail.com) · [📞 03582-233040](tel:03582233040)
+
+<br/>
+
+*"तमसो मा ज्योतिर्गमय" — From darkness, lead me to enlightenment*
 
 </div>
