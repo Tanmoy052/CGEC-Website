@@ -26,7 +26,23 @@ app.get("/", (req: Request, res: Response) => {
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
+
+  // Cloudinary env var diagnostic — visible in Render logs
+  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+  const apiKey = process.env.CLOUDINARY_API_KEY;
+  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+  if (cloudName && apiKey && apiSecret) {
+    console.log(`✅ Cloudinary configured: cloud_name="${cloudName}"`);
+  } else {
+    console.error(`❌ Cloudinary NOT configured! Missing env vars:`);
+    if (!cloudName) console.error('   - CLOUDINARY_CLOUD_NAME is missing');
+    if (!apiKey)   console.error('   - CLOUDINARY_API_KEY is missing');
+    if (!apiSecret) console.error('   - CLOUDINARY_API_SECRET is missing');
+    console.error('   Image uploads will FAIL until these are set in Render → Environment.');
+  }
+
   // Automatically initialize default admin and seed all existing data
   await seedDefaultAdmin();
   await runFullWebsiteSeeder();
 });
+
