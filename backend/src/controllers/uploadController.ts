@@ -57,7 +57,7 @@ export const uploadMediaToCloudinary = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error('❌ Cloudinary upload failed:', error.message || error);
     return res.status(500).json({
-      message: 'File upload to Cloudinary failed. Ensure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET are set in your Render environment variables.',
+      message: `Cloudinary upload failed: ${error.message || error}`,
       error: error.message || 'Upload error',
     });
   }
