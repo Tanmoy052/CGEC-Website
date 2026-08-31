@@ -12,7 +12,22 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+// Restrict CORS to only the Vercel frontend and local dev
+const allowedOrigins = [
+  'https://cgec-website-frontend.vercel.app',
+  'http://localhost:3000',
+];
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, curl, Render health checks)
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS: Origin '${origin}' not allowed`));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 
 // Routes

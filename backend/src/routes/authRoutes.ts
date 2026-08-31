@@ -1,11 +1,10 @@
 import { Router } from 'express';
-import { register, login, adminLogin, seedDefaultAdmin } from '../controllers/authController';
+import { login, adminLogin } from '../controllers/authController';
 
 const router = Router();
 
-router.post('/register', register);
+// NOTE: /register and /seed-admin removed — security risk (open role assignment & seed exposure)
 router.post('/login', login);
 router.post('/admin-login', adminLogin);
-router.post('/seed-admin', seedDefaultAdmin);
 
 export default router;

@@ -72,12 +72,6 @@ export default function HiddenAdminLoginPage() {
     }
   };
 
-  const fillDefaultCredentials = () => {
-    setEmail("admin@cgec.org.in");
-    setPassword("Admin@cgec2026");
-    toast.success("Default credentials auto-filled!");
-  };
-
   return (
     <div className="min-h-screen bg-slate-950 flex flex-col justify-center items-center px-4 py-12 relative overflow-hidden selection:bg-blue-600 selection:text-white">
       <Toaster position="top-center" />
@@ -188,19 +182,6 @@ export default function HiddenAdminLoginPage() {
               )}
             </button>
           </form>
-
-          {/* Quick Helper for Demo / First-time setup */}
-          <div className="mt-6 pt-5 border-t border-slate-800 flex items-center justify-between text-xs text-slate-400">
-            <span>First time setup?</span>
-            <button
-              type="button"
-              onClick={fillDefaultCredentials}
-              className="text-blue-400 hover:text-blue-300 font-semibold inline-flex items-center gap-1 hover:underline cursor-pointer"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Use Default Admin</span>
-            </button>
-          </div>
         </div>
 
         {/* Security Notice */}

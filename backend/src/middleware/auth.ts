@@ -27,7 +27,7 @@ export const protect = (req: AuthRequest, res: Response, next: NextFunction) => 
 
 export const authorize = (...roles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction) => {
-    if (!roles.includes(req.user.role)) {
+    if (!req.user || !roles.includes(req.user.role)) {
       return res.status(403).json({ message: 'User role not authorized to access this route' });
     }
     next();
