@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -1150,7 +1150,7 @@ CGEC's 21-acre green campus offers a beautiful learning environment:
   if (contains(q, "arnab", "shahid", "pranab", "umakanta", "supriyo", "prabir", "gautam das", "soumik", "avisek", "palash", "rajib", "abhijit", "rabiul", "atanu", "tanumay", "deepjyoti", "goutam panda", "mafizul", "sushovan", "prasenjit", "gyan", "provas", "masud", "sanchayan", "sudipta", "nikhilesh", "ziaul", "biren", "kingshuk", "asif", "shyamal", "chhandamay", "mithun", "ansarul", "samik", "arghya", "biplab", "tanmay", "salim", "somen")) {
     // Build a search of all faculty
     const allFaculty: { name: string; dept: string }[] = [];
-    Object.entries(KB.departments).forEach(([deptKey, dept]) => {
+    Object.values(KB.departments).forEach((dept) => {
       dept.faculty.forEach((f) => {
         allFaculty.push({ name: f, dept: dept.shortName });
       });
@@ -1169,7 +1169,7 @@ ${matches.length === 1 ? "Found 1 matching faculty member:" : `Found ${matches.l
 ${matches.map((m) => `**[${m.dept}]** ${m.name}`).join("\n\n")}
 
 > For detailed profiles, visit the respective department page.`,
-        suggestions: matches.length === 1 
+        suggestions: matches.length === 1
           ? [`${matches[0].dept} Department`, "All Faculty", "Contact College"]
           : ["CSE Faculty", "ECE Faculty", "All Departments"],
       };
@@ -1369,8 +1369,6 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (pathname?.startsWith("/admin")) return null;
-
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -1383,8 +1381,6 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
     if (!isOpen) {
       const timer = setTimeout(() => setHasNewMessage(true), 5000);
       return () => clearTimeout(timer);
-    } else {
-      setHasNewMessage(false);
     }
   }, [isOpen]);
 
@@ -1394,7 +1390,7 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
     setTimeout(() => inputRef.current?.focus(), 300);
   };
 
-  const handleSend = (customInput?: string) => {
+  const handleSend = useCallback((customInput?: string) => {
     const messageText = (customInput || input).trim();
     if (!messageText) return;
 
@@ -1404,13 +1400,13 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
     setShowQuickTopics(false);
     setIsLoading(true);
 
-    const delay = 700 + Math.random() * 600;
+    const delay = 700 + Math.floor(Math.random() * 600);
     setTimeout(() => {
       const { content, suggestions } = getBotResponse(messageText);
       setMessages((prev) => [...prev, { role: "bot", content, suggestions }]);
       setIsLoading(false);
     }, delay);
-  };
+  }, [input]);
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
@@ -1418,6 +1414,8 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
       handleSend();
     }
   };
+
+  if (pathname?.startsWith("/admin")) return null;
 
   return (
     <>
@@ -1476,7 +1474,7 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
                   <h3 className="font-bold text-sm leading-tight">CGEC Smart Assistant</h3>
                   <div className="flex items-center gap-1.5 text-[10px] text-blue-200 font-semibold uppercase tracking-wider mt-0.5">
                     <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                    Online • AI Powered
+                    Online
                   </div>
                 </div>
               </div>
@@ -1649,7 +1647,7 @@ How can I help you today? Pick a topic or type your question!`,
                 </motion.button>
               </div>
               <p className="text-[10px] text-gray-400 text-center mt-2 font-medium">
-                Official CGEC Smart Assistant · Powered by Institutional Knowledge
+                Official CGEC Smart Assistant
               </p>
             </div>
           </motion.div>

@@ -13,6 +13,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [admissionYear, setAdmissionYear] = useState("2025");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -21,6 +22,31 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"}/public/admission`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.activeYear) {
+          setAdmissionYear(data.activeYear);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
+  const getChildLabel = (child: { label: string; href: string }) => {
+    if (child.href.startsWith("/admission") && !child.href.includes("fees")) {
+      return `Admission ${admissionYear}`;
+    }
+    return child.label;
+  };
+
+  const getChildHref = (child: { label: string; href: string }) => {
+    if (child.href.startsWith("/admission") && !child.href.includes("fees")) {
+      return "/admission";
+    }
+    return child.href;
+  };
 
   if (pathname?.startsWith("/admin")) {
     return null;
@@ -131,7 +157,7 @@ export default function Navbar() {
                       {link.children.map((child, idx) => (
                         <Link
                           key={child.label}
-                          href={child.href}
+                          href={getChildHref(child)}
                           className={cn(
                             "block px-6 py-3 text-sm text-white hover:bg-white/10 transition-colors",
                             idx !== link.children.length - 1
@@ -139,7 +165,7 @@ export default function Navbar() {
                               : "",
                           )}
                         >
-                          {child.label}
+                          {getChildLabel(child)}
                         </Link>
                       ))}
                     </div>
@@ -210,11 +236,11 @@ export default function Navbar() {
                       {link.children.map((child) => (
                         <Link
                           key={child.label}
-                          href={child.href}
+                          href={getChildHref(child)}
                           className="px-4 py-2 text-base text-gray-600 hover:text-blue-600 border-l-2 border-gray-100 hover:border-blue-600 transition-all"
                           onClick={() => setIsOpen(false)}
                         >
-                          {child.label}
+                          {getChildLabel(child)}
                         </Link>
                       ))}
                     </div>

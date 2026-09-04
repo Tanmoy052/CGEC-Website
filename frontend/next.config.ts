@@ -67,6 +67,18 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: "/placement/brochure.pdf",
+        destination: "/api/brochure/view",
+      },
+      {
+        source: "/placement-brochure.pdf",
+        destination: "/api/brochure/view",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

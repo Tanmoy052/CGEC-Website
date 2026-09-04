@@ -1,82 +1,115 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { API_URL } from "@/lib/constants";
+
+interface CommitteeMemberApi {
+  id?: string;
+  name: string;
+  position: string;
+  department?: string | null;
+  order?: number;
+}
+
+const DEFAULT_MEMBERS = [
+  {
+    id: 1,
+    name: "Dr. Gautam Das",
+    designation: "Professor",
+    role: "Convenor",
+    department: "Electronics and Communication Engineering",
+  },
+  {
+    id: 2,
+    name: "Prof. Somen Mondal",
+    designation: "Assistant Professor",
+    role: "Member",
+    department: "Computer Science and Engineering",
+  },
+  {
+    id: 3,
+    name: "Dr. Prasenjit Das",
+    designation: "Assistant Professor",
+    role: "Member",
+    department: "Mechanical Engineering",
+  },
+  {
+    id: 4,
+    name: "Dr. Palash Das",
+    designation: "Assistant Professor",
+    role: "Member",
+    department: "Electronics and Communication Engineering",
+  },
+  {
+    id: 5,
+    name: "Prof. Atanu Maji",
+    designation: "Assistant Professor",
+    role: "Member",
+    department: "Electrical Engineering",
+  },
+  {
+    id: 6,
+    name: "Prof. Biren Gurung",
+    designation: "Assistant Professor",
+    role: "Member",
+    department: "Civil Engineering",
+  },
+  {
+    id: 7,
+    name: "Prof. Mohammad Salim",
+    designation: "Assistant Professor",
+    role: "Member",
+    department: "Basic Science and Humanities",
+  },
+  {
+    id: 8,
+    name: "Dr. Kingshuk Dan",
+    designation: "Assistant Professor, Registrar In Charge",
+    role: "Member",
+    department: "Civil Engineering",
+  },
+  {
+    id: 9,
+    name: "Dr. Manoj Das",
+    designation: "Librarian",
+    role: "Member",
+    department: "Central Library",
+  },
+  {
+    id: 10,
+    name: "Dr. Shymal Ghosh",
+    designation: "Assistant Professor",
+    role: "Member",
+    department: "Civil Engineering",
+  },
+];
 
 export default function AcademicCommitteePage() {
-  const members = [
-    {
-      id: 1,
-      name: "Dr. Gautam Das",
-      designation: "Professor",
-      role: "Convenor",
-      department: "Electronics and Communication Engineering",
-    },
-    {
-      id: 2,
-      name: "Prof. Somen Mondal",
-      designation: "Assistant Professor",
-      role: "Member",
-      department: "Computer Science and Engineering",
-    },
-    {
-      id: 3,
-      name: "Dr. Prasenjit Das",
-      designation: "Assistant Professor",
-      role: "Member",
-      department: "Mechanical Engineering",
-    },
-    {
-      id: 4,
-      name: "Dr. Palash Das",
-      designation: "Assistant Professor",
-      role: "Member",
-      department: "Electronics and Communication Engineering",
-    },
-    {
-      id: 5,
-      name: "Prof. Atanu Maji",
-      designation: "Assistant Professor",
-      role: "Member",
-      department: "Electrical Engineering",
-    },
-    {
-      id: 6,
-      name: "Prof. Biren Gurung",
-      designation: "Assistant Professor",
-      role: "Member",
-      department: "Civil Engineering",
-    },
-    {
-      id: 7,
-      name: "Prof. Mohammad Salim",
-      designation: "Assistant Professor",
-      role: "Member",
-      department: "Basic Science and Humanities",
-    },
-    {
-      id: 8,
-      name: "Dr. Kingshuk Dan",
-      designation: "Assistant Professor, Registrar In Charge",
-      role: "Member",
-      department: "Civil Engineering",
-    },
-    {
-      id: 9,
-      name: "Dr. Manoj Das",
-      designation: "Librarian",
-      role: "Member",
-      department: "Central Library",
-    },
-    {
-      id: 10,
-      name: "Dr. Shymal Ghosh",
-      designation: "Assistant Professor",
-      role: "Member",
-      department: "Civil Engineering",
-    },
-  ];
+  const [members, setMembers] = useState(DEFAULT_MEMBERS);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/committees?committee=academic`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setMembers(
+            data.map((m: CommitteeMemberApi, idx: number) => {
+              const parts = (m.position || "").split(",");
+              return {
+                id: m.order || idx + 1,
+                name: m.name,
+                designation: parts[0]?.trim() || m.position,
+                role: parts.slice(1).join(", ").trim() || "Member",
+                department: m.department || "-",
+              };
+            })
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white pb-12">

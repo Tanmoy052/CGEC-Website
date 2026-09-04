@@ -19,16 +19,73 @@ const tabs = [
   { id: "wall", label: "WALL MAGAZINE" },
 ];
 
+interface DeptFacultyItem {
+  name: string;
+  role: string;
+  experience: string;
+  qualification: string;
+  specialization: string;
+  image: string;
+  cvLink: string;
+}
+
+interface DeptSyllabusItem {
+  semester: string;
+  pdfLink: string;
+  title: string;
+}
+
+interface DeptLabItem {
+  name: string;
+  description: string;
+  image?: string | null;
+  roomNumber?: string | null;
+}
+
+interface DeptWallMagazineItem {
+  id?: string;
+  title: string;
+  edition?: string | null;
+  year?: string | null;
+  description?: string | null;
+  imageUrl: string;
+  pdfLink?: string | null;
+  department?: string | null;
+}
+
+interface RawFacultyApi {
+  name: string;
+  designation: string;
+  experience?: string | null;
+  qualifications?: string[] | string | null;
+  specialization?: string[] | string | null;
+  image?: string | null;
+  cvLink?: string | null;
+}
+
+interface RawSyllabusApi {
+  semester: string;
+  pdfLink: string;
+  title: string;
+}
+
+interface RawLabApi {
+  name: string;
+  description: string;
+  image?: string | null;
+  roomNumber?: string | null;
+}
+
 export default function DepartmentPage() {
   const params = useParams();
   const deptSlug = (params.dept as string) || "";
   const dept = departments[deptSlug.toLowerCase()];
 
   const [activeTab, setActiveTab] = useState("home");
-  const [dbFaculty, setDbFaculty] = useState<any[]>([]);
-  const [dbSyllabus, setDbSyllabus] = useState<any[]>([]);
-  const [dbLabs, setDbLabs] = useState<any[]>([]);
-  const [dbWallMagazines, setDbWallMagazines] = useState<any[]>([]);
+  const [dbFaculty, setDbFaculty] = useState<DeptFacultyItem[]>([]);
+  const [dbSyllabus, setDbSyllabus] = useState<DeptSyllabusItem[]>([]);
+  const [dbLabs, setDbLabs] = useState<DeptLabItem[]>([]);
+  const [dbWallMagazines, setDbWallMagazines] = useState<DeptWallMagazineItem[]>([]);
 
   useEffect(() => {
     if (!deptSlug) return;
@@ -40,7 +97,7 @@ export default function DepartmentPage() {
       .then((data) => {
         if (Array.isArray(data)) {
           setDbFaculty(
-            data.map((f) => ({
+            data.map((f: RawFacultyApi) => ({
               name: f.name,
               role: f.designation,
               experience: f.experience || "-",
@@ -60,7 +117,7 @@ export default function DepartmentPage() {
       .then((data) => {
         if (Array.isArray(data)) {
           setDbSyllabus(
-            data.map((s) => ({
+            data.map((s: RawSyllabusApi) => ({
               semester: s.semester,
               pdfLink: s.pdfLink,
               title: s.title,
@@ -76,10 +133,11 @@ export default function DepartmentPage() {
       .then((data) => {
         if (Array.isArray(data)) {
           setDbLabs(
-            data.map((l) => ({
+            data.map((l: RawLabApi) => ({
               name: l.name,
               description: l.description,
               image: l.image,
+              roomNumber: l.roomNumber,
             }))
           );
         }
@@ -91,8 +149,8 @@ export default function DepartmentPage() {
       .then((r) => r.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          const deptMags = data.filter(
-            (m) =>
+          const deptMags: DeptWallMagazineItem[] = data.filter(
+            (m: DeptWallMagazineItem) =>
               !m.department ||
               m.department.toUpperCase() === deptUpper ||
               m.department.toUpperCase() === "ALL" ||
@@ -351,7 +409,7 @@ export default function DepartmentPage() {
                         </td>
                         <td className="px-6 py-5 text-gray-700 leading-relaxed align-top">
                           {lab.description || "-"}
-                          {lab.roomNumber && (
+                          {"roomNumber" in lab && Boolean(lab.roomNumber) && (
                             <span className="block text-xs text-gray-500 mt-1 font-medium">
                               📍 {lab.roomNumber}
                             </span>
@@ -384,7 +442,7 @@ export default function DepartmentPage() {
                           {i + 1}
                         </td>
                         <td className="px-6 py-4 font-bold text-gray-900">
-                          {item.title ? `${item.semester} - ${item.title}` : item.semester}
+                          {"title" in item && item.title ? `${item.semester} - ${item.title}` : item.semester}
                         </td>
                         <td className="px-6 py-4 text-center">
                           <a

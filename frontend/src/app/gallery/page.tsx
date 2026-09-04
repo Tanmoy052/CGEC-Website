@@ -1,10 +1,17 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import { ChevronRight, Camera, Filter } from "lucide-react";
+import { ChevronRight, Camera } from "lucide-react";
 import { API_URL } from "@/lib/constants";
+
+interface GalleryItem {
+  id: string;
+  title: string;
+  category: string;
+  imageUrl: string;
+  description?: string | null;
+}
 
 const CATEGORIES = ["ALL", "Campus", "Labs", "Events", "Sports", "Cultural"];
 
@@ -54,7 +61,7 @@ const fallbackGallery = [
 ];
 
 export default function GalleryPage() {
-  const [galleryItems, setGalleryItems] = useState<any[]>([]);
+  const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("ALL");
   const [isLoading, setIsLoading] = useState(true);
 

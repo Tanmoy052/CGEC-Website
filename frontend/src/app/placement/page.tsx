@@ -1,11 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRight, Phone, Mail } from "lucide-react";
+import { ChevronRight, Phone, Mail, FileText } from "lucide-react";
 import Image from "next/image";
+import { API_URL } from "@/lib/constants";
 
 export default function PlacementPage() {
+  const [brochure, setBrochure] = useState<{
+    title: string;
+    description?: string | null;
+    fileUrl: string;
+    fileType?: string | null;
+    fileSize?: string | null;
+  } | null>(null);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/brochures/latest`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.fileUrl) {
+          setBrochure(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   const representatives = [
     {
       name: "Prof. Atanu Maji",
@@ -55,6 +75,30 @@ export default function PlacementPage() {
       </div>
 
       <div className="container mx-auto px-4 max-w-6xl">
+        {/* Placement Brochure Banner */}
+        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white rounded-2xl p-6 sm:p-8 mb-10 shadow-xl border border-blue-800/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+          <div className="space-y-2">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-400/30">
+              <span className="w-2 h-2 rounded-full bg-blue-300" />
+              <span>Official Recruiter Guide</span>
+            </div>
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+              {brochure?.title || "CGEC Placement Brochure 2025-26"}
+            </h2>
+            <p className="text-sm text-blue-200 max-w-2xl leading-relaxed">
+              {brochure?.description || "Download the complete Training & Placement brochure containing batch demographics, department-wise skillsets, past recruiter testimonials, and campus hiring guidelines."}
+            </p>
+          </div>
+
+          <Link
+            href="/placement/brochure"
+            className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-500/30 hover:scale-105 active:scale-95 shrink-0"
+          >
+            <FileText className="w-4 h-4" />
+            <span>View Placement Brochures</span>
+          </Link>
+        </div>
+
         <h1 className="text-3xl font-bold text-blue-900 mb-8">
           Message from the Training and Placement Officer
         </h1>

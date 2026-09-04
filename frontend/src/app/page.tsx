@@ -1,14 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Hero from "@/components/home/Hero";
 import NoticeBoard from "@/components/home/NoticeBoard";
 import {
   ArrowRight,
   ChevronLeft,
   ChevronRight,
-  Quote,
-  Users,
   Library,
   Monitor,
   Projector,
@@ -16,13 +14,16 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { API_URL } from "@/lib/constants";
 
 export default function Home() {
   const [testimonialIndex, setTestimonialIndex] = useState(0);
   const [recruiterIndex, setRecruiterIndex] = useState(0);
   const [leadershipIndex, setLeadershipIndex] = useState(0);
 
-  const leaders = [
+
+
+  const DEFAULT_LEADERS = [
     {
       name: "Dr. Sushovan Chatterjee",
       role: "Principal & Associate Professor",
@@ -151,7 +152,7 @@ export default function Home() {
     },
   ];
 
-  const recruiters = [
+  const DEFAULT_RECRUITERS = [
     {
       name: "Technext",
       logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVqX3biFjz21ZQdxt9C-EPUjdLvEhobTJaJuEuL0z1&s",
@@ -203,6 +204,29 @@ export default function Home() {
       logo: "data:image/png;base64,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",
     },
   ];
+
+  const [leaders, setLeaders] = useState(DEFAULT_LEADERS);
+  const [recruiters, setRecruiters] = useState(DEFAULT_RECRUITERS);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/leadership`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setLeaders(data);
+        }
+      })
+      .catch(() => {});
+
+    fetch(`${API_URL}/public/recruiters`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setRecruiters(data);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const nextLeadership = () => {
     setLeadershipIndex((prev) => (prev + 4 >= leaders.length ? 0 : prev + 4));
@@ -696,8 +720,7 @@ export default function Home() {
                         alt={testimonial.name}
                         fill
                         className={
-                          // @ts-ignore
-                          testimonial.imageFit || "object-cover object-top"
+                          (testimonial as { imageFit?: string }).imageFit || "object-cover object-top"
                         }
                         unoptimized
                       />

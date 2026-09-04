@@ -1,141 +1,172 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight, Phone, Mail } from "lucide-react";
+import { API_URL } from "@/lib/constants";
+
+interface AntiRaggingMemberApi {
+  id?: string;
+  name: string;
+  position: string;
+  phone?: string | null;
+  email?: string | null;
+  order?: number;
+}
+
+const DEFAULT_MEMBERS = [
+  {
+    id: 1,
+    name: "Dr. Sushovan Chatterjee",
+    position: "Associate Professor, Principal (Office-in-Charge), Chairman",
+    phone: "9707545561",
+    email: "principal@cgec.org.in",
+  },
+  {
+    id: 2,
+    name: "Dr. Kingshuk Dan",
+    position: "Assistant Professor, Registrar (Office-in-Charge), Convenor",
+    phone: "9474848817",
+    email: "dankingshuk@gmail.com",
+  },
+  {
+    id: 3,
+    name: "Dr. Gautam Das",
+    position: "Professor, ECE Department, Member",
+    phone: "9434171610",
+    email: "gdas321@yahoo.co.in",
+  },
+  {
+    id: 4,
+    name: "Prof. Somen Mondal",
+    position: "Assistant Professor, CSE Department, Member",
+    phone: "9331892632",
+    email: "somen@cgec.org.in",
+  },
+  {
+    id: 5,
+    name: "Prof. Soumik Roy",
+    position: "Assistant Professor, Hostel Superintendent Boys' Host",
+    phone: "9681034366",
+    email: "Whbes.sr@gmail.com",
+  },
+  {
+    id: 6,
+    name: "Prof. Madhumita Dhar",
+    position:
+      "Assistant Professor, Hostel Superintendent Ladies Hostel, Member",
+    phone: "7063666567",
+    email: "adhumita.dhar007@gmail.com",
+  },
+  {
+    id: 7,
+    name: "Prof. Chhandamay Ray",
+    position: "Assistant Professor, CE Department, Member",
+    phone: "9903194589",
+    email: "chhandamayray@yahoo.com",
+  },
+  {
+    id: 8,
+    name: "Prof. Amit Singha Roy",
+    position: "Assistant Professor, BSH Department, Member",
+    phone: "8172051534",
+    email: "singharoyamit@gmail.com",
+  },
+  {
+    id: 9,
+    name: "Mr. Sharadindu Roy",
+    position: "NGO Representative Rdical Socitety, Member",
+    phone: "8172051534",
+    email: "singharoyamit@gmail.com",
+  },
+  {
+    id: 10,
+    name: "Mr. Tapan Paul",
+    position:
+      "Office In-charge, Kotwali Police Station | P.S. Cooch Behar, Member",
+    phone: "9147889249",
+    email: "cbrkotwalies@gmail.com",
+  },
+  {
+    id: 11,
+    name: "Prof. Avinash Kumar Tiwari",
+    position:
+      "Assistant Professor, LAW Department, Cooch Behar Panchanan Barma University, Member",
+    phone: "83033 61615",
+    email: "tiwariavinash002@gmail.com",
+  },
+  {
+    id: 12,
+    name: "Mr. Main Uddin Chisti",
+    position: "Reporter, Telegraph, Member",
+    phone: "9434742618",
+    email: "khanmoin46@gmail.com",
+  },
+  {
+    id: 13,
+    name: "Md. Kamarul Islam",
+    position: "Upper Division Assistant, Member",
+    phone: "8926829926",
+    email: "kamarul55566@gmail.com",
+  },
+  {
+    id: 14,
+    name: "Khadija Khatun",
+    position: "Parent, Member (ME, 2nd year)",
+    phone: "9434688688",
+    email: "khadijakhatun.cb@gmail.com",
+  },
+  {
+    id: 15,
+    name: "Latifa Hossain",
+    position: "Parent, Member (ME, 2nd year)",
+    phone: "7063007615",
+    email: "",
+  },
+  {
+    id: 16,
+    name: "Driti Ghosh",
+    position: "2nd year Student, EE",
+    phone: "9641008674",
+    email: "dritighosh20@gmail.com",
+  },
+  {
+    id: 17,
+    name: "Siddhartha Bag",
+    position: "3rd year Student, CSE",
+    phone: "9123613119",
+    email: "amibagsiddhartha21@gmail.com",
+  },
+  {
+    id: 18,
+    name: "Subhajit Sadhu",
+    position: "4th year Student, CE",
+    phone: "9733234154",
+    email: "subhajit09ce@gmail.com",
+  },
+];
 
 export default function AntiRaggingCommitteePage() {
-  const members = [
-    {
-      id: 1,
-      name: "Dr. Sushovan Chatterjee",
-      position: "Associate Professor, Principal (Office-in-Charge), Chairman",
-      phone: "9707545561",
-      email: "principal@cgec.org.in",
-    },
-    {
-      id: 2,
-      name: "Dr. Kingshuk Dan",
-      position: "Assistant Professor, Registrar (Office-in-Charge), Convenor",
-      phone: "9474848817",
-      email: "dankingshuk@gmail.com",
-    },
-    {
-      id: 3,
-      name: "Dr. Gautam Das",
-      position: "Professor, ECE Department, Member",
-      phone: "9434171610",
-      email: "gdas321@yahoo.co.in",
-    },
-    {
-      id: 4,
-      name: "Prof. Somen Mondal",
-      position: "Assistant Professor, CSE Department, Member",
-      phone: "9331892632",
-      email: "somen@cgec.org.in",
-    },
-    {
-      id: 5,
-      name: "Prof. Soumik Roy",
-      position: "Assistant Professor, Hostel Superintendent Boys' Host",
-      phone: "9681034366",
-      email: "Whbes.sr@gmail.com",
-    },
-    {
-      id: 6,
-      name: "Prof. Madhumita Dhar",
-      position:
-        "Assistant Professor, Hostel Superintendent Ladies Hostel, Member",
-      phone: "7063666567",
-      email: "adhumita.dhar007@gmail.com",
-    },
-    {
-      id: 7,
-      name: "Prof. Chhandamay Ray",
-      position: "Assistant Professor, CE Department, Member",
-      phone: "9903194589",
-      email: "chhandamayray@yahoo.com",
-    },
-    {
-      id: 8,
-      name: "Prof. Amit Singha Roy",
-      position: "Assistant Professor, BSH Department, Member",
-      phone: "8172051534",
-      email: "singharoyamit@gmail.com",
-    },
-    {
-      id: 9,
-      name: "Mr. Sharadindu Roy",
-      position: "NGO Representative Rdical Socitety, Member",
-      phone: "8172051534",
-      email: "singharoyamit@gmail.com",
-    },
-    {
-      id: 10,
-      name: "Mr. Tapan Paul",
-      position:
-        "Office In-charge, Kotwali Police Station | P.S. Cooch Behar, Member",
-      phone: "9147889249",
-      email: "cbrkotwalies@gmail.com",
-    },
-    {
-      id: 11,
-      name: "Prof. Avinash Kumar Tiwari",
-      position:
-        "Assistant Professor, LAW Department, Cooch Behar Panchanan Barma University, Member",
-      phone: "83033 61615",
-      email: "tiwariavinash002@gmail.com",
-    },
-    {
-      id: 12,
-      name: "Mr. Main Uddin Chisti",
-      position: "Reporter, Telegraph, Member",
-      phone: "9434742618",
-      email: "khanmoin46@gmail.com",
-    },
-    {
-      id: 13,
-      name: "Md. Kamarul Islam",
-      position: "Upper Division Assistant, Member",
-      phone: "8926829926",
-      email: "kamarul55566@gmail.com",
-    },
-    {
-      id: 14,
-      name: "Khadija Khatun",
-      position: "Parent, Member (ME, 2nd year)",
-      phone: "9434688688",
-      email: "khadijakhatun.cb@gmail.com",
-    },
-    {
-      id: 15,
-      name: "Latifa Hossain",
-      position: "Parent, Member (ME, 2nd year)",
-      phone: "7063007615",
-      email: "",
-    },
-    {
-      id: 16,
-      name: "Driti Ghosh",
-      position: "2nd year Student, EE",
-      phone: "9641008674",
-      email: "dritighosh20@gmail.com",
-    },
-    {
-      id: 17,
-      name: "Siddhartha Bag",
-      position: "3rd year Student, CSE",
-      phone: "9123613119",
-      email: "amibagsiddhartha21@gmail.com",
-    },
-    {
-      id: 18,
-      name: "Subhajit Sadhu",
-      position: "4th year Student, CE",
-      phone: "9733234154",
-      email: "subhajit09ce@gmail.com",
-    },
-  ];
+  const [members, setMembers] = useState(DEFAULT_MEMBERS);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/committees?committee=anti-ragging`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setMembers(
+            data.map((m: AntiRaggingMemberApi, idx: number) => ({
+              id: m.order || idx + 1,
+              name: m.name,
+              position: m.position,
+              phone: m.phone || "",
+              email: m.email || "",
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white pb-12">

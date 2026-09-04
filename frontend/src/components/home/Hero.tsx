@@ -11,7 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ArrowRight,
-  Sparkles,
+  FileText,
 } from "lucide-react";
 
 interface HeroSlide {
@@ -137,7 +137,7 @@ const Hero = () => {
             >
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-3.5 py-1.5 mb-6 text-xs sm:text-sm font-semibold tracking-wider text-blue-200 uppercase bg-blue-900/60 border border-blue-500/40 rounded-full backdrop-blur-md shadow-lg">
-                <Sparkles className="w-3.5 h-3.5 text-blue-400 animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse" />
                 <span>{slides[currentIndex].tag}</span>
               </div>
 
@@ -162,10 +162,11 @@ const Hero = () => {
                 </Link>
 
                 <Link
-                  href="/admission"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 backdrop-blur-md rounded-xl font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0"
+                  href="/placement/brochure"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 backdrop-blur-md rounded-xl font-semibold transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 shadow-sm"
                 >
-                  <span>Admissions 2026</span>
+                  <FileText className="w-4 h-4 text-blue-300" />
+                  <span>Placement Brochure</span>
                 </Link>
               </div>
             </motion.div>

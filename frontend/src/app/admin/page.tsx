@@ -18,19 +18,13 @@ import {
   ExternalLink,
   Loader2,
   FileText,
-  AlertCircle,
   Eye,
   EyeOff,
-  Building,
   Mail,
-  Phone,
   GraduationCap,
-  Calendar,
   X,
-  CheckCircle2,
-  Sparkles,
+  RefreshCw,
   KeyRound,
-  Shield,
   ShieldCheck,
   UserCheck,
   Save,
@@ -40,17 +34,44 @@ import {
   UploadCloud,
   FileUp,
   ImagePlus,
-  Check,
+  Receipt,
+  Briefcase,
+  Award,
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 import { API_URL } from "@/lib/constants";
 import Image from "next/image";
+import CommitteesTab from "./components/CommitteesTab";
+import AdmissionTab from "./components/AdmissionTab";
+import FeesTab from "./components/FeesTab";
+import LeadershipTab from "./components/LeadershipTab";
+import RecruitersTab from "./components/RecruitersTab";
+import PlacementBrochureTab from "./components/PlacementBrochureTab";
 
 const DEPARTMENTS = ["CSE", "ECE", "EE", "ME", "CE", "BSH"];
 const SEMESTERS = ["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester", "All Semesters"];
 const NOTICE_CATEGORIES = ["General", "Academic", "Tender", "Recruitment"];
 const NOTICE_PRIORITIES = ["NORMAL", "HIGH", "URGENT"];
 const GALLERY_CATEGORIES = ["Campus", "Events", "Sports", "Labs", "Cultural"];
+
+type AdminTabType =
+  | "overview"
+  | "faculty"
+  | "syllabus"
+  | "notices"
+  | "labs"
+  | "gallery"
+  | "wallmagazine"
+  | "admission"
+  | "fees"
+  | "committees"
+  | "leadership"
+  | "recruiters"
+  | "brochure"
+  | "settings";
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type AdminRecord = Record<string, any>;
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -59,7 +80,8 @@ export default function AdminDashboardPage() {
   const [adminToken, setAdminToken] = useState<string | null>(null);
   const [adminName, setAdminName] = useState("Administrator");
   const [adminEmail, setAdminEmail] = useState("admin@cgec.org.in");
-  const [activeTab, setActiveTab] = useState<"overview" | "faculty" | "syllabus" | "notices" | "labs" | "gallery" | "wallmagazine" | "settings">("overview");
+  const [activeTab, setActiveTab] = useState<AdminTabType>("overview");
+  const [admissionYear, setAdmissionYear] = useState("2025");
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -71,15 +93,21 @@ export default function AdminDashboardPage() {
     labs: 0,
     gallery: 0,
     users: 0,
+    admission: 0,
+    fees: 0,
+    committees: 0,
+    leadership: 0,
+    recruiters: 0,
+    brochures: 0,
   });
 
   // Data Collections
-  const [facultyList, setFacultyList] = useState<any[]>([]);
-  const [syllabusList, setSyllabusList] = useState<any[]>([]);
-  const [noticesList, setNoticesList] = useState<any[]>([]);
-  const [labsList, setLabsList] = useState<any[]>([]);
-  const [galleryList, setGalleryList] = useState<any[]>([]);
-  const [wallMagazineList, setWallMagazineList] = useState<any[]>([]);
+  const [facultyList, setFacultyList] = useState<AdminRecord[]>([]);
+  const [syllabusList, setSyllabusList] = useState<AdminRecord[]>([]);
+  const [noticesList, setNoticesList] = useState<AdminRecord[]>([]);
+  const [labsList, setLabsList] = useState<AdminRecord[]>([]);
+  const [galleryList, setGalleryList] = useState<AdminRecord[]>([]);
+  const [wallMagazineList, setWallMagazineList] = useState<AdminRecord[]>([]);
 
   // Search & Filter
   const [searchQuery, setSearchQuery] = useState("");
@@ -88,7 +116,7 @@ export default function AdminDashboardPage() {
   // Modal Controls
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"faculty" | "syllabus" | "notice" | "lab" | "gallery" | "wallmagazine" | null>(null);
-  const [editingItem, setEditingItem] = useState<any | null>(null);
+  const [editingItem, setEditingItem] = useState<AdminRecord | null>(null);
   const [formLoading, setFormLoading] = useState(false);
   const [uploadingField, setUploadingField] = useState<string | null>(null);
 
@@ -129,7 +157,7 @@ export default function AdminDashboardPage() {
       } else {
         toast.error(data.message || "Failed to upload file", { id: "upload-status" });
       }
-    } catch (err) {
+    } catch {
       toast.error("Network error during file upload", { id: "upload-status" });
     } finally {
       setUploadingField(null);
@@ -219,40 +247,8 @@ export default function AdminDashboardPage() {
     department: "",
   });
 
-  // Check Authentication on Mount
-  useEffect(() => {
-    const token = localStorage.getItem("cgec_admin_token");
-    const role = localStorage.getItem("cgec_admin_role");
-    const name = localStorage.getItem("cgec_admin_name");
-    const email = localStorage.getItem("cgec_admin_email");
-
-    if (!token || role !== "ADMIN") {
-      toast.error("Please login to access the Admin Panel");
-      router.push("/admin/login/cgec");
-      return;
-    }
-
-    setAdminToken(token);
-    if (name) setAdminName(name);
-    if (email) {
-      setAdminEmail(email);
-      setProfileForm((prev) => ({ ...prev, name: name || "CGEC Super Administrator", email }));
-    }
-    fetchDashboardData(token);
-    fetchAdminProfile(token);
-  }, [router]);
-
-  const handleSignOut = () => {
-    localStorage.removeItem("cgec_admin_token");
-    localStorage.removeItem("cgec_admin_role");
-    localStorage.removeItem("cgec_admin_name");
-    localStorage.removeItem("cgec_admin_email");
-    toast.success("Signed out successfully");
-    router.push("/admin/login/cgec");
-  };
-
   // Fetch Current Admin Profile
-  const fetchAdminProfile = async (token: string) => {
+  const fetchAdminProfile = useCallback(async (token: string) => {
     try {
       const res = await fetch(`${API_URL}/admin/profile`, {
         headers: { Authorization: `Bearer ${token}` },
@@ -267,8 +263,8 @@ export default function AdminDashboardPage() {
         setAdminName(data.name || "Administrator");
         setAdminEmail(data.email || "admin@cgec.org.in");
       }
-    } catch (err) {}
-  };
+    } catch {}
+  }, []);
 
   // Fetch Dashboard Stats & All Collections
   const fetchDashboardData = useCallback(async (token: string) => {
@@ -280,7 +276,7 @@ export default function AdminDashboardPage() {
       const statsRes = await fetch(`${API_URL}/admin/stats`, { headers });
       if (statsRes.ok) {
         const statsData = await statsRes.json();
-        setStats(statsData.counts || stats);
+        setStats((prev) => statsData.counts || prev);
       }
 
       // 2. Faculty
@@ -318,12 +314,53 @@ export default function AdminDashboardPage() {
       if (wallMagRes.ok) {
         setWallMagazineList(await wallMagRes.json());
       }
-    } catch (err) {
+
+      // 8. Admission Active Year
+      const admRes = await fetch(`${API_URL}/admin/admission`, { headers });
+      if (admRes.ok) {
+        const admData = await admRes.json();
+        if (admData.activeYear) {
+          setAdmissionYear(admData.activeYear);
+        }
+      }
+    } catch {
       toast.error("Error loading admin data");
     } finally {
       setIsLoading(false);
     }
-  }, [stats]);
+  }, []);
+
+  // Check Authentication on Mount
+  useEffect(() => {
+    const token = localStorage.getItem("cgec_admin_token");
+    const role = localStorage.getItem("cgec_admin_role");
+    const name = localStorage.getItem("cgec_admin_name");
+    const email = localStorage.getItem("cgec_admin_email");
+
+    if (!token || role !== "ADMIN") {
+      toast.error("Please login to access the Admin Panel");
+      router.push("/admin/login/cgec");
+      return;
+    }
+
+    setAdminToken(token);
+    if (name) setAdminName(name);
+    if (email) {
+      setAdminEmail(email);
+      setProfileForm((prev) => ({ ...prev, name: name || "CGEC Super Administrator", email }));
+    }
+    fetchDashboardData(token);
+    fetchAdminProfile(token);
+  }, [router, fetchDashboardData, fetchAdminProfile]);
+
+  const handleSignOut = () => {
+    localStorage.removeItem("cgec_admin_token");
+    localStorage.removeItem("cgec_admin_role");
+    localStorage.removeItem("cgec_admin_name");
+    localStorage.removeItem("cgec_admin_email");
+    toast.success("Signed out successfully");
+    router.push("/admin/login/cgec");
+  };
 
   // Handle Admin Profile & Password Update
   const handleProfileSubmit = async (e: React.FormEvent) => {
@@ -379,7 +416,7 @@ export default function AdminDashboardPage() {
       } else {
         toast.error(data.message || "Failed to update admin profile");
       }
-    } catch (err) {
+    } catch {
       toast.error("Network error while updating admin credentials");
     } finally {
       setProfileSaveLoading(false);
@@ -464,7 +501,7 @@ export default function AdminDashboardPage() {
     setIsModalOpen(true);
   };
 
-  const openEditModal = (type: "faculty" | "syllabus" | "notice" | "lab" | "wallmagazine", item: any) => {
+  const openEditModal = (type: "faculty" | "syllabus" | "notice" | "lab" | "wallmagazine", item: AdminRecord) => {
     setModalType(type);
     setEditingItem(item);
 
@@ -626,11 +663,11 @@ export default function AdminDashboardPage() {
           setIsModalOpen(false);
           fetchDashboardData(adminToken);
         } else {
-          const err = await res.json();
-          toast.error(err.message || "Failed to save magazine");
+          const errData = await res.json();
+          toast.error(errData.message || "Failed to save magazine");
         }
       }
-    } catch (err) {
+    } catch {
       toast.error("Network error saving changes");
     } finally {
       setFormLoading(false);
@@ -654,19 +691,19 @@ export default function AdminDashboardPage() {
       } else {
         toast.error("Failed to delete");
       }
-    } catch (err) {
+    } catch {
       toast.error("Network error deleting item");
     }
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col lg:flex-row selection:bg-blue-600 selection:text-white">
+    <div className="h-screen w-screen overflow-hidden bg-slate-950 text-slate-100 flex flex-col lg:flex-row selection:bg-blue-600 selection:text-white">
       <Toaster position="top-right" />
 
       {/* Mobile Top Navigation Header */}
-      <div className="lg:hidden bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between sticky top-0 z-30">
+      <div className="lg:hidden bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between shrink-0 z-30">
         <div className="flex items-center space-x-3">
-          <div className="w-9 h-9 rounded-xl overflow-hidden shadow-md shadow-blue-500/20 flex items-center justify-center bg-white">
+          <div className="w-9 h-9 rounded-xl overflow-hidden shadow-md shadow-blue-500/20 flex items-center justify-center bg-white shrink-0">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src="/cgec_round_logo.ico" alt="CGEC Logo" className="w-full h-full object-contain" />
           </div>
@@ -681,7 +718,7 @@ export default function AdminDashboardPage() {
 
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          className="p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700 focus:outline-none"
+          className="p-2 rounded-xl bg-slate-800 text-slate-300 hover:text-white border border-slate-700 focus:outline-none cursor-pointer"
         >
           {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
         </button>
@@ -689,31 +726,56 @@ export default function AdminDashboardPage() {
 
       {/* Sidebar Navigation (Desktop always visible, Mobile collapsible drawer) */}
       <aside
-        className={`w-full lg:w-72 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 ${
-          isMobileMenuOpen ? "block" : "hidden lg:flex"
+        className={`w-full lg:w-72 bg-slate-900 border-r border-slate-800 flex flex-col shrink-0 h-full max-h-screen select-none ${
+          isMobileMenuOpen ? "fixed inset-0 z-50 flex flex-col bg-slate-900" : "hidden lg:flex"
         }`}
       >
         {/* Logo & Admin Status (Desktop) */}
-        <div className="p-6 border-b border-slate-800 hidden lg:block">
+        <div className="p-5 border-b border-slate-800/80 shrink-0 hidden lg:block bg-slate-900">
           <div className="flex items-center space-x-3">
-            <div className="w-11 h-11 rounded-2xl overflow-hidden shadow-lg shadow-blue-500/20 bg-white flex items-center justify-center">
+            <div className="w-10 h-10 rounded-2xl overflow-hidden shadow-lg shadow-blue-500/20 bg-white flex items-center justify-center shrink-0">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src="/cgec_round_logo.ico" alt="CGEC Logo" className="w-full h-full object-contain" />
             </div>
-            <div>
-              <h2 className="font-extrabold text-white text-lg tracking-tight">CGEC CMS</h2>
+            <div className="min-w-0">
+              <h2 className="font-extrabold text-white text-base tracking-tight truncate">CGEC CMS</h2>
               <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-medium">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                <span>Administrator Mode</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+                <span className="truncate">Administrator Mode</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Navigation Items */}
-        <nav className="p-4 space-y-1.5 flex-1">
+        {/* Mobile Drawer Top Bar with Close Button */}
+        {isMobileMenuOpen && (
+          <div className="p-4 border-b border-slate-800 flex items-center justify-between shrink-0 lg:hidden">
+            <div className="flex items-center space-x-2.5">
+              <div className="w-8 h-8 rounded-xl overflow-hidden bg-white flex items-center justify-center shrink-0">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/cgec_round_logo.ico" alt="CGEC Logo" className="w-full h-full object-contain" />
+              </div>
+              <span className="font-extrabold text-white text-sm">Navigation Menu</span>
+            </div>
+            <button
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        )}
+
+        {/* Navigation Items (The Green Line Area - with dedicated sleek scrollbar) */}
+        <nav className="p-3 space-y-1 flex-1 overflow-y-auto min-h-0 custom-sidebar-scrollbar">
           {[
             { id: "overview", label: "Dashboard Overview", icon: LayoutDashboard, count: null },
+            { id: "committees", label: "Committees (All 10)", icon: ShieldCheck, count: stats.committees || null },
+            { id: "admission", label: `Admission ${admissionYear}`, icon: GraduationCap, count: stats.admission || null },
+            { id: "fees", label: "Fees Structure", icon: Receipt, count: stats.fees || null },
+            { id: "leadership", label: "Leadership Messages", icon: Award, count: stats.leadership || null },
+            { id: "recruiters", label: "Our Recruiters", icon: Briefcase, count: stats.recruiters || null },
+            { id: "brochure", label: "Placement Brochure", icon: FileText, count: stats.brochures || null },
             { id: "faculty", label: "Faculty Directory", icon: Users, count: stats.faculty },
             { id: "syllabus", label: "Syllabus & PDFs", icon: BookOpen, count: stats.syllabus },
             { id: "notices", label: "Notices & Tenders", icon: Bell, count: stats.notices },
@@ -728,23 +790,23 @@ export default function AdminDashboardPage() {
               <button
                 key={tab.id}
                 onClick={() => {
-                  setActiveTab(tab.id as any);
+                  setActiveTab(tab.id as AdminTabType);
                   setIsMobileMenuOpen(false);
                 }}
-                className={`w-full flex items-center justify-between px-4 py-3.5 rounded-xl font-semibold text-sm transition-all duration-200 cursor-pointer ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl font-medium text-xs transition-all duration-150 cursor-pointer ${
                   isActive
-                    ? "bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                    ? "bg-blue-600 text-white shadow-md shadow-blue-600/30 font-bold"
                     : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/60"
                 }`}
               >
-                <div className="flex items-center space-x-3">
-                  <Icon className={`w-5 h-5 ${isActive ? "text-white" : "text-slate-400"}`} />
-                  <span>{tab.label}</span>
+                <div className="flex items-center space-x-2.5 truncate">
+                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-slate-400"}`} />
+                  <span className="truncate">{tab.label}</span>
                 </div>
                 {tab.count !== null && (
                   <span
-                    className={`text-xs px-2 py-0.5 rounded-full font-bold ${
-                      isActive ? "bg-white/20 text-white" : "bg-slate-800 text-slate-400"
+                    className={`text-[10px] px-2 py-0.5 rounded-full font-bold shrink-0 ml-1.5 ${
+                      isActive ? "bg-white/25 text-white" : "bg-slate-800 text-slate-400 border border-slate-700/50"
                     }`}
                   >
                     {tab.count}
@@ -755,80 +817,112 @@ export default function AdminDashboardPage() {
           })}
         </nav>
 
-        {/* User Info & Sign Out */}
-        <div className="p-4 border-t border-slate-800">
-          <div className="bg-slate-950/60 p-3.5 rounded-2xl border border-slate-800/80 mb-3 flex items-center justify-between">
-            <div className="truncate pr-2">
-              <p className="text-xs font-bold text-white truncate">{adminName}</p>
-              <p className="text-[11px] text-slate-500 truncate">{adminEmail}</p>
+        {/* User Profile & Sign Out Footer (The Blue Area - Stationary & locked at bottom left) */}
+        <div className="p-3.5 border-t border-slate-800/80 bg-slate-950/70 shrink-0 mt-auto">
+          <div className="flex items-center space-x-2.5 mb-2.5 p-2 rounded-xl bg-slate-900 border border-slate-800/80">
+            <div className="w-8 h-8 rounded-full bg-blue-600/20 text-blue-400 flex items-center justify-center font-bold text-xs border border-blue-500/30 shrink-0">
+              {adminName.slice(0, 2).toUpperCase()}
             </div>
-            <span className="px-2 py-0.5 text-[10px] font-extrabold uppercase tracking-wider bg-blue-500/20 text-blue-400 border border-blue-500/30 rounded-md shrink-0">
-              ADMIN
-            </span>
+            <div className="flex-1 min-w-0">
+              <p className="text-xs font-bold text-white truncate leading-tight">{adminName}</p>
+              <p className="text-[10px] text-slate-400 truncate leading-tight mt-0.5">{adminEmail}</p>
+            </div>
           </div>
 
           <button
             onClick={handleSignOut}
-            className="w-full flex items-center justify-center space-x-2 px-4 py-3 rounded-xl font-bold text-sm text-rose-400 hover:text-white bg-rose-500/10 hover:bg-rose-600 border border-rose-500/20 transition-all duration-200 cursor-pointer shadow-sm"
+            className="w-full flex items-center justify-center space-x-2 px-3 py-2 rounded-xl bg-rose-500/10 text-rose-400 hover:bg-rose-500 hover:text-white text-xs font-bold transition-all cursor-pointer border border-rose-500/20 shadow-sm"
           >
-            <LogOut className="w-4 h-4" />
+            <LogOut className="w-3.5 h-3.5 shrink-0" />
             <span>Sign Out</span>
           </button>
         </div>
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 flex flex-col overflow-y-auto max-h-screen">
-        {/* Top Header Bar */}
-        <header className="bg-slate-900/60 backdrop-blur-md border-b border-slate-800 px-6 py-4 sticky top-0 z-20 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-extrabold text-white capitalize">
+      <main className="flex-1 flex flex-col h-full min-w-0 overflow-hidden bg-slate-950">
+        {/* Top Header Bar - FIXED / STATIONARY (Second Image Header) */}
+        <header className="bg-slate-900/90 backdrop-blur-xl border-b border-slate-800/80 px-6 py-3.5 shrink-0 z-20 flex items-center justify-between gap-4 shadow-sm">
+          <div className="min-w-0">
+            <h1 className="text-lg sm:text-xl font-extrabold text-white capitalize truncate tracking-tight">
               {activeTab === "overview"
                 ? "System Overview"
                 : activeTab === "settings"
                 ? "Admin Account & Security Settings"
                 : activeTab === "wallmagazine"
                 ? "Wall Magazine"
+                : activeTab === "admission"
+                ? `Admission ${admissionYear} Portal`
+                : activeTab === "fees"
+                ? "Fees Structure Management"
+                : activeTab === "committees"
+                ? "Committees Management (All 10)"
+                : activeTab === "leadership"
+                ? "Leadership Messages"
+                : activeTab === "recruiters"
+                ? "Our Recruiters"
+                : activeTab === "brochure"
+                ? "Placement Brochure Management"
                 : `${activeTab} Management`}
             </h1>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-slate-400 truncate">
               Cooch Behar Government Engineering College CMS Portal
             </p>
           </div>
 
-          <div className="flex items-center gap-3">
-            {activeTab !== "overview" && activeTab !== "settings" && (
-              <button
-                onClick={() => {
-                  if (activeTab === "faculty") openCreateModal("faculty");
-                  else if (activeTab === "syllabus") openCreateModal("syllabus");
-                  else if (activeTab === "notices") openCreateModal("notice");
-                  else if (activeTab === "labs") openCreateModal("lab");
-                  else if (activeTab === "gallery") openCreateModal("gallery");
-                  else if (activeTab === "wallmagazine") openCreateModal("wallmagazine");
-                }}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs sm:text-sm font-bold shadow-lg shadow-blue-600/30 transition-all cursor-pointer hover:scale-105 active:scale-95"
-              >
-                <Plus className="w-4 h-4" />
-                <span>Add {activeTab === "faculty" ? "Faculty" : activeTab === "syllabus" ? "Syllabus PDF" : activeTab === "notices" ? "Notice" : activeTab === "labs" ? "Lab" : activeTab === "wallmagazine" ? "Magazine" : "Photo"}</span>
-              </button>
-            )}
+          <div className="flex items-center gap-3 shrink-0">
+            {activeTab !== "overview" &&
+              activeTab !== "settings" &&
+              activeTab !== "admission" &&
+              activeTab !== "fees" &&
+              activeTab !== "committees" &&
+              activeTab !== "leadership" &&
+              activeTab !== "recruiters" &&
+              activeTab !== "brochure" && (
+                <button
+                  onClick={() => {
+                    if (activeTab === "faculty") openCreateModal("faculty");
+                    else if (activeTab === "syllabus") openCreateModal("syllabus");
+                    else if (activeTab === "notices") openCreateModal("notice");
+                    else if (activeTab === "labs") openCreateModal("lab");
+                    else if (activeTab === "gallery") openCreateModal("gallery");
+                    else if (activeTab === "wallmagazine") openCreateModal("wallmagazine");
+                  }}
+                  className="inline-flex items-center gap-2 px-3.5 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-bold shadow-lg shadow-blue-600/30 transition-all cursor-pointer hover:scale-105 active:scale-95"
+                >
+                  <Plus className="w-4 h-4" />
+                  <span>
+                    Add{" "}
+                    {activeTab === "faculty"
+                      ? "Faculty"
+                      : activeTab === "syllabus"
+                      ? "Syllabus PDF"
+                      : activeTab === "notices"
+                      ? "Notice"
+                      : activeTab === "labs"
+                      ? "Lab"
+                      : activeTab === "wallmagazine"
+                      ? "Magazine"
+                      : "Photo"}
+                  </span>
+                </button>
+              )}
 
             <button
               onClick={() => {
                 fetchDashboardData(adminToken!);
                 fetchAdminProfile(adminToken!);
               }}
-              className="p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all cursor-pointer"
+              className="p-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white hover:bg-slate-700 transition-all cursor-pointer border border-slate-700/50"
               title="Refresh Data"
             >
-              <Sparkles className="w-4 h-4 text-blue-400" />
+              <RefreshCw className="w-4 h-4" />
             </button>
           </div>
         </header>
 
-        {/* Content Container */}
-        <div className="p-6 space-y-6 flex-1">
+        {/* Content Container - THE ONLY SCROLLING AREA ON THE RIGHT */}
+        <div className="flex-1 overflow-y-auto min-h-0 p-6 space-y-6 custom-content-scrollbar">
           {isLoading ? (
             <div className="h-96 flex flex-col items-center justify-center space-y-3">
               <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
@@ -842,8 +936,14 @@ export default function AdminDashboardPage() {
               {activeTab === "overview" && (
                 <div className="space-y-8">
                   {/* KPI Stats Cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     {[
+                      { label: "Committees (10)", value: stats.committees, icon: ShieldCheck, color: "from-blue-600 to-indigo-600", tab: "committees" },
+                      { label: "Admission 2025", value: stats.admission, icon: GraduationCap, color: "from-cyan-600 to-blue-600", tab: "admission" },
+                      { label: "Fees Structure", value: stats.fees, icon: Receipt, color: "from-emerald-600 to-teal-600", tab: "fees" },
+                      { label: "Leadership Messages", value: stats.leadership, icon: Award, color: "from-purple-600 to-pink-600", tab: "leadership" },
+                      { label: "Our Recruiters", value: stats.recruiters, icon: Briefcase, color: "from-amber-500 to-orange-600", tab: "recruiters" },
+                      { label: "Placement Brochure", value: stats.brochures, icon: FileText, color: "from-blue-600 to-cyan-600", tab: "brochure" },
                       { label: "Faculty Directory", value: stats.faculty, icon: Users, color: "from-blue-600 to-indigo-600", tab: "faculty" },
                       { label: "Syllabus & PDFs", value: stats.syllabus, icon: BookOpen, color: "from-indigo-600 to-purple-600", tab: "syllabus" },
                       { label: "Published Notices", value: stats.notices, icon: Bell, color: "from-amber-500 to-orange-600", tab: "notices" },
@@ -856,7 +956,7 @@ export default function AdminDashboardPage() {
                         <motion.div
                           key={index}
                           whileHover={{ y: -3 }}
-                          onClick={() => item.tab && setActiveTab(item.tab as any)}
+                          onClick={() => item.tab && setActiveTab(item.tab as AdminTabType)}
                           className={`p-6 rounded-3xl bg-slate-900 border border-slate-800/80 shadow-xl relative overflow-hidden group ${
                             item.tab ? "cursor-pointer" : ""
                           }`}
@@ -878,13 +978,61 @@ export default function AdminDashboardPage() {
                   {/* Quick Action Shortcuts */}
                   <div className="bg-slate-900/80 border border-slate-800 rounded-3xl p-6">
                     <h3 className="text-lg font-bold text-white mb-4">Quick Management Actions</h3>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+                      <button
+                        onClick={() => setActiveTab("committees")}
+                        className="p-4 rounded-2xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/20 text-blue-300 flex flex-col items-center text-center space-y-2 cursor-pointer transition-all"
+                      >
+                        <ShieldCheck className="w-6 h-6 text-blue-400" />
+                        <span className="text-xs font-bold">Committees (10)</span>
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab("admission")}
+                        className="p-4 rounded-2xl bg-cyan-600/10 hover:bg-cyan-600/20 border border-cyan-500/20 text-cyan-300 flex flex-col items-center text-center space-y-2 cursor-pointer transition-all"
+                      >
+                        <GraduationCap className="w-6 h-6 text-cyan-400" />
+                        <span className="text-xs font-bold">Admission 2025</span>
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab("fees")}
+                        className="p-4 rounded-2xl bg-emerald-600/10 hover:bg-emerald-600/20 border border-emerald-500/20 text-emerald-300 flex flex-col items-center text-center space-y-2 cursor-pointer transition-all"
+                      >
+                        <Receipt className="w-6 h-6 text-emerald-400" />
+                        <span className="text-xs font-bold">Fees Structure</span>
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab("leadership")}
+                        className="p-4 rounded-2xl bg-purple-600/10 hover:bg-purple-600/20 border border-purple-500/20 text-purple-300 flex flex-col items-center text-center space-y-2 cursor-pointer transition-all"
+                      >
+                        <Award className="w-6 h-6 text-purple-400" />
+                        <span className="text-xs font-bold">Leadership Cards</span>
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab("recruiters")}
+                        className="p-4 rounded-2xl bg-amber-600/10 hover:bg-amber-600/20 border border-amber-500/20 text-amber-300 flex flex-col items-center text-center space-y-2 cursor-pointer transition-all"
+                      >
+                        <Briefcase className="w-6 h-6 text-amber-400" />
+                        <span className="text-xs font-bold">Our Recruiters</span>
+                      </button>
+
+                      <button
+                        onClick={() => setActiveTab("brochure")}
+                        className="p-4 rounded-2xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/20 text-blue-300 flex flex-col items-center text-center space-y-2 cursor-pointer transition-all"
+                      >
+                        <FileText className="w-6 h-6 text-blue-400" />
+                        <span className="text-xs font-bold">Placement Brochure</span>
+                      </button>
+
                       <button
                         onClick={() => openCreateModal("faculty")}
                         className="p-4 rounded-2xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/20 text-blue-300 flex flex-col items-center text-center space-y-2 cursor-pointer transition-all"
                       >
                         <Users className="w-6 h-6 text-blue-400" />
-                        <span className="text-xs font-bold">Add Faculty Member</span>
+                        <span className="text-xs font-bold">Add Faculty</span>
                       </button>
 
                       <button
@@ -1453,8 +1601,28 @@ export default function AdminDashboardPage() {
                 </div>
               )}
 
+              {/* COMMITTEES TAB */}
+              {activeTab === "committees" && <CommitteesTab adminToken={adminToken} />}
+
+              {/* ADMISSION TAB */}
+              {activeTab === "admission" && (
+                <AdmissionTab adminToken={adminToken} onYearChange={(newYear) => setAdmissionYear(newYear)} />
+              )}
+
+              {/* FEES STRUCTURE TAB */}
+              {activeTab === "fees" && <FeesTab adminToken={adminToken} />}
+
+              {/* LEADERSHIP MESSAGES TAB */}
+              {activeTab === "leadership" && <LeadershipTab adminToken={adminToken} />}
+
+              {/* RECRUITERS TAB */}
+              {activeTab === "recruiters" && <RecruitersTab adminToken={adminToken} />}
+
+              {/* PLACEMENT BROCHURE TAB */}
+              {activeTab === "brochure" && <PlacementBrochureTab adminToken={adminToken} />}
+
               {/* ========================================================================= */}
-              {/* 8. ADMIN CREDENTIALS & ACCOUNT SECURITY TAB */}
+              {/* ADMIN CREDENTIALS & ACCOUNT SECURITY TAB */}
               {/* ========================================================================= */}
               {activeTab === "settings" && (
                 <div className="max-w-4xl space-y-8">
@@ -2317,7 +2485,7 @@ export default function AdminDashboardPage() {
                         placeholder="/img/wall_magazine/cover_2025.jpg or https://res.cloudinary.com/..."
                         className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500"
                       />
-                      <p className="text-[11px] text-slate-500">Paste an existing image URL or click "Upload Cover Image" to pick from your device</p>
+                      <p className="text-[11px] text-slate-500">Paste an existing image URL or click &quot;Upload Cover Image&quot; to pick from your device</p>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

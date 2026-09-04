@@ -12,11 +12,9 @@ import {
   ArrowRight,
   Loader2,
   KeyRound,
-  Sparkles,
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 import { API_URL } from "@/lib/constants";
-import Image from "next/image";
 
 export default function HiddenAdminLoginPage() {
   const router = useRouter();
@@ -65,7 +63,7 @@ export default function HiddenAdminLoginPage() {
       } else {
         toast.error(data.message || "Invalid administrator credentials");
       }
-    } catch (error) {
+    } catch {
       toast.error("Failed to connect to backend server. Please verify port 5000 is active.");
     } finally {
       setIsLoading(false);

@@ -41,7 +41,7 @@ const LoginPage = () => {
       } else {
         toast.error(data.message || "Login failed");
       }
-    } catch (error) {
+    } catch {
       toast.error("An error occurred during login");
     } finally {
       setIsLoading(false);

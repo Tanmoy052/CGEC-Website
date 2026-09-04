@@ -7,9 +7,27 @@ import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { API_URL } from "@/lib/constants";
 
+interface NoticeItem {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  isNew?: boolean;
+  attachment?: string | null;
+}
+
+interface RawNotice {
+  id: string;
+  title: string;
+  createdAt?: string;
+  category?: string;
+  priority?: string;
+  attachment?: string | null;
+}
+
 const CATEGORIES = ["NOTICE", "TENDER", "NEWS", "RECRUITMENT"];
 
-const STATIC_NOTICES = [
+const STATIC_NOTICES: NoticeItem[] = [
   // NOTICE
   {
     id: "s1",
@@ -88,14 +106,14 @@ const STATIC_NOTICES = [
 
 const NoticeBoard = () => {
   const [activeTab, setActiveTab] = useState("NOTICE");
-  const [dbNotices, setDbNotices] = useState<any[]>([]);
+  const [dbNotices, setDbNotices] = useState<NoticeItem[]>([]);
 
   useEffect(() => {
     fetch(`${API_URL}/public/notices`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          const formatted = data.map((n) => ({
+          const formatted: NoticeItem[] = data.map((n: RawNotice) => ({
             id: n.id,
             title: n.title,
             date: n.createdAt ? n.createdAt.split("T")[0] : "2026",

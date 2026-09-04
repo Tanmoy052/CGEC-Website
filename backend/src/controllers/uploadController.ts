@@ -11,8 +11,17 @@ export const uploadMediaToCloudinary = async (req: Request, res: Response) => {
     }
 
     const { folder = 'general' } = req.body;
-    const isPdf = file.mimetype === 'application/pdf' || file.originalname.toLowerCase().endsWith('.pdf');
-    const resourceType = isPdf ? 'raw' : 'auto';
+    const ext = file.originalname.split('.').pop()?.toLowerCase() || '';
+    const isImage = file.mimetype.startsWith('image/') || ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'].includes(ext);
+    const isVideo = file.mimetype.startsWith('video/') || ['mp4', 'webm', 'mov'].includes(ext);
+    // Non-media documents (PDF, DOC, DOCX, PPT, PPTX, etc.) MUST be uploaded as 'raw' in Cloudinary
+    const resourceType = isImage ? 'image' : isVideo ? 'video' : 'raw';
+
+    const formatFileSize = (bytes: number) => {
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+    };
 
     const uploadPromise = new Promise<{ secure_url: string; public_id: string; format: string }>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
@@ -32,7 +41,7 @@ export const uploadMediaToCloudinary = async (req: Request, res: Response) => {
           resolve({
             secure_url: result.secure_url,
             public_id: result.public_id,
-            format: result.format || (isPdf ? 'pdf' : 'jpg'),
+            format: result.format || ext || (isImage ? 'jpg' : 'raw'),
           });
         }
       );
@@ -51,7 +60,9 @@ export const uploadMediaToCloudinary = async (req: Request, res: Response) => {
       publicId: result.public_id,
       storage: 'cloudinary',
       originalName: file.originalname,
+      fileType: ext,
       size: file.size,
+      formattedSize: formatFileSize(file.size),
     });
 
   } catch (error: any) {

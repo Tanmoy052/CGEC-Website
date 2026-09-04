@@ -40,4 +40,63 @@ body {
       transform: translateY(0);
     }
   }
+
+  /* Sleek Modern Dark Scrollbar for Admin Panel */
+  .custom-admin-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  .custom-admin-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-admin-scrollbar::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 9999px;
+  }
+  .custom-admin-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #475569;
+  }
+
+  /* Sidebar Specific Scrollbar */
+  .custom-sidebar-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #334155 transparent;
+  }
+  .custom-sidebar-scrollbar::-webkit-scrollbar {
+    width: 5px;
+  }
+  .custom-sidebar-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-sidebar-scrollbar::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 9999px;
+    transition: background 0.2s ease;
+  }
+  .custom-sidebar-scrollbar:hover::-webkit-scrollbar-thumb {
+    background: #334155;
+  }
+  .custom-sidebar-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #3b82f6;
+  }
+
+  /* Main Content Area Scrollbar */
+  .custom-content-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #334155 #090d16;
+  }
+  .custom-content-scrollbar::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+  }
+  .custom-content-scrollbar::-webkit-scrollbar-track {
+    background: #020617;
+  }
+  .custom-content-scrollbar::-webkit-scrollbar-thumb {
+    background: #1e293b;
+    border-radius: 9999px;
+  }
+  .custom-content-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #334155;
+  }
 }

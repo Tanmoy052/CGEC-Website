@@ -110,3 +110,94 @@ model WallMagazine {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
+
+model AdmissionItem {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  year         String   @default("2025")
+  category     String   @default("NOTICE") // NOTICE or DOCUMENT
+  title        String
+  fileUrl      String
+  filePublicId String?
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model AdmissionConfig {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  year               String   @unique @default("2025")
+  whatsappLink       String?
+  contactPhone       String?
+  contactEmail       String?
+  officerName        String?
+  officerRole        String?
+  officerDesignation String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+}
+
+model FeeItem {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  academicYear  String   @default("2025-26")
+  admissionType String   @default("REGULAR") // REGULAR (1st sem) or LATERAL (3rd sem)
+  slNo          String
+  feeHead       String
+  cseEce        String
+  core          String
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model CommitteeMember {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  committee  String   // slug e.g. academic, anti-ragging, anti-ragging-squard, counsellor, grc, icc, iic, iqac, sc-st, student-grc
+  name       String
+  position   String
+  department String?
+  phone      String?
+  email      String?
+  order      Int      @default(0)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+model LeadershipMessage {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  role          String
+  dept          String?
+  message       String
+  image         String
+  imagePublicId String?
+  order         Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model Recruiter {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  logo         String
+  logoPublicId String?
+  website      String?
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model PlacementBrochure {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String   @default("Placement Brochure")
+  description  String?
+  academicYear String?  @default("2025-2026")
+  fileUrl      String?  @default("")
+  filePublicId String?
+  fileType     String?  // pdf, doc, docx, ppt, pptx, jpg, png, etc.
+  fileName     String?
+  fileSize     String?
+  isActive     Boolean  @default(true)
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

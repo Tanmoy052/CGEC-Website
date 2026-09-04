@@ -13,6 +13,26 @@ import {
 import { cn } from "@/lib/utils";
 import { API_URL } from "@/lib/constants";
 
+interface NoticeRecord {
+  id: string | number;
+  title: string;
+  category: string;
+  date: string;
+  priority: string;
+  desc: string;
+  file?: string | null;
+}
+
+interface RawBackendNotice {
+  id: string;
+  title: string;
+  category?: string;
+  createdAt?: string;
+  priority?: string;
+  content?: string;
+  attachment?: string | null;
+}
+
 const CATEGORIES = ["All", "NOTICE", "TENDER", "NEWS", "RECRUITMENT"];
 
 const NOTICES_DATA = [
@@ -141,20 +161,20 @@ const NOTICES_DATA = [
 const NoticePage = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [dbNotices, setDbNotices] = useState<any[]>([]);
+  const [dbNotices, setDbNotices] = useState<NoticeRecord[]>([]);
 
   useEffect(() => {
     fetch(`${API_URL}/public/notices`)
       .then((res) => res.json())
       .then((data) => {
         if (Array.isArray(data)) {
-          const formatted = data.map((n) => ({
+          const formatted: NoticeRecord[] = data.map((n: RawBackendNotice) => ({
             id: n.id,
             title: n.title,
             category: (n.category || "NOTICE").toUpperCase(),
             date: n.createdAt ? new Date(n.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Feb 2026",
             priority: n.priority || "NORMAL",
-            desc: n.content,
+            desc: n.content || "",
             file: n.attachment || null,
           }));
           setDbNotices(formatted);
