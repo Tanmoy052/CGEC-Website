@@ -26,38 +26,14 @@ export default function PlacementPage() {
       .catch(() => {});
   }, []);
 
-  const representatives = [
-    {
-      name: "Prof. Atanu Maji",
-      department: "EE",
-      email: "atanudgp@outlook.com",
-      phone: "9734762149",
-    },
-    {
-      name: "Prof. Rajib Das",
-      department: "ECE",
-      email: "rajibdasece@gmail.com",
-      phone: "9163309694",
-    },
-    {
-      name: "Prof. Masud Rana",
-      department: "ME",
-      email: "masud.rana@cgec.org.in",
-      phone: "9851012790",
-    },
-    {
-      name: "Prof. Chhandamay Ray",
-      department: "CE",
-      email: "chhandamayray@yahoo.com",
-      phone: "9903194589",
-    },
-    {
-      name: "Prof. Arghya Chakraborty",
-      department: "BSH",
-      email: "pikaiarghya@gmail.com",
-      phone: "8617455414",
-    },
-  ];
+  interface RepresentativeItem {
+    name: string;
+    department: string;
+    email: string;
+    phone: string;
+  }
+
+  const representatives: RepresentativeItem[] = [];
 
   return (
     <div className="min-h-screen bg-white pb-12">
@@ -258,31 +234,39 @@ export default function PlacementPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {representatives.map((rep, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="py-3 px-4 text-gray-800 font-medium border-r border-gray-200">
-                      {rep.name}
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 border-r border-gray-200">
-                      {rep.department}
-                    </td>
-                    <td className="py-3 px-4 text-gray-600 border-r border-gray-200">
-                      <a
-                        href={`mailto:${rep.email}`}
-                        className="text-blue-600 hover:underline flex items-center gap-1"
-                      >
-                        <Mail className="w-3 h-3" />
-                        {rep.email}
-                      </a>
-                    </td>
-                    <td className="py-3 px-4 text-gray-600">
-                      <div className="flex items-center gap-1">
-                        <Phone className="w-3 h-3 text-blue-600" />
-                        {rep.phone}
-                      </div>
+                {representatives.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-8 text-center text-gray-500 font-medium">
+                      Faculty representatives details will be updated shortly.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  representatives.map((rep, index) => (
+                    <tr key={index} className="hover:bg-gray-50">
+                      <td className="py-3 px-4 text-gray-800 font-medium border-r border-gray-200">
+                        {rep.name}
+                      </td>
+                      <td className="py-3 px-4 text-gray-600 border-r border-gray-200">
+                        {rep.department}
+                      </td>
+                      <td className="py-3 px-4 text-gray-600 border-r border-gray-200">
+                        <a
+                          href={`mailto:${rep.email}`}
+                          className="text-blue-600 hover:underline flex items-center gap-1"
+                        >
+                          <Mail className="w-3 h-3" />
+                          {rep.email}
+                        </a>
+                      </td>
+                      <td className="py-3 px-4 text-gray-600">
+                        <div className="flex items-center gap-1">
+                          <Phone className="w-3 h-3 text-blue-600" />
+                          {rep.phone}
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>

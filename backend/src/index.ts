@@ -5,7 +5,6 @@ import authRoutes from "./routes/authRoutes";
 import adminRoutes from "./routes/adminRoutes";
 import publicRoutes from "./routes/publicRoutes";
 import { seedDefaultAdmin } from "./controllers/authController";
-import { runFullWebsiteSeeder } from "./lib/seedAllData";
 
 dotenv.config();
 
@@ -56,8 +55,7 @@ app.listen(PORT, async () => {
     console.error('   Image uploads will FAIL until these are set in Render → Environment.');
   }
 
-  // Automatically initialize default admin and seed all existing data
+  // Automatically initialize default admin if not present
   await seedDefaultAdmin();
-  await runFullWebsiteSeeder();
 });
 

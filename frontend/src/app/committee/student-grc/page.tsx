@@ -1,19 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { API_URL } from "@/lib/constants";
+
+interface CommitteeMemberApi {
+  id?: string;
+  name: string;
+  position: string;
+  department?: string | null;
+  order?: number;
+}
 
 export default function SGRCPage() {
-  const members = [
-    "1. Dr. Prabal Deb, Principal- Chairman",
-    "2. Dr. Samik Nag, Asst. Prof., BSH Dept.- Coordinator",
-    "3. Prof. Madhuchandra Bhaduri, Asst. Prof., BSH Dept - Member",
-    "4. Prof. G.T. Lepcha, Asst. Prof., ME Dept - Member",
-    "5. Mr. Hrdayat Tulla, Student Member",
-    "6. Prof. Mohammad Salim- Registrar( Officiating)- Member",
-    "7. Prof. Soumik Roy, Asst. Prof., BSH Dept – Member",
-  ];
+  const [members, setMembers] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/committees?committee=student-grc`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setMembers(
+            data.map((m: CommitteeMemberApi, idx: number) => 
+              `${idx + 1}. ${m.name}${m.position ? `, ${m.position}` : ""}${m.department ? `, ${m.department}` : ""}`
+            )
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white pb-12">
@@ -39,9 +55,8 @@ export default function SGRCPage() {
           Student Grievance Redressal Committee (SGRC)
         </h1>
         <p className="text-gray-700 mb-8 leading-relaxed">
-          In order to provide opportunities for redressal of certain grievances
-          of students, the following Student Grievance Redressal Committee
-          (SGRC) is constituted.
+          In order to provide prompt opportunities for redressal of student grievances,
+          the Student Grievance Redressal Committee (SGRC) is constituted.
         </p>
 
         <div className="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
@@ -59,14 +74,18 @@ export default function SGRCPage() {
             <tbody className="divide-y divide-gray-100">
               <tr>
                 <td className="py-4 px-4 text-gray-800 font-semibold align-top border-r border-gray-200">
-                  Student Grievance Redressal Committee (SGRC)
+                  Student Grievance Redressal Committee (SGRC):
                 </td>
                 <td className="py-4 px-4 text-gray-700 align-top">
-                  <ul className="space-y-2">
-                    {members.map((member, index) => (
-                      <li key={index}>{member}</li>
-                    ))}
-                  </ul>
+                  {members.length === 0 ? (
+                    <p className="text-gray-500 italic">No committee members listed currently.</p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {members.map((member, index) => (
+                        <li key={index}>{member}</li>
+                      ))}
+                    </ul>
+                  )}
                 </td>
               </tr>
             </tbody>

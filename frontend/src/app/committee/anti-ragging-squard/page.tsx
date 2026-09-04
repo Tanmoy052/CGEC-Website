@@ -1,103 +1,49 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { API_URL } from "@/lib/constants";
+
+interface AntiRaggingSquadRow {
+  id: number;
+  name: string;
+  department: string;
+  designation: string;
+  email: string;
+}
+
+interface CommitteeMemberApi {
+  id?: string;
+  name: string;
+  position: string;
+  department?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  order?: number;
+}
 
 export default function AntiRaggingSquadPage() {
-  const members = [
-    {
-      id: 1,
-      name: "Prof. Sourav Chatterjee",
-      department: "CSE",
-      designation: "Assistant Professor & Convenor",
-      email: "itssourav@gmail.com",
-    },
-    {
-      id: 2,
-      name: "Prof. Arnab Gain",
-      department: "CSE",
-      designation: "Assistant Professor",
-      email: "arnabgaincgec@gmail.com",
-    },
-    {
-      id: 3,
-      name: "Dr. Sourav Chakraborty",
-      department: "ECE",
-      designation: "Assistant Professor",
-      email: "sourav.chakraborty@cgec.org.in",
-    },
-    {
-      id: 4,
-      name: "Prof. Sudipta Roy",
-      department: "ME",
-      designation: "Assistant Professor",
-      email: "sudipta.roy@cgec.org.in",
-    },
-    {
-      id: 5,
-      name: "Prof. Arghya Chakraborty",
-      department: "BSH",
-      designation: "Assistant Professor",
-      email: "pikaiarghya@gmail.com",
-    },
-    {
-      id: 6,
-      name: "Dr. Manoj Das",
-      department: "Library",
-      designation: "Librarian",
-      email: "manoj.das.library@cgec.org.in",
-    },
-    {
-      id: 7,
-      name: "Prof. Mohammad Salim",
-      department: "BSH",
-      designation: "Assistant Professor",
-      email: "wbcscap@gmail.com",
-    },
-    {
-      id: 8,
-      name: "Mr. Umakanta Bera",
-      department: "CSE",
-      designation: "Technical Assistant",
-      email: "umakantabera@gmail.com",
-    },
-    {
-      id: 9,
-      name: "Mr. Abhijit Sarma",
-      department: "ECE",
-      designation: "Technical Assistant",
-      email: "abhijitsarma500@gmail.com",
-    },
-    {
-      id: 10,
-      name: "Mr. Ziaul Rahaman",
-      department: "ME",
-      designation: "Technical Assistant",
-      email: "ziaulrahaman126@gmail.com",
-    },
-    {
-      id: 11,
-      name: "Mr. Ansarul Seikh",
-      department: "CE",
-      designation: "Technical Assistant",
-      email: "ansarulseikh@gmail.com",
-    },
-    {
-      id: 12,
-      name: "Girl Student prefinal year(2)",
-      department: "All Department",
-      designation: "Student",
-      email: "",
-    },
-    {
-      id: 13,
-      name: "Girl Student Second year",
-      department: "All Department",
-      designation: "Student",
-      email: "",
-    },
-  ];
+  const [members, setMembers] = useState<AntiRaggingSquadRow[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/committees?committee=anti-ragging-squard`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setMembers(
+            data.map((m: CommitteeMemberApi, idx: number) => ({
+              id: m.order || idx + 1,
+              name: m.name,
+              department: m.department || "CGEC",
+              designation: m.position,
+              email: m.email || "-",
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white pb-12">
@@ -123,10 +69,9 @@ export default function AntiRaggingSquadPage() {
           Anti-ragging Squad
         </h1>
         <p className="text-gray-700 mb-8 leading-relaxed">
-          CGEC constitute a Anti-Ragging Squad nominated by the Head of the
-          Institution(Principal/OIC) and such representation may be considered
-          necessary for maintaining vigil, oversight and patrolling functions
-          and shall remain mobile, alert and active at all times
+          CGEC constitutes an Anti-Ragging Squad nominated by the Head of the
+          Institution for maintaining vigil, oversight, and patrolling functions
+          to ensure zero tolerance for ragging.
         </p>
 
         <div className="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
@@ -147,27 +92,37 @@ export default function AntiRaggingSquadPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {members.map((member) => (
-                <tr key={member.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 text-center text-gray-600 align-top">
-                    {member.id}
-                  </td>
-                  <td className="py-3 px-4 text-gray-800 font-medium align-top">
-                    {member.name}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600 align-top">
-                    {member.department}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600 align-top">
-                    {member.designation}
-                  </td>
-                  <td className="py-3 px-4 text-blue-600 align-top break-all">
-                    {member.email && (
-                      <a href={`mailto:${member.email}`}>{member.email}</a>
-                    )}
+              {members.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-gray-500 font-medium">
+                    No committee members listed currently.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                members.map((member) => (
+                  <tr key={member.id} className="hover:bg-gray-50">
+                    <td className="py-3 px-4 text-center text-gray-600 align-top">
+                      {member.id}
+                    </td>
+                    <td className="py-3 px-4 text-gray-800 font-medium align-top">
+                      {member.name}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 align-top">
+                      {member.department}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 align-top">
+                      {member.designation}
+                    </td>
+                    <td className="py-3 px-4 text-blue-600 align-top break-all">
+                      {member.email && member.email !== "-" ? (
+                        <a href={`mailto:${member.email}`}>{member.email}</a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

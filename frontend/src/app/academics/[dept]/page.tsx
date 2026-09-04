@@ -103,7 +103,7 @@ export default function DepartmentPage() {
               experience: f.experience || "-",
               qualification: Array.isArray(f.qualifications) ? f.qualifications.join(", ") : f.qualifications || "-",
               specialization: Array.isArray(f.specialization) ? f.specialization.join(", ") : f.specialization || "-",
-              image: f.image || "/img/Faculty/Somen_P.jpg",
+              image: f.image || "",
               cvLink: f.cvLink || "",
             }))
           );
@@ -333,53 +333,62 @@ export default function DepartmentPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {allFaculty.map((member, i) => (
-                      <tr
-                        key={i}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="px-6 py-4">
-                          <div className="relative w-24 h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm mx-auto bg-gray-100">
-                            {/* eslint-disable-next-line @next/next/no-img-element */}
-                            <img
-                              src={member.image || "/img/Faculty/Somen_P.jpg"}
-                              alt={member.name}
-                              onError={(e) => {
-                                (e.target as HTMLImageElement).src = "/img/Faculty/Somen_P.jpg";
-                              }}
-                              className="w-full h-full object-cover object-top"
-                            />
-                          </div>
-                        </td>
-                        <td className="px-6 py-4 font-bold text-gray-900">
-                          {member.cvLink ? (
-                            <a
-                              href={member.cvLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-blue-600 hover:underline inline-flex items-center gap-1"
-                            >
-                              <span>{member.name}</span>
-                              <ExternalLink className="w-3 h-3" />
-                            </a>
-                          ) : (
-                            member.name
-                          )}
-                        </td>
-                        <td className="px-6 py-4 text-gray-700">
-                          {member.experience || "-"}
-                        </td>
-                        <td className="px-6 py-4 text-blue-600 font-medium">
-                          {member.role}
-                        </td>
-                        <td className="px-6 py-4 text-gray-700">
-                          {member.qualification || "-"}
-                        </td>
-                        <td className="px-6 py-4 text-gray-700 leading-relaxed max-w-xs">
-                          {member.specialization || "-"}
+                    {allFaculty.length === 0 ? (
+                      <tr>
+                        <td colSpan={6} className="px-6 py-12 text-center text-gray-500 font-medium">
+                          No faculty details currently available.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      allFaculty.map((member, i) => (
+                        <tr
+                          key={i}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-4">
+                            <div className="relative w-24 h-32 rounded-lg overflow-hidden border border-gray-200 shadow-sm mx-auto bg-gray-100 flex items-center justify-center">
+                              {member.image ? (
+                                /* eslint-disable-next-line @next/next/no-img-element */
+                                <img
+                                  src={member.image}
+                                  alt={member.name}
+                                  className="w-full h-full object-cover object-top"
+                                />
+                              ) : (
+                                <span className="text-gray-400 text-xs font-semibold">No Photo</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-6 py-4 font-bold text-gray-900">
+                            {member.cvLink ? (
+                              <a
+                                href={member.cvLink}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline inline-flex items-center gap-1"
+                              >
+                                <span>{member.name}</span>
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            ) : (
+                              member.name
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-gray-700">
+                            {member.experience || "-"}
+                          </td>
+                          <td className="px-6 py-4 text-blue-600 font-medium">
+                            {member.role}
+                          </td>
+                          <td className="px-6 py-4 text-gray-700">
+                            {member.qualification || "-"}
+                          </td>
+                          <td className="px-6 py-4 text-gray-700 leading-relaxed max-w-xs">
+                            {member.specialization || "-"}
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -396,27 +405,35 @@ export default function DepartmentPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {allLabs.map((lab, i) => (
-                      <tr
-                        key={i}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="px-6 py-5 text-center font-medium text-gray-500 align-top">
-                          {i + 1}
-                        </td>
-                        <td className="px-6 py-5 font-bold text-gray-900 align-top">
-                          {lab.name}
-                        </td>
-                        <td className="px-6 py-5 text-gray-700 leading-relaxed align-top">
-                          {lab.description || "-"}
-                          {"roomNumber" in lab && Boolean(lab.roomNumber) && (
-                            <span className="block text-xs text-gray-500 mt-1 font-medium">
-                              📍 {lab.roomNumber}
-                            </span>
-                          )}
+                    {allLabs.length === 0 ? (
+                      <tr>
+                        <td colSpan={3} className="px-6 py-12 text-center text-gray-500 font-medium">
+                          No laboratory facilities currently listed.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      allLabs.map((lab, i) => (
+                        <tr
+                          key={i}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-5 text-center font-medium text-gray-500 align-top">
+                            {i + 1}
+                          </td>
+                          <td className="px-6 py-5 font-bold text-gray-900 align-top">
+                            {lab.name}
+                          </td>
+                          <td className="px-6 py-5 text-gray-700 leading-relaxed align-top">
+                            {lab.description || "-"}
+                            {"roomNumber" in lab && Boolean(lab.roomNumber) && (
+                              <span className="block text-xs text-gray-500 mt-1 font-medium">
+                                📍 {lab.roomNumber}
+                              </span>
+                            )}
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -433,29 +450,37 @@ export default function DepartmentPage() {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-gray-100">
-                    {allSyllabus.map((item, i) => (
-                      <tr
-                        key={i}
-                        className="hover:bg-gray-50 transition-colors"
-                      >
-                        <td className="px-6 py-4 text-center font-medium text-gray-500">
-                          {i + 1}
-                        </td>
-                        <td className="px-6 py-4 font-bold text-gray-900">
-                          {"title" in item && item.title ? `${item.semester} - ${item.title}` : item.semester}
-                        </td>
-                        <td className="px-6 py-4 text-center">
-                          <a
-                            href={item.pdfLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 transition-colors"
-                          >
-                            PDF
-                          </a>
+                    {allSyllabus.length === 0 ? (
+                      <tr>
+                        <td colSpan={3} className="px-6 py-12 text-center text-gray-500 font-medium">
+                          No syllabus documents currently available.
                         </td>
                       </tr>
-                    ))}
+                    ) : (
+                      allSyllabus.map((item, i) => (
+                        <tr
+                          key={i}
+                          className="hover:bg-gray-50 transition-colors"
+                        >
+                          <td className="px-6 py-4 text-center font-medium text-gray-500">
+                            {i + 1}
+                          </td>
+                          <td className="px-6 py-4 font-bold text-gray-900">
+                            {"title" in item && item.title ? `${item.semester} - ${item.title}` : item.semester}
+                          </td>
+                          <td className="px-6 py-4 text-center">
+                            <a
+                              href={item.pdfLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 transition-colors"
+                            >
+                              PDF
+                            </a>
+                          </td>
+                        </tr>
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -475,9 +500,16 @@ export default function DepartmentPage() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-100">
-                      {dept.research.map((facultySection, sectionIndex) => (
-                        <React.Fragment key={sectionIndex}>
-                          <tr className="bg-blue-50/50">
+                      {dept.research.length === 0 ? (
+                        <tr>
+                          <td colSpan={3} className="px-6 py-12 text-center text-gray-500 font-medium">
+                            No research publications currently listed.
+                          </td>
+                        </tr>
+                      ) : (
+                        dept.research.map((facultySection, sectionIndex) => (
+                          <React.Fragment key={sectionIndex}>
+                            <tr className="bg-blue-50/50">
                             <td
                               colSpan={3}
                               className="px-6 py-3 text-center font-bold text-blue-800 border-y border-blue-100"
@@ -509,8 +541,9 @@ export default function DepartmentPage() {
                               </td>
                             </tr>
                           ))}
-                        </React.Fragment>
-                      ))}
+                          </React.Fragment>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>

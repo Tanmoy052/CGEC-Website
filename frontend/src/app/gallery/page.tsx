@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRight, Camera } from "lucide-react";
+import { ChevronRight, Camera, ImageOff } from "lucide-react";
 import { API_URL } from "@/lib/constants";
 
 interface GalleryItem {
@@ -15,50 +15,7 @@ interface GalleryItem {
 
 const CATEGORIES = ["ALL", "Campus", "Labs", "Events", "Sports", "Cultural"];
 
-const fallbackGallery = [
-  {
-    id: "1",
-    title: "Main Academic Building & Front Lawns",
-    category: "Campus",
-    imageUrl: "/img/hero/slider-1.jpg",
-    description: "Cooch Behar Government Engineering College main academic building",
-  },
-  {
-    id: "2",
-    title: "Modern Computer Center & Computing Labs",
-    category: "Labs",
-    imageUrl: "/img/hero/slider-2.jpg",
-    description: "Equipped with high-performance workstations and optical fiber connectivity",
-  },
-  {
-    id: "3",
-    title: "Advanced Electronics & Communication Lab",
-    category: "Labs",
-    imageUrl: "/img/hero/slider-3.jpg",
-    description: "Microwave and VLSI design engineering laboratories",
-  },
-  {
-    id: "4",
-    title: "Central Administrative Block",
-    category: "Campus",
-    imageUrl: "/img/hero/slider-4.webp",
-    description: "Administrative facilities, principal's office, and conference hall",
-  },
-  {
-    id: "5",
-    title: "Electrical Machines & Power Systems Lab",
-    category: "Labs",
-    imageUrl: "/img/hero/slider-5.jpg",
-    description: "Heavy machinery and smart grid test benches",
-  },
-  {
-    id: "6",
-    title: "Computer Science Laboratory",
-    category: "Labs",
-    imageUrl: "/img/labs/cse_lab.jpg",
-    description: "CSE department high-speed software lab",
-  },
-];
+const fallbackGallery: GalleryItem[] = [];
 
 export default function GalleryPage() {
   const [galleryItems, setGalleryItems] = useState<GalleryItem[]>([]);
@@ -69,7 +26,7 @@ export default function GalleryPage() {
     fetch(`${API_URL}/public/gallery`)
       .then((res) => res.json())
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) {
+        if (Array.isArray(data)) {
           setGalleryItems(data);
         } else {
           setGalleryItems(fallbackGallery);
@@ -141,6 +98,16 @@ export default function GalleryPage() {
               <div key={n} className="h-72 bg-gray-200 animate-pulse rounded-2xl" />
             ))}
           </div>
+        ) : filteredItems.length === 0 ? (
+          <div className="bg-white rounded-2xl border border-dashed border-gray-300 p-16 text-center space-y-3 max-w-lg mx-auto">
+            <div className="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto">
+              <ImageOff className="w-7 h-7" />
+            </div>
+            <h3 className="text-gray-900 font-bold text-lg">No Gallery Images Uploaded</h3>
+            <p className="text-gray-500 text-sm">
+              New campus photographs and event captures will be displayed here once uploaded by college administrators.
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             {filteredItems.map((item, idx) => (
@@ -151,11 +118,8 @@ export default function GalleryPage() {
                 <div className="relative h-64 w-full bg-slate-900 overflow-hidden">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={item.imageUrl || "/img/hero/slider-1.jpg"}
+                    src={item.imageUrl}
                     alt={item.title}
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).src = "/img/hero/slider-1.jpg";
-                    }}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />

@@ -18,60 +18,15 @@ interface AdmissionItemData {
   order?: number;
 }
 
-const DEFAULT_NOTICES = [
-  {
-    id: "01",
-    subject: "Reporting Notice for 1st year students",
-    link: "/admission/2025/NOTIFICATION_FOR_ADDMISSION_PROCESS_2025-26.pdf",
-  },
-  {
-    id: "02",
-    subject:
-      "NOTICE FOR ADMISSION THROUGH DECENTRALIZED COUNSELLING IN THE 1ST YEAR OF B. TECH COURSES AGAINST VACANCY",
-    link: "/admission/2025/Notice_Decentralized_2025-26.pdf",
-  },
-  {
-    id: "03",
-    subject:
-      "UPDATED NOTICE FOR ADMISSION THROUGH DECENTRALIZED COUNSELLING IN THE 1ST YEAR OF B. TECH COURSES AGAINST VACANCY",
-    link: "/admission/2025/2025-26_10.pdf",
-  },
-  {
-    id: "04",
-    subject:
-      "Status of applications for decentralized counselling of B.Tech 1st Semester candidates",
-    link: "/admission/2025/NOTIFICATION_FOR_ADDMISSION_PROCESS_2025-26.pdf",
-  },
-  {
-    id: "05",
-    subject:
-      "Provisional Merit List as per online application provided by candidate WBJEE for decentralized counselling of B.Tech 1st Semester candidates CGEC",
-    link: "/admission/2025/NOTIFICATION_FOR_ADDMISSION_PROCESS_2025-26.pdf",
-  },
-];
+interface AdmissionNoticeRow {
+  id: string;
+  subject: string;
+  link: string;
+}
 
-const DEFAULT_DOCUMENTS = [
-  {
-    id: "01",
-    subject: "College at a Glance",
-    link: "/admission/2025/CGEC_at_a_glance.pdf",
-  },
-  {
-    id: "02",
-    subject: "Fees structure",
-    link: "/admission/2025/FEES_STRUCTURE_CGEC.pdf",
-  },
-  {
-    id: "03",
-    subject: "Medical Form",
-    link: "/admission/2025/MEDICAL_FORM.pdf",
-  },
-  {
-    id: "04",
-    subject: "Anti-Ragging Undertaking",
-    link: "/admission/2025/Anti-Ragging_Undertaking.pdf",
-  },
-];
+const DEFAULT_NOTICES: AdmissionNoticeRow[] = [];
+
+const DEFAULT_DOCUMENTS: AdmissionNoticeRow[] = [];
 
 export default function AdmissionDynamicPage() {
   const [year, setYear] = useState("2025");
@@ -191,26 +146,34 @@ export default function AdmissionDynamicPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {notices.map((notice) => (
-                    <tr key={notice.id} className="hover:bg-gray-50">
-                      <td className="py-2 px-3 text-gray-600 align-top">
-                        {notice.id}
-                      </td>
-                      <td className="py-2 px-3 text-gray-800 font-medium">
-                        {notice.subject}
-                      </td>
-                      <td className="py-2 px-3 align-top">
-                        <a
-                          href={notice.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-bold text-gray-800 hover:text-blue-600"
-                        >
-                          Download
-                        </a>
+                  {notices.length === 0 ? (
+                    <tr>
+                      <td colSpan={3} className="py-8 text-center text-gray-500 font-medium">
+                        No admission notices currently available.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    notices.map((notice) => (
+                      <tr key={notice.id} className="hover:bg-gray-50">
+                        <td className="py-2 px-3 text-gray-600 align-top">
+                          {notice.id}
+                        </td>
+                        <td className="py-2 px-3 text-gray-800 font-medium">
+                          {notice.subject}
+                        </td>
+                        <td className="py-2 px-3 align-top">
+                          <a
+                            href={notice.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-bold text-gray-800 hover:text-blue-600"
+                          >
+                            Download
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>
@@ -237,26 +200,34 @@ export default function AdmissionDynamicPage() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
-                  {documents.map((doc) => (
-                    <tr key={doc.id} className="hover:bg-gray-50">
-                      <td className="py-2 px-3 text-gray-600 align-top">
-                        {doc.id}
-                      </td>
-                      <td className="py-2 px-3 text-gray-800 font-medium">
-                        {doc.subject}
-                      </td>
-                      <td className="py-2 px-3 align-top">
-                        <a
-                          href={doc.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="font-bold text-gray-800 hover:text-blue-600"
-                        >
-                          Download
-                        </a>
+                  {documents.length === 0 ? (
+                    <tr>
+                      <td colSpan={3} className="py-8 text-center text-gray-500 font-medium">
+                        No admission documents currently available.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    documents.map((doc) => (
+                      <tr key={doc.id} className="hover:bg-gray-50">
+                        <td className="py-2 px-3 text-gray-600 align-top">
+                          {doc.id}
+                        </td>
+                        <td className="py-2 px-3 text-gray-800 font-medium">
+                          {doc.subject}
+                        </td>
+                        <td className="py-2 px-3 align-top">
+                          <a
+                            href={doc.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="font-bold text-gray-800 hover:text-blue-600"
+                          >
+                            Download
+                          </a>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

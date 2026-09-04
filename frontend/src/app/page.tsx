@@ -29,66 +29,8 @@ export default function Home() {
       role: "Principal & Associate Professor",
       dept: "Mechanical Engineering",
       message:
-        "Excellent facilities in terms of equipment and staffs are available to prepare students as professional Mechanical Engineers.",
-      image: "/img/Faculty/ME_Sushovan_Chatterjee.jpg",
-    },
-    {
-      name: "Dr. Palash Das",
-      role: "Assistant Professor",
-      dept: "Electronics & Comm. Engg.",
-      message:
-        "I believe that someone's adaptive nature is one of the reasons behind his success. Our students are sufficiently adaptive.",
-      image: "/img/Faculty/ECEpalashDas.jpg",
-    },
-    {
-      name: "Dr. Kingshuk Dan",
-      role: "Assistant Professor",
-      dept: "Civil Engineering",
-      message:
-        "The aim of the department is to impart the students a sound knowledge of the theory of civil engineering subjects.",
-      image: "/img/Faculty/Kingshuk%20Dan.jpg",
-    },
-    {
-      name: "Dr. Somen Mondal  (TPO Head)",
-      role: "HOD & Assistant Professor",
-      dept: "Electrical Engineering",
-      message:
-        "The TPO Cell promotes student success through dedicated faculty,industry Alliance,& effective training and placement outcomes.",
-      image: "/img/Faculty/Somen_P.jpg",
-    },
-    // Adding more leaders for carousel
-    {
-      name: "Prof. Arnab Gain",
-      role: "Assistant Professor",
-      dept: "Computer Science & Engg.",
-      message:
-        "Our department is committed to excellence in teaching and research in the field of computer science and technology.",
-      image: "/img/Faculty/423-A.jpg",
-    },
-    {
-      name: "Dr. Sourav Chakraborty",
-      role: "HOD & Assistant Professor",
-      dept: "Electrical Engineering",
-      message:
-        "We focus on providing a strong foundation in electrical systems and power electronics for sustainable future.",
-      image: "/img/Faculty/sourav.png",
-    },
-    // Adding more leaders for carousel
-    {
-      name: "Prof. Atanu Maji",
-      role: "HOD & Assistant Professor",
-      dept: "Computer Science & Engg.",
-      message:
-        " As HOD (EE), I am committed to academic excellence, practical learning, and preparing our students for successful careers.",
-      image: "/img/Faculty/EE_Atanu.jpg",
-    },
-    {
-      name: "Dr. Samik Nag",
-      role: "Assistant Professor",
-      dept: "Physics",
-      message:
-        "Basic sciences form the backbone of engineering. We ensure our students have a solid conceptual foundation.",
-      image: "/img/Faculty/CHE_Samik_Nag.jpg",
+        "Welcome to Cooch Behar Government Engineering College. We foster technical innovation, academic rigor, and ethical citizenship across all engineering disciplines.",
+      image: "/img/about_img.webp",
     },
   ];
 
@@ -152,58 +94,7 @@ export default function Home() {
     },
   ];
 
-  const DEFAULT_RECRUITERS = [
-    {
-      name: "Technext",
-      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVqX3biFjz21ZQdxt9C-EPUjdLvEhobTJaJuEuL0z1&s",
-    },
-    {
-      name: "ICICI Bank",
-      logo: "https://www.google.com/s2/favicons?domain=icicibank.com&sz=256",
-    },
-    {
-      name: "Infosys",
-      logo: "https://content.linkedin.com/content/dam/me/business/en-us/sales-solutions/resources/images/apac/images/infosys-logo.png.original.png",
-    },
-
-    {
-      name: "Mindtree",
-      logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVe94WjiPTzH2WwFOu3mw5UQU9I5Q_haldfg&s",
-    },
-
-    {
-      name: "TCS",
-      logo: "https://cgec.org.in/img/company_logo/Tata%20Consultancy%20Services.png",
-    },
-    {
-      name: "Cognizant",
-      logo: "https://www.google.com/s2/favicons?domain=cognizant.com&sz=256",
-    },
-    {
-      name: "Wipro",
-      logo: "https://www.google.com/s2/favicons?domain=wipro.com&sz=256",
-    },
-    {
-      name: "Accenture",
-      logo: "https://www.google.com/s2/favicons?domain=accenture.com&sz=256",
-    },
-    {
-      name: "Capgemini",
-      logo: "https://cgec.org.in/img/company_logo/Capgemini.jpg",
-    },
-    {
-      name: "HCL",
-      logo: "https://www.logo.wine/a/logo/HCL_Technologies/HCL_Technologies-Logo.wine.svg",
-    },
-    {
-      name: "Tech Mahindra",
-      logo: "https://architecturehouston.org/wp-content/uploads/2025/04/Logo-Without-Tagline_Blue.png",
-    },
-    {
-      name: "LTI",
-      logo: "data:image/png;base64,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",
-    },
-  ];
+  const DEFAULT_RECRUITERS: { name: string; logo: string }[] = [];
 
   const [leaders, setLeaders] = useState(DEFAULT_LEADERS);
   const [recruiters, setRecruiters] = useState(DEFAULT_RECRUITERS);
@@ -654,22 +545,28 @@ export default function Home() {
             </div>
           </div>
           <div className="flex flex-wrap justify-center items-center gap-10 lg:gap-16 min-h-[100px]">
-            {recruiters
-              .slice(recruiterIndex, recruiterIndex + 6)
-              .map((recruiter, i) => (
-                <div
-                  key={i}
-                  className="relative w-32 h-16 transition-all duration-300 hover:scale-110 flex items-center justify-center animate-fadeIn"
-                >
-                  <Image
-                    src={recruiter.logo}
-                    alt={recruiter.name}
-                    fill
-                    className="object-contain"
-                    unoptimized
-                  />
-                </div>
-              ))}
+            {recruiters.length > 0 ? (
+              recruiters
+                .slice(recruiterIndex, recruiterIndex + 6)
+                .map((recruiter, i) => (
+                  <div
+                    key={i}
+                    className="relative w-32 h-16 transition-all duration-300 hover:scale-110 flex items-center justify-center animate-fadeIn"
+                  >
+                    <Image
+                      src={recruiter.logo}
+                      alt={recruiter.name}
+                      fill
+                      className="object-contain"
+                      unoptimized
+                    />
+                  </div>
+                ))
+            ) : (
+              <p className="text-gray-400 text-sm font-medium py-4">
+                Recruiter details will be updated shortly.
+              </p>
+            )}
           </div>
         </div>
       </section>

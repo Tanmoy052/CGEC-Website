@@ -1,60 +1,51 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight, Phone, Mail } from "lucide-react";
+import { API_URL } from "@/lib/constants";
+
+interface IICMemberRow {
+  id: number;
+  name: string;
+  designation: string;
+  associatedWith: string;
+  mobile: string;
+  email: string;
+}
+
+interface CommitteeMemberApi {
+  id?: string;
+  name: string;
+  position: string;
+  department?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  order?: number;
+}
 
 export default function IICPage() {
-  const members = [
-    {
-      id: 1,
-      name: "Dr. Aritra Acharyya",
-      designation: "Assistant Professor (Coordinator)",
-      associatedWith: "Cooch Behar Government Engineering College (CGEC)",
-      mobile: "9836357184",
-      email: "ari_besu@yahoo.co.in",
-    },
-    {
-      id: 2,
-      name: "Dr. Prasenjit Dey",
-      designation: "Assistant Professor",
-      associatedWith: "CGEC",
-      mobile: "9123363688",
-      email: "prasenjitdey13@gmail.com",
-    },
-    {
-      id: 3,
-      name: "Prof. Atanu Maji",
-      designation: "Assistant Professor",
-      associatedWith: "CGEC",
-      mobile: "9734762149",
-      email: "atanudgp@outlook.com",
-    },
-    {
-      id: 4,
-      name: "Prof. Prasenjit Das",
-      designation: "Assistant Professor",
-      associatedWith: "CGEC",
-      mobile: "7044057958",
-      email: "pd.jgec006@gmail.com",
-    },
-    {
-      id: 5,
-      name: "Prof. Biren Gurung",
-      designation: "Assistant Professor",
-      associatedWith: "CGEC",
-      mobile: "9734474528",
-      email: "biren.gurung@gmail.com",
-    },
-    {
-      id: 6,
-      name: "Prof. Amit Singha Roy",
-      designation: "Assistant Professor",
-      associatedWith: "CGEC",
-      mobile: "8172051534",
-      email: "singharoyamit@gmail.com",
-    },
-  ];
+  const [members, setMembers] = useState<IICMemberRow[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/committees?committee=iic`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setMembers(
+            data.map((m: CommitteeMemberApi, idx: number) => ({
+              id: m.order || idx + 1,
+              name: m.name,
+              designation: m.position,
+              associatedWith: "CGEC",
+              mobile: m.phone || "-",
+              email: m.email || "-",
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white pb-12">
@@ -80,11 +71,9 @@ export default function IICPage() {
           Institute Industry Cell
         </h1>
         <p className="text-gray-700 mb-8 leading-relaxed">
-          A committee named &apos;Institute Industry Cell&apos; has been formed
-          with the following members to provide institutional support to all
-          departments for industry initiatives and to maintain a bridge between
-          the need of the industry and the academic offerings. The committee
-          will start functioning from 23/03/2021.
+          The Institute Industry Cell provides institutional support to all
+          departments for industry initiatives and maintains a bridge between
+          the needs of the industry and academic offerings.
         </p>
 
         <div className="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
@@ -108,39 +97,49 @@ export default function IICPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {members.map((member) => (
-                <tr key={member.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 text-center text-gray-600 align-top">
-                    {member.id}.
-                  </td>
-                  <td className="py-3 px-4 text-gray-800 font-medium align-top">
-                    {member.name}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600 align-top">
-                    {member.designation}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600 align-top">
-                    {member.associatedWith}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600 align-top whitespace-nowrap">
-                    <div className="flex items-center gap-1">
-                      <Phone className="w-3 h-3 text-blue-600" />
-                      {member.mobile}
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 align-top">
-                    {member.email && (
-                      <a
-                        href={`mailto:${member.email}`}
-                        className="flex items-center gap-1 text-blue-600 hover:underline break-all"
-                      >
-                        <Mail className="w-3 h-3 flex-shrink-0" />
-                        {member.email}
-                      </a>
-                    )}
+              {members.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-gray-500 font-medium">
+                    No committee members listed currently.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                members.map((member) => (
+                  <tr key={member.id} className="hover:bg-gray-50">
+                    <td className="py-3 px-4 text-center text-gray-600 align-top">
+                      {member.id}.
+                    </td>
+                    <td className="py-3 px-4 text-gray-800 font-medium align-top">
+                      {member.name}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 align-top">
+                      {member.designation}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 align-top">
+                      {member.associatedWith}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 align-top whitespace-nowrap">
+                      <div className="flex items-center gap-1">
+                        <Phone className="w-3 h-3 text-blue-600" />
+                        {member.mobile}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 align-top">
+                      {member.email && member.email !== "-" ? (
+                        <a
+                          href={`mailto:${member.email}`}
+                          className="flex items-center gap-1 text-blue-600 hover:underline break-all"
+                        >
+                          <Mail className="w-3 h-3 flex-shrink-0" />
+                          {member.email}
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

@@ -29,37 +29,9 @@ interface AutoTableDoc extends jsPDF {
   };
 }
 
-const DEFAULT_TABLE1: FeeRow[] = [
-  { id: 1, desc: "Admission Fee (one time)", cse: "1000", core: "500" },
-  { id: 2, desc: "Tuition Fee (July 2025 to December 2025)", cse: "6000", core: "3000" },
-  { id: 3, desc: "University Development Fee (one time) May change by the order of MAKAUT", cse: "2200", core: "2200" },
-  { id: 4, desc: "University Registration Fee (one time) May change by the order of MAKAUT", cse: "500", core: "500" },
-  { id: 5, desc: "Caution Money Deposit (Refundable) (one time)", cse: "300", core: "300" },
-  { id: 6, desc: "Identity Card & Library Card (one time)", cse: "200", core: "200" },
-  { id: 7, desc: "First Aid fee (one time)", cse: "50", core: "50" },
-  { id: 8, desc: "Athletic Fee (one time)", cse: "600", core: "600" },
-  { id: 9, desc: "Student's Insurance Fee (one time)", cse: "600", core: "600" },
-  { id: 10, desc: "Fees Book per book", cse: "50", core: "50" },
-  { id: 11, desc: "Library Caution Deposit (Refundable) (one time)", cse: "2000", core: "2000" },
-  { id: 12, desc: "Career Pathway Facility Charge", cse: "1200", core: "1200" },
-  { id: "", desc: "Total", cse: "14700", core: "11200" },
-];
+const DEFAULT_TABLE1: FeeRow[] = [];
 
-const DEFAULT_TABLE2: FeeRow[] = [
-  { id: 1, desc: "Admission Fee (one time)", cse: "1000", core: "500" },
-  { id: 2, desc: "Tuition Fee (July 2025 to December 2025)", cse: "6000", core: "3000" },
-  { id: 3, desc: "University Development Fee (one time) May change by the order of MAKAUT", cse: "1650", core: "1650" },
-  { id: 4, desc: "University Registration Fee (one time) May change by the order of MAKAUT", cse: "500", core: "500" },
-  { id: 5, desc: "Caution Money Deposit (Refundable) (one time)", cse: "300", core: "300" },
-  { id: 6, desc: "Identity Card & Library Card (one time)", cse: "200", core: "200" },
-  { id: 7, desc: "First Aid fee (one time)", cse: "50", core: "50" },
-  { id: 8, desc: "Athletic Fee (one time)", cse: "600", core: "600" },
-  { id: 9, desc: "Student's Insurance Fee (one time)", cse: "450", core: "450" },
-  { id: 10, desc: "Fees Book per book", cse: "50", core: "50" },
-  { id: 11, desc: "Library Caution Deposit (Refundable) (one time)", cse: "2000", core: "2000" },
-  { id: 12, desc: "Career Pathway Facility Charge", cse: "1200", core: "1200" },
-  { id: "", desc: "Total", cse: "14000", core: "10500" },
-];
+const DEFAULT_TABLE2: FeeRow[] = [];
 
 export default function FeesStructurePage() {
   const [table1Data, setTable1Data] = useState<FeeRow[]>(DEFAULT_TABLE1);
@@ -245,43 +217,49 @@ export default function FeesStructurePage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {table1Data.map((item, idx) => {
-                  const isTotal =
-                    String(item.id).toLowerCase() === "total" ||
-                    item.desc.toLowerCase() === "total" ||
-                    idx === table1Data.length - 1;
-                  return (
-                    <tr
-                      key={idx}
-                      className={
-                        isTotal
-                          ? "bg-blue-50 font-bold text-blue-900"
-                          : "hover:bg-blue-50/50 transition-colors"
-                      }
-                    >
-                      <td className="px-6 py-3 text-gray-500 font-medium">
-                        {item.id}
-                      </td>
-                      <td className={`px-6 py-3 ${isTotal ? "uppercase" : "text-gray-800"}`}>
-                        {item.desc}
-                      </td>
-                      <td className="px-6 py-3 text-gray-900 font-bold text-right">
-                        {item.cse}
-                      </td>
-                      <td className="px-6 py-3 text-gray-900 font-bold text-right">
-                        {item.core}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {table1Data.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-8 text-center text-gray-500 font-medium">
+                      Fee structure details are currently being updated.
+                    </td>
+                  </tr>
+                ) : (
+                  table1Data.map((item, idx) => {
+                    const isTotal =
+                      String(item.id).toLowerCase() === "total" ||
+                      item.desc.toLowerCase() === "total" ||
+                      idx === table1Data.length - 1;
+                    return (
+                      <tr
+                        key={idx}
+                        className={
+                          isTotal
+                            ? "bg-blue-50 font-bold text-blue-900"
+                            : "hover:bg-blue-50/50 transition-colors"
+                        }
+                      >
+                        <td className="px-6 py-3 text-gray-500 font-medium">
+                          {item.id}
+                        </td>
+                        <td className={`px-6 py-3 ${isTotal ? "uppercase" : "text-gray-800"}`}>
+                          {item.desc}
+                        </td>
+                        <td className="px-6 py-3 text-gray-900 font-bold text-right">
+                          {item.cse}
+                        </td>
+                        <td className="px-6 py-3 text-gray-900 font-bold text-right">
+                          {item.core}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
           <div className="bg-yellow-50 p-4 border-t border-yellow-100 text-sm text-yellow-800">
             <strong>** Note:</strong> Students admitted in TFW category need not
-            pay Tuition Fees. They have to pay as follows:{" "}
-            <span className="font-bold">ECE & CSE Rs. 8700/-</span> &{" "}
-            <span className="font-bold">CE, ME & EE Rs. 8200/-</span>
+            pay Tuition Fees.
           </div>
         </div>
 
@@ -312,35 +290,43 @@ export default function FeesStructurePage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
-                {table2Data.map((item, idx) => {
-                  const isTotal =
-                    String(item.id).toLowerCase() === "total" ||
-                    item.desc.toLowerCase() === "total" ||
-                    idx === table2Data.length - 1;
-                  return (
-                    <tr
-                      key={idx}
-                      className={
-                        isTotal
-                          ? "bg-blue-50 font-bold text-blue-900"
-                          : "hover:bg-blue-50/50 transition-colors"
-                      }
-                    >
-                      <td className="px-6 py-3 text-gray-500 font-medium">
-                        {item.id}
-                      </td>
-                      <td className={`px-6 py-3 ${isTotal ? "uppercase" : "text-gray-800"}`}>
-                        {item.desc}
-                      </td>
-                      <td className="px-6 py-3 text-gray-900 font-bold text-right">
-                        {item.cse}
-                      </td>
-                      <td className="px-6 py-3 text-gray-900 font-bold text-right">
-                        {item.core}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {table2Data.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="px-6 py-8 text-center text-gray-500 font-medium">
+                      Fee structure details are currently being updated.
+                    </td>
+                  </tr>
+                ) : (
+                  table2Data.map((item, idx) => {
+                    const isTotal =
+                      String(item.id).toLowerCase() === "total" ||
+                      item.desc.toLowerCase() === "total" ||
+                      idx === table2Data.length - 1;
+                    return (
+                      <tr
+                        key={idx}
+                        className={
+                          isTotal
+                            ? "bg-blue-50 font-bold text-blue-900"
+                            : "hover:bg-blue-50/50 transition-colors"
+                        }
+                      >
+                        <td className="px-6 py-3 text-gray-500 font-medium">
+                          {item.id}
+                        </td>
+                        <td className={`px-6 py-3 ${isTotal ? "uppercase" : "text-gray-800"}`}>
+                          {item.desc}
+                        </td>
+                        <td className="px-6 py-3 text-gray-900 font-bold text-right">
+                          {item.cse}
+                        </td>
+                        <td className="px-6 py-3 text-gray-900 font-bold text-right">
+                          {item.core}
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>

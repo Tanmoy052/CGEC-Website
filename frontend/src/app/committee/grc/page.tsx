@@ -1,16 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import { API_URL } from "@/lib/constants";
+
+interface CommitteeMemberApi {
+  id?: string;
+  name: string;
+  position: string;
+  department?: string | null;
+  order?: number;
+}
 
 export default function GRCPage() {
-  const members = [
-    "1. Dr. Prabal Deb, Principal – Chairman",
-    "2. Bidisha Mukherjee, Jt. DTE – Member",
-    "3. Dr. Sushovan Chatterjee, HOD & Associate Professor, ME department – Member",
-    "4. Dr. Sourav De , HOD & Associate Professor, CSE department - Member",
-  ];
+  const [members, setMembers] = useState<string[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/committees?committee=grc`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setMembers(
+            data.map((m: CommitteeMemberApi, idx: number) => 
+              `${idx + 1}. ${m.name}, ${m.position}${m.department ? ` (${m.department})` : ""}`
+            )
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white pb-12">
@@ -37,9 +56,8 @@ export default function GRCPage() {
         </h1>
         <p className="text-gray-700 mb-8 leading-relaxed">
           To address the grievances of faculty/staff members including service
-          matters at the Institution level itself, a Grievance Redressal
-          Committee (GRC) for faculty/staff members is constituted to look into
-          the grievances of the faculty/staff members as follows.
+          matters at the Institution level, the Grievance Redressal
+          Committee (GRC) looks into grievances submitted by staff.
         </p>
 
         <div className="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
@@ -60,11 +78,15 @@ export default function GRCPage() {
                   Grievance Redressal Committee (GRC) for Faculty / Staff:
                 </td>
                 <td className="py-4 px-4 text-gray-700 align-top">
-                  <ul className="space-y-2">
-                    {members.map((member, index) => (
-                      <li key={index}>{member}</li>
-                    ))}
-                  </ul>
+                  {members.length === 0 ? (
+                    <p className="text-gray-500 italic">No committee members listed currently.</p>
+                  ) : (
+                    <ul className="space-y-2">
+                      {members.map((member, index) => (
+                        <li key={index}>{member}</li>
+                      ))}
+                    </ul>
+                  )}
                 </td>
               </tr>
             </tbody>

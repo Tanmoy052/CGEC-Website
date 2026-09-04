@@ -1,60 +1,51 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight, Phone, Mail } from "lucide-react";
+import { API_URL } from "@/lib/constants";
+
+interface CounsellorMemberRow {
+  id: number;
+  name: string;
+  designation: string;
+  associatedWith: string;
+  contact: string;
+  email: string;
+}
+
+interface CommitteeMemberApi {
+  id?: string;
+  name: string;
+  position: string;
+  department?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  order?: number;
+}
 
 export default function StudentCounsellorPage() {
-  const members = [
-    {
-      id: 1,
-      name: "Prof. Sunandita Bhowmik (as nominated by VC,(CBPBU))",
-      designation: "Assistant Prof.",
-      associatedWith: "Cooch Behar Panchanan Barma University (CBPBU)",
-      contact: "9002735087",
-      email: "sunanditabhowmik@cbpbu.ac.in",
-    },
-    {
-      id: 2,
-      name: "Dr. Prasenjit Dey",
-      designation: "Assistant Prof.",
-      associatedWith: "Cooch Behar Government Engineering College (CGEC)",
-      contact: "9123363688",
-      email: "prasenjitdey13@gmail.com",
-    },
-    {
-      id: 3,
-      name: "Prof. Biren Gurung",
-      designation: "Assistant Prof.",
-      associatedWith: "CGEC",
-      contact: "9734474528",
-      email: "biren.gurung@gmail.com",
-    },
-    {
-      id: 4,
-      name: "Dr. Gopal Ghosh",
-      designation: "Assistant Prof.",
-      associatedWith: "CGEC",
-      contact: "8981708655",
-      email: "ghoshgopal.pmath@gmail.com",
-    },
-    {
-      id: 5,
-      name: "Mr. Sujay Sarkar",
-      designation: "Technical Asst.",
-      associatedWith: "CGEC",
-      contact: "9232147569",
-      email: "sujaysarkar1997@gmail.com",
-    },
-    {
-      id: 6,
-      name: "Mr. Soumik Sarkar",
-      designation: "Technical Asst.",
-      associatedWith: "CGEC",
-      contact: "7501408016",
-      email: "soumik.sarkar100@gmail.com",
-    },
-  ];
+  const [members, setMembers] = useState<CounsellorMemberRow[]>([]);
+
+  useEffect(() => {
+    fetch(`${API_URL}/public/committees?committee=counsellor`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data && Array.isArray(data) && data.length > 0) {
+          setMembers(
+            data.map((m: CommitteeMemberApi, idx: number) => ({
+              id: m.order || idx + 1,
+              name: m.name,
+              designation: m.position,
+              associatedWith: "CGEC",
+              contact: m.phone || "-",
+              email: m.email || "-",
+            }))
+          );
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   return (
     <div className="min-h-screen bg-white pb-12">
@@ -80,10 +71,8 @@ export default function StudentCounsellorPage() {
           Student Counsellor
         </h1>
         <p className="text-gray-700 mb-8 leading-relaxed">
-          A student counsellor committee has been formed with the following
-          members to start functioning from 23/03/2021 to provide support to
-          students to deal anxiety and stress issues, to nurture their creative
-          minds etc.
+          The student counsellor committee provides support to students dealing
+          with academic anxiety and stress, while nurturing creative and personal growth.
         </p>
 
         <div className="overflow-x-auto bg-white rounded-lg shadow-sm border border-gray-200">
@@ -109,39 +98,49 @@ export default function StudentCounsellorPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {members.map((member) => (
-                <tr key={member.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 text-center text-gray-600 align-top">
-                    {member.id}.
-                  </td>
-                  <td className="py-3 px-4 text-gray-800 font-medium align-top">
-                    {member.name}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600 align-top">
-                    {member.designation}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600 align-top">
-                    {member.associatedWith}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600 align-top whitespace-nowrap">
-                    <div className="flex items-center gap-1">
-                      <Phone className="w-3 h-3 text-blue-600" />
-                      {member.contact}
-                    </div>
-                  </td>
-                  <td className="py-3 px-4 align-top">
-                    {member.email && (
-                      <a
-                        href={`mailto:${member.email}`}
-                        className="flex items-center gap-1 text-blue-600 hover:underline break-all"
-                      >
-                        <Mail className="w-3 h-3 flex-shrink-0" />
-                        {member.email}
-                      </a>
-                    )}
+              {members.length === 0 ? (
+                <tr>
+                  <td colSpan={6} className="py-8 text-center text-gray-500 font-medium">
+                    No committee members listed currently.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                members.map((member) => (
+                  <tr key={member.id} className="hover:bg-gray-50">
+                    <td className="py-3 px-4 text-center text-gray-600 align-top">
+                      {member.id}.
+                    </td>
+                    <td className="py-3 px-4 text-gray-800 font-medium align-top">
+                      {member.name}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 align-top">
+                      {member.designation}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 align-top">
+                      {member.associatedWith}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600 align-top whitespace-nowrap">
+                      <div className="flex items-center gap-1">
+                        <Phone className="w-3 h-3 text-blue-600" />
+                        {member.contact}
+                      </div>
+                    </td>
+                    <td className="py-3 px-4 align-top">
+                      {member.email && member.email !== "-" ? (
+                        <a
+                          href={`mailto:${member.email}`}
+                          className="flex items-center gap-1 text-blue-600 hover:underline break-all"
+                        >
+                          <Mail className="w-3 h-3 flex-shrink-0" />
+                          {member.email}
+                        </a>
+                      ) : (
+                        "-"
+                      )}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>

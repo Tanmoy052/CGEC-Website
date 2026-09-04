@@ -13,78 +13,15 @@ interface CommitteeMemberApi {
   order?: number;
 }
 
-const DEFAULT_MEMBERS = [
-  {
-    id: 1,
-    name: "Dr. Gautam Das",
-    designation: "Professor",
-    role: "Convenor",
-    department: "Electronics and Communication Engineering",
-  },
-  {
-    id: 2,
-    name: "Prof. Somen Mondal",
-    designation: "Assistant Professor",
-    role: "Member",
-    department: "Computer Science and Engineering",
-  },
-  {
-    id: 3,
-    name: "Dr. Prasenjit Das",
-    designation: "Assistant Professor",
-    role: "Member",
-    department: "Mechanical Engineering",
-  },
-  {
-    id: 4,
-    name: "Dr. Palash Das",
-    designation: "Assistant Professor",
-    role: "Member",
-    department: "Electronics and Communication Engineering",
-  },
-  {
-    id: 5,
-    name: "Prof. Atanu Maji",
-    designation: "Assistant Professor",
-    role: "Member",
-    department: "Electrical Engineering",
-  },
-  {
-    id: 6,
-    name: "Prof. Biren Gurung",
-    designation: "Assistant Professor",
-    role: "Member",
-    department: "Civil Engineering",
-  },
-  {
-    id: 7,
-    name: "Prof. Mohammad Salim",
-    designation: "Assistant Professor",
-    role: "Member",
-    department: "Basic Science and Humanities",
-  },
-  {
-    id: 8,
-    name: "Dr. Kingshuk Dan",
-    designation: "Assistant Professor, Registrar In Charge",
-    role: "Member",
-    department: "Civil Engineering",
-  },
-  {
-    id: 9,
-    name: "Dr. Manoj Das",
-    designation: "Librarian",
-    role: "Member",
-    department: "Central Library",
-  },
-  {
-    id: 10,
-    name: "Dr. Shymal Ghosh",
-    designation: "Assistant Professor",
-    role: "Member",
-    department: "Civil Engineering",
-  },
-];
+interface AcademicCommitteeRow {
+  id: number;
+  name: string;
+  designation: string;
+  role: string;
+  department: string;
+}
+
+const DEFAULT_MEMBERS: AcademicCommitteeRow[] = [];
 
 export default function AcademicCommitteePage() {
   const [members, setMembers] = useState(DEFAULT_MEMBERS);
@@ -155,25 +92,33 @@ export default function AcademicCommitteePage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {members.map((member) => (
-                <tr key={member.id} className="hover:bg-gray-50">
-                  <td className="py-3 px-4 text-center text-gray-600">
-                    {member.id}
-                  </td>
-                  <td className="py-3 px-4 text-gray-800 font-medium">
-                    {member.name}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600">
-                    {member.designation}
-                  </td>
-                  <td className="py-3 px-4 text-gray-800 font-medium">
-                    {member.role}
-                  </td>
-                  <td className="py-3 px-4 text-gray-600">
-                    {member.department}
+              {members.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-8 text-center text-gray-500 font-medium">
+                    No committee members listed currently.
                   </td>
                 </tr>
-              ))}
+              ) : (
+                members.map((member) => (
+                  <tr key={member.id} className="hover:bg-gray-50">
+                    <td className="py-3 px-4 text-center text-gray-600">
+                      {member.id}
+                    </td>
+                    <td className="py-3 px-4 text-gray-800 font-medium">
+                      {member.name}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600">
+                      {member.designation}
+                    </td>
+                    <td className="py-3 px-4 text-gray-800 font-medium">
+                      {member.role}
+                    </td>
+                    <td className="py-3 px-4 text-gray-600">
+                      {member.department}
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
