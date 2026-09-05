@@ -115,6 +115,13 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
     const file = e.target.files?.[0];
     if (!file || !adminToken) return;
 
+    // Enforce PDF-only uploads
+    if (file.type !== "application/pdf" && !file.name.toLowerCase().endsWith(".pdf")) {
+      toast.error("Only PDF files are allowed for download documents.");
+      e.target.value = "";
+      return;
+    }
+
     setUploadingPdf(true);
     const fd = new FormData();
     fd.append("file", file);
@@ -143,6 +150,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
       toast.error("Network error uploading PDF", { id: "pdf-upload" });
     } finally {
       setUploadingPdf(false);
+      e.target.value = "";
     }
   };
 
@@ -719,7 +727,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                     )}
                     <input
                       type="file"
-                      accept=".pdf,.doc,.docx"
+                      accept=".pdf,application/pdf"
                       onChange={handleFileUpload}
                       className="hidden"
                       disabled={uploadingPdf}

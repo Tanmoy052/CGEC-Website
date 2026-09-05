@@ -47,6 +47,7 @@ import FeesTab from "./components/FeesTab";
 import LeadershipTab from "./components/LeadershipTab";
 import RecruitersTab from "./components/RecruitersTab";
 import PlacementBrochureTab from "./components/PlacementBrochureTab";
+import HodMessageTab from "./components/HodMessageTab";
 
 const DEPARTMENTS = ["CSE", "ECE", "EE", "ME", "CE", "BSH"];
 const SEMESTERS = ["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester", "All Semesters"];
@@ -56,6 +57,7 @@ const GALLERY_CATEGORIES = ["Campus", "Events", "Sports", "Labs", "Cultural"];
 
 type AdminTabType =
   | "overview"
+  | "hod-message"
   | "faculty"
   | "syllabus"
   | "notices"
@@ -78,8 +80,8 @@ export default function AdminDashboardPage() {
 
   // Authentication State
   const [adminToken, setAdminToken] = useState<string | null>(null);
-  const [adminName, setAdminName] = useState("Administrator");
-  const [adminEmail, setAdminEmail] = useState("admin@cgec.org.in");
+  const [adminName, setAdminName] = useState("");
+  const [adminEmail, setAdminEmail] = useState("");
   const [activeTab, setActiveTab] = useState<AdminTabType>("overview");
   const [admissionYear, setAdmissionYear] = useState("2026");
   const [isLoading, setIsLoading] = useState(true);
@@ -99,6 +101,7 @@ export default function AdminDashboardPage() {
     leadership: 0,
     recruiters: 0,
     brochures: 0,
+    hodMessages: 0,
   });
 
   // Data Collections
@@ -203,7 +206,7 @@ export default function AdminDashboardPage() {
     description: "",
     pdfLink: "",
     pdfPublicId: "",
-    academicYear: "2025-2026",
+    academicYear: "",
   });
 
   const [noticeForm, setNoticeForm] = useState({
@@ -257,11 +260,11 @@ export default function AdminDashboardPage() {
         const data = await res.json();
         setProfileForm((prev) => ({
           ...prev,
-          name: data.name || "CGEC Super Administrator",
-          email: data.email || "admin@cgec.org.in",
+          name: data.name || "",
+          email: data.email || "",
         }));
-        setAdminName(data.name || "Administrator");
-        setAdminEmail(data.email || "admin@cgec.org.in");
+        setAdminName(data.name || "");
+        setAdminEmail(data.email || "");
       }
     } catch {}
   }, []);
@@ -347,7 +350,7 @@ export default function AdminDashboardPage() {
     if (name) setAdminName(name);
     if (email) {
       setAdminEmail(email);
-      setProfileForm((prev) => ({ ...prev, name: name || "CGEC Super Administrator", email }));
+      setProfileForm((prev) => ({ ...prev, name: name || "", email }));
     }
     fetchDashboardData(token);
     fetchAdminProfile(token);
@@ -438,8 +441,8 @@ export default function AdminDashboardPage() {
         phone: "",
         experience: "",
         specialization: "",
-        qualifications: "B.Tech, M.Tech, Ph.D",
-        image: "/img/Faculty/Somen_P.jpg",
+        qualifications: "",
+        image: "",
         imagePublicId: "",
         cvLink: "",
         cvPublicId: "",
@@ -451,9 +454,9 @@ export default function AdminDashboardPage() {
         semester: "1st Semester",
         title: "",
         description: "",
-        pdfLink: "/data/cse/BTECH_all dept_1st year.pdf",
+        pdfLink: "",
         pdfPublicId: "",
-        academicYear: "2025-2026",
+        academicYear: "",
       });
     } else if (type === "notice") {
       setNoticeForm({
@@ -471,16 +474,16 @@ export default function AdminDashboardPage() {
         department: "CSE",
         name: "",
         description: "",
-        image: "/img/labs/cse_lab.jpg",
+        image: "",
         imagePublicId: "",
-        roomNumber: "Room 204, Academic Block",
+        roomNumber: "",
         facultyInCharge: "",
       });
     } else if (type === "gallery") {
       setGalleryForm({
         title: "",
         category: "Campus",
-        imageUrl: "/img/hero/slider-1.jpg",
+        imageUrl: "",
         imagePublicId: "",
         description: "",
       });
@@ -529,7 +532,7 @@ export default function AdminDashboardPage() {
         description: item.description || "",
         pdfLink: item.pdfLink || "",
         pdfPublicId: item.pdfPublicId || "",
-        academicYear: item.academicYear || "2025-2026",
+        academicYear: item.academicYear || "",
       });
     } else if (type === "notice") {
       setNoticeForm({
@@ -770,6 +773,7 @@ export default function AdminDashboardPage() {
         <nav className="p-3 space-y-1 flex-1 overflow-y-auto min-h-0 custom-sidebar-scrollbar">
           {[
             { id: "overview", label: "Dashboard Overview", icon: LayoutDashboard, count: null },
+            { id: "hod-message", label: "HOD Messages", icon: UserCheck, count: stats.hodMessages || null },
             { id: "committees", label: "Committees (All 10)", icon: ShieldCheck, count: stats.committees || null },
             { id: "admission", label: `Admission ${admissionYear}`, icon: GraduationCap, count: stats.admission || null },
             { id: "fees", label: "Fees Structure", icon: Receipt, count: stats.fees || null },
@@ -847,6 +851,8 @@ export default function AdminDashboardPage() {
             <h1 className="text-lg sm:text-xl font-extrabold text-white capitalize truncate tracking-tight">
               {activeTab === "overview"
                 ? "System Overview"
+                : activeTab === "hod-message"
+                ? "Department HOD Messages"
                 : activeTab === "settings"
                 ? "Admin Account & Security Settings"
                 : activeTab === "wallmagazine"
@@ -873,6 +879,7 @@ export default function AdminDashboardPage() {
           <div className="flex items-center gap-3 shrink-0">
             {activeTab !== "overview" &&
               activeTab !== "settings" &&
+              activeTab !== "hod-message" &&
               activeTab !== "admission" &&
               activeTab !== "fees" &&
               activeTab !== "committees" &&
@@ -938,6 +945,7 @@ export default function AdminDashboardPage() {
                   {/* KPI Stats Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     {[
+                      { label: "HOD Messages", value: stats.hodMessages, icon: UserCheck, color: "from-blue-600 to-teal-600", tab: "hod-message" },
                       { label: "Committees (10)", value: stats.committees, icon: ShieldCheck, color: "from-blue-600 to-indigo-600", tab: "committees" },
                       { label: `Admission ${admissionYear}`, value: stats.admission, icon: GraduationCap, color: "from-cyan-600 to-blue-600", tab: "admission" },
                       { label: "Fees Structure", value: stats.fees, icon: Receipt, color: "from-emerald-600 to-teal-600", tab: "fees" },
@@ -1604,6 +1612,9 @@ export default function AdminDashboardPage() {
               {/* COMMITTEES TAB */}
               {activeTab === "committees" && <CommitteesTab adminToken={adminToken} />}
 
+              {/* HOD MESSAGES TAB */}
+              {activeTab === "hod-message" && <HodMessageTab adminToken={adminToken} />}
+
               {/* ADMISSION TAB */}
               {activeTab === "admission" && (
                 <AdmissionTab adminToken={adminToken} onYearChange={(newYear) => setAdmissionYear(newYear)} />
@@ -1989,7 +2000,7 @@ export default function AdminDashboardPage() {
                           type="text"
                           value={facultyForm.image}
                           onChange={(e) => setFacultyForm({ ...facultyForm, image: e.target.value })}
-                          placeholder="/img/Faculty/Somen_P.jpg or https://res.cloudinary.com/..."
+                          placeholder="https://res.cloudinary.com/... or image URL"
                           className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500"
                         />
                       </div>
@@ -2238,7 +2249,7 @@ export default function AdminDashboardPage() {
                           )}
                           <input
                             type="file"
-                            accept=".pdf,image/*,application/pdf"
+                            accept=".pdf,application/pdf"
                             className="hidden"
                             disabled={uploadingField === "notice-attach"}
                             onChange={(e) =>
@@ -2388,7 +2399,7 @@ export default function AdminDashboardPage() {
                           required
                           value={galleryForm.imageUrl}
                           onChange={(e) => setGalleryForm({ ...galleryForm, imageUrl: e.target.value })}
-                          placeholder="/img/hero/slider-1.jpg or https://res.cloudinary.com/..."
+                          placeholder="https://res.cloudinary.com/... or image URL"
                           className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-blue-500"
                         />
                       </div>
@@ -2482,7 +2493,7 @@ export default function AdminDashboardPage() {
                         required
                         value={wallMagazineForm.imageUrl}
                         onChange={(e) => setWallMagazineForm({ ...wallMagazineForm, imageUrl: e.target.value })}
-                        placeholder="/img/wall_magazine/cover_2025.jpg or https://res.cloudinary.com/..."
+                        placeholder="https://res.cloudinary.com/... or image URL"
                         className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500"
                       />
                       <p className="text-[11px] text-slate-500">Paste an existing image URL or click &quot;Upload Cover Image&quot; to pick from your device</p>

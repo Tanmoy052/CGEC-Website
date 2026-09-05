@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { ChevronRight, Phone, Mail, FileText } from "lucide-react";
-import Image from "next/image";
 import { API_URL } from "@/lib/constants";
 
 export default function PlacementPage() {
@@ -59,10 +58,10 @@ export default function PlacementPage() {
               <span>Official Recruiter Guide</span>
             </div>
             <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-              {brochure?.title || "CGEC Placement Brochure 2025-26"}
+              {brochure?.title || "CGEC Placement Brochure"}
             </h2>
             <p className="text-sm text-blue-200 max-w-2xl leading-relaxed">
-              {brochure?.description || "Download the complete Training & Placement brochure containing batch demographics, department-wise skillsets, past recruiter testimonials, and campus hiring guidelines."}
+              {brochure?.description || "Official Training & Placement brochures detailing student demographics, skill matrices, recruiter profiles, and campus hiring guidelines."}
             </p>
           </div>
 
@@ -122,17 +121,6 @@ export default function PlacementPage() {
           </div>
 
           <div>
-            <div className="w-full lg:w-56 float-none lg:float-right ml-0 lg:ml-6 mb-6 lg:mb-2">
-              <div className="relative w-full aspect-[3/4] rounded-lg overflow-hidden shadow-md border border-gray-200 bg-gray-100">
-                <Image
-                  src="https://cgec.org.in/img/Faculty/Somen_P.jpg"
-                  alt="Prof. Somen Mondal, TPO"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-
             <h3 className="text-lg font-bold text-gray-900 mb-2">
               To Our Esteemed Industry Partners:
             </h3>

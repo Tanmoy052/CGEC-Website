@@ -428,7 +428,7 @@ export default function LeadershipTab({ adminToken }: LeadershipTabProps) {
                   <input
                     type="text"
                     required
-                    placeholder="/img/Faculty/... or https://res.cloudinary.com/..."
+                    placeholder="https://res.cloudinary.com/... or image URL"
                     value={formData.image}
                     onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                     className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500"

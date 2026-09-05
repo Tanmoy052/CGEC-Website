@@ -17,6 +17,16 @@ export const uploadMediaToCloudinary = async (req: Request, res: Response) => {
     // Non-media documents (PDF, DOC, DOCX, PPT, PPTX, etc.) MUST be uploaded as 'raw' in Cloudinary
     const resourceType = isImage ? 'image' : isVideo ? 'video' : 'raw';
 
+    // Enforce PDF-only for document folders (notices, admission, syllabus, fees, brochures, wall magazines)
+    const documentFolders = ['admission', 'notices', 'syllabus', 'fees', 'wall_magazine', 'brochure', 'faculty_cv'];
+    const isDocumentFolder = documentFolders.some((df) => folder.toLowerCase().startsWith(df));
+    if (isDocumentFolder) {
+      const isPdf = file.mimetype === 'application/pdf' || ext === 'pdf';
+      if (!isPdf) {
+        return res.status(400).json({ message: 'Only PDF files are allowed for document uploads.' });
+      }
+    }
+
     const formatFileSize = (bytes: number) => {
       if (bytes < 1024) return `${bytes} B`;
       if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;

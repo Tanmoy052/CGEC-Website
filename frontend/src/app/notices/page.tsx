@@ -184,17 +184,29 @@ const NoticePage = () => {
                             {notice.desc}
                           </p>
 
-                          <div className="pt-4 flex flex-wrap items-center gap-4">
-                            <button className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20">
-                              <Download className="w-5 h-5" />
-                              <span>Download PDF</span>
-                            </button>
-                            <button className="flex items-center space-x-2 text-gray-500 hover:text-blue-600 font-bold transition-colors">
-                              <FileText className="w-5 h-5" />
-                              <span>View Online</span>
-                              <ChevronRight className="w-4 h-4" />
-                            </button>
-                          </div>
+                          {notice.file && (
+                            <div className="pt-4 flex flex-wrap items-center gap-4">
+                              <a
+                                href={`/api/pdf/download?url=${encodeURIComponent(notice.file)}&name=${encodeURIComponent(notice.title)}`}
+                                download
+                                rel="noopener noreferrer"
+                                className="flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-xl font-bold hover:bg-blue-700 transition-all shadow-lg shadow-blue-600/20"
+                              >
+                                <Download className="w-5 h-5" />
+                                <span>Download PDF</span>
+                              </a>
+                              <a
+                                href={`/api/pdf/download?url=${encodeURIComponent(notice.file)}&name=${encodeURIComponent(notice.title)}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="flex items-center space-x-2 text-gray-500 hover:text-blue-600 font-bold transition-colors"
+                              >
+                                <FileText className="w-5 h-5" />
+                                <span>View Online</span>
+                                <ChevronRight className="w-4 h-4" />
+                              </a>
+                            </div>
+                          )}
                         </div>
                       </div>
                     </motion.div>

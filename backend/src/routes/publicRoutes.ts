@@ -14,6 +14,7 @@ import {
   getPlacementBrochures,
   getLatestBrochure,
   getBrochureById,
+  getHodMessages,
 } from '../controllers/adminController';
 
 const router = Router();
@@ -33,5 +34,6 @@ router.get('/recruiters', getRecruiters);
 router.get('/brochures', getPlacementBrochures);
 router.get('/brochures/latest', getLatestBrochure);
 router.get('/brochures/:id', getBrochureById);
+router.get('/hod-message', getHodMessages);
 
 export default router;

@@ -392,7 +392,7 @@ export default function RecruitersTab({ adminToken }: RecruitersTabProps) {
                   <input
                     type="text"
                     required
-                    placeholder="https://... or /img/company_logo/..."
+                    placeholder="https://res.cloudinary.com/... or logo image URL"
                     value={formData.logo}
                     onChange={(e) => setFormData({ ...formData, logo: e.target.value })}
                     className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500"

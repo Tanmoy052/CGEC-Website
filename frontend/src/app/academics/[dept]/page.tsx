@@ -53,6 +53,13 @@ interface DeptWallMagazineItem {
   department?: string | null;
 }
 
+interface DeptHodItem {
+  name: string;
+  designation?: string;
+  message: string;
+  image?: string | null;
+}
+
 interface RawFacultyApi {
   name: string;
   designation: string;
@@ -86,6 +93,7 @@ export default function DepartmentPage() {
   const [dbSyllabus, setDbSyllabus] = useState<DeptSyllabusItem[]>([]);
   const [dbLabs, setDbLabs] = useState<DeptLabItem[]>([]);
   const [dbWallMagazines, setDbWallMagazines] = useState<DeptWallMagazineItem[]>([]);
+  const [dbHod, setDbHod] = useState<DeptHodItem | null>(null);
 
   useEffect(() => {
     if (!deptSlug) return;
@@ -160,6 +168,21 @@ export default function DepartmentPage() {
         }
       })
       .catch(() => {});
+
+    // Fetch dynamic HOD message
+    fetch(`${API_URL}/public/hod-message?department=${deptUpper}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((data) => {
+        if (data && data.name && data.message) {
+          setDbHod({
+            name: data.name,
+            designation: data.designation || "Head of Department",
+            message: data.message,
+            image: data.image || null,
+          });
+        }
+      })
+      .catch(() => {});
   }, [deptSlug]);
 
   // If department not found, show 404
@@ -177,6 +200,12 @@ export default function DepartmentPage() {
   const allFaculty = dbFaculty.length > 0 ? dbFaculty : dept.faculty;
   const allSyllabus = dbSyllabus.length > 0 ? dbSyllabus : dept.syllabus;
   const allLabs = dbLabs.length > 0 ? dbLabs : dept.labs;
+  const currentHod = dbHod || (dept.hodMessage.name && dept.hodMessage.message ? {
+    name: dept.hodMessage.name,
+    designation: "Head of Department",
+    message: Array.isArray(dept.hodMessage.message) ? dept.hodMessage.message.join("\n\n") : dept.hodMessage.message,
+    image: dept.hodMessage.image || null,
+  } : null);
 
   // Generate dynamic tab labels
   const dynamicTabs = tabs.map((tab) => ({
@@ -280,43 +309,41 @@ export default function DepartmentPage() {
             )}
 
             {activeTab === "hod" && (
-              <div className="flex flex-col md:flex-row gap-8 items-start bg-gray-50 p-8 rounded-2xl border border-gray-200 shadow-sm">
-                <div className="shrink-0 relative w-full md:w-auto h-[250px] md:h-[220px] aspect-[4/5] rounded-xl overflow-hidden shadow-lg border border-gray-100 mx-auto md:mx-0">
-                  <Image
-                    src={dept.hodMessage.image}
-                    alt={dept.hodMessage.name}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex-1">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-2">
-                    {dept.hodMessage.name}
-                  </h2>
-                  <h3 className="text-blue-600 font-medium mb-6 uppercase tracking-wide">
-                    Head of Department
-                  </h3>
-                  <div className="prose prose-lg text-gray-700 relative pl-8 border-l-4 border-blue-600 font-medium">
-                    <span className="absolute -top-6 -left-6 text-6xl text-blue-200 font-serif">
-                      &ldquo;
-                    </span>
-                    {Array.isArray(dept.hodMessage.message) ? (
-                      dept.hodMessage.message.map((msg, i) => (
-                        <p
-                          key={i}
-                          className="relative z-10 italic leading-relaxed mb-4 last:mb-0 font-medium"
-                        >
-                          {msg}
-                        </p>
-                      ))
-                    ) : (
-                      <p className="relative z-10 italic leading-relaxed font-medium">
-                        {dept.hodMessage.message}
+              currentHod?.name && currentHod?.message ? (
+                <div className="flex flex-col md:flex-row gap-8 items-start bg-gray-50 p-8 rounded-2xl border border-gray-200 shadow-sm">
+                  {currentHod.image && (
+                    <div className="shrink-0 relative w-full md:w-auto h-[250px] md:h-[220px] aspect-[4/5] rounded-xl overflow-hidden shadow-lg border border-gray-100 mx-auto md:mx-0">
+                      <Image
+                        src={currentHod.image}
+                        alt={currentHod.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="flex-1">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                      {currentHod.name}
+                    </h2>
+                    <h3 className="text-blue-600 font-medium mb-6 uppercase tracking-wide">
+                      {currentHod.designation || "Head of Department"}
+                    </h3>
+                    <div className="prose prose-lg text-gray-700 relative pl-8 border-l-4 border-blue-600 font-medium">
+                      <span className="absolute -top-6 -left-6 text-6xl text-blue-200 font-serif select-none">
+                        &ldquo;
+                      </span>
+                      <p className="relative z-10 italic leading-relaxed font-medium whitespace-pre-line">
+                        {currentHod.message}
                       </p>
-                    )}
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="py-16 text-center text-gray-400 bg-gray-50 rounded-2xl border border-gray-200">
+                  <p className="font-semibold text-lg">HOD message not yet available.</p>
+                  <p className="text-sm mt-1">This section will be updated soon.</p>
+                </div>
+              )
             )}
 
             {activeTab === "faculty" && (
@@ -470,8 +497,8 @@ export default function DepartmentPage() {
                           </td>
                           <td className="px-6 py-4 text-center">
                             <a
-                              href={item.pdfLink}
-                              target="_blank"
+                              href={`/api/pdf/download?url=${encodeURIComponent(item.pdfLink)}&name=${encodeURIComponent(("title" in item ? (item as { title: string }).title : null) || item.semester)}`}
+                              download
                               rel="noopener noreferrer"
                               className="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded hover:bg-blue-700 transition-colors"
                             >
@@ -606,13 +633,12 @@ export default function DepartmentPage() {
                         {mag.pdfLink && (
                           <div className="px-5 pb-5 pt-0">
                             <a
-                              href={mag.pdfLink}
-                              target="_blank"
+                              href={`/api/pdf/download?url=${encodeURIComponent(mag.pdfLink)}&name=${encodeURIComponent(mag.title)}`}
+                              download
                               rel="noopener noreferrer"
                               className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-blue-50 hover:bg-blue-600 text-blue-700 hover:text-white rounded-xl font-bold text-xs transition-all duration-200"
                             >
-                              <span>Read / Download Magazine PDF</span>
-                              <ExternalLink className="w-3.5 h-3.5" />
+                              <span>Download Magazine PDF</span>
                             </a>
                           </div>
                         )}

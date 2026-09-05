@@ -56,7 +56,7 @@ export default function PlacementBrochureTab({ adminToken }: PlacementBrochureTa
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    academicYear: "2025-2026",
+    academicYear: "",
     fileUrl: "",
     filePublicId: "",
     fileType: "pdf",
@@ -137,9 +137,9 @@ export default function PlacementBrochureTab({ adminToken }: PlacementBrochureTa
   const openCreateModal = () => {
     setEditingBrochure(null);
     setFormData({
-      title: "CGEC Placement Brochure 2025-26",
-      description: "Official Training & Placement Brochure for Cooch Behar Government Engineering College detailing department rosters, recruiter highlights, and hiring guidelines.",
-      academicYear: "2025-2026",
+      title: "",
+      description: "",
+      academicYear: "",
       fileUrl: "",
       filePublicId: "",
       fileType: "pdf",
@@ -156,7 +156,7 @@ export default function PlacementBrochureTab({ adminToken }: PlacementBrochureTa
     setFormData({
       title: item.title,
       description: item.description || "",
-      academicYear: item.academicYear || "2025-2026",
+      academicYear: item.academicYear || "",
       fileUrl: item.fileUrl,
       filePublicId: item.filePublicId || "",
       fileType: item.fileType || "pdf",

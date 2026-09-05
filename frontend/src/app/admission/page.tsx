@@ -37,11 +37,11 @@ export default function AdmissionDynamicPage() {
   const [documents, setDocuments] = useState(DEFAULT_DOCUMENTS);
   const [config, setConfig] = useState({
     whatsappLink: "",
-    contactPhone: "9475445190",
-    contactEmail: "admission@cgec.org.in",
-    officerName: "Dr. Sushovan Chatterjee",
-    officerRole: "PI Admin, Admission (2026)",
-    officerDesignation: "Cooch Behar Government Engineering College",
+    contactPhone: "",
+    contactEmail: "",
+    officerName: "",
+    officerRole: "",
+    officerDesignation: "",
   });
 
   useEffect(() => {
@@ -75,11 +75,11 @@ export default function AdmissionDynamicPage() {
           if (data.config) {
             setConfig({
               whatsappLink: data.config.whatsappLink || "",
-              contactPhone: data.config.contactPhone || "9475445190",
-              contactEmail: data.config.contactEmail || "admission@cgec.org.in",
-              officerName: data.config.officerName || "Dr. Sushovan Chatterjee",
-              officerRole: data.config.officerRole || `PI Admin, Admission (${currentYear})`,
-              officerDesignation: data.config.officerDesignation || "Cooch Behar Government Engineering College",
+              contactPhone: data.config.contactPhone || "",
+              contactEmail: data.config.contactEmail || "",
+              officerName: data.config.officerName || "",
+              officerRole: data.config.officerRole || "",
+              officerDesignation: data.config.officerDesignation || "",
             });
           }
         }
@@ -176,8 +176,8 @@ export default function AdmissionDynamicPage() {
                       </div>
 
                       <a
-                        href={notice.link}
-                        target="_blank"
+                        href={`/api/pdf/download?url=${encodeURIComponent(notice.link)}&name=${encodeURIComponent(notice.subject)}`}
+                        download
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold shadow-sm hover:shadow transition-all shrink-0 self-start sm:self-center min-h-[34px] w-full sm:w-auto"
                       >
@@ -226,8 +226,8 @@ export default function AdmissionDynamicPage() {
                       </div>
 
                       <a
-                        href={doc.link}
-                        target="_blank"
+                        href={`/api/pdf/download?url=${encodeURIComponent(doc.link)}&name=${encodeURIComponent(doc.subject)}`}
+                        download
                         rel="noopener noreferrer"
                         className="inline-flex items-center justify-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold shadow-sm hover:shadow transition-all shrink-0 self-start sm:self-center min-h-[34px] w-full sm:w-auto"
                       >
@@ -272,38 +272,46 @@ export default function AdmissionDynamicPage() {
               </div>
             )}
 
-            <div className="pt-4 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
-              <div className="flex items-center gap-2.5 text-gray-700">
-                <Phone className="w-4 h-4 text-blue-600 shrink-0" />
-                <span className="truncate">
-                  Official Contact:{" "}
-                  <a
-                    href={`tel:${config.contactPhone}`}
-                    className="font-bold text-blue-900 hover:underline"
-                  >
-                    {config.contactPhone}
-                  </a>
-                </span>
+            {(config.contactPhone || config.contactEmail) && (
+              <div className="pt-4 border-t border-gray-100 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs sm:text-sm">
+                {config.contactPhone && (
+                  <div className="flex items-center gap-2.5 text-gray-700">
+                    <Phone className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="truncate">
+                      Official Contact:{" "}
+                      <a
+                        href={`tel:${config.contactPhone}`}
+                        className="font-bold text-blue-900 hover:underline"
+                      >
+                        {config.contactPhone}
+                      </a>
+                    </span>
+                  </div>
+                )}
+                {config.contactEmail && (
+                  <div className="flex items-center gap-2.5 text-gray-700">
+                    <Mail className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span className="truncate">
+                      Email:{" "}
+                      <a
+                        href={`mailto:${config.contactEmail}`}
+                        className="font-bold text-blue-900 hover:underline"
+                      >
+                        {config.contactEmail}
+                      </a>
+                    </span>
+                  </div>
+                )}
               </div>
-              <div className="flex items-center gap-2.5 text-gray-700">
-                <Mail className="w-4 h-4 text-blue-600 shrink-0" />
-                <span className="truncate">
-                  Email:{" "}
-                  <a
-                    href={`mailto:${config.contactEmail}`}
-                    className="font-bold text-blue-900 hover:underline"
-                  >
-                    {config.contactEmail}
-                  </a>
-                </span>
-              </div>
-            </div>
+            )}
 
-            <div className="pt-3 border-t border-gray-100">
-              <p className="font-bold text-gray-900 text-sm">{config.officerName}</p>
-              <p className="text-gray-600 text-xs">{config.officerRole}</p>
-              <p className="text-gray-500 text-xs">{config.officerDesignation}</p>
-            </div>
+            {(config.officerName || config.officerRole || config.officerDesignation) && (
+              <div className="pt-3 border-t border-gray-100">
+                {config.officerName && <p className="font-bold text-gray-900 text-sm">{config.officerName}</p>}
+                {config.officerRole && <p className="text-gray-600 text-xs">{config.officerRole}</p>}
+                {config.officerDesignation && <p className="text-gray-500 text-xs">{config.officerDesignation}</p>}
+              </div>
+            )}
           </div>
         </div>
       </div>

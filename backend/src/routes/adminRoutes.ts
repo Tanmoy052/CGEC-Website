@@ -53,6 +53,9 @@ import {
   createPlacementBrochure,
   updatePlacementBrochure,
   deletePlacementBrochure,
+  getHodMessages,
+  saveHodMessage,
+  deleteHodMessage,
 } from '../controllers/adminController';
 
 import multer from 'multer';
@@ -150,6 +153,11 @@ router.get('/brochures', getPlacementBrochures);
 router.post('/brochures', createPlacementBrochure);
 router.put('/brochures/:id', updatePlacementBrochure);
 router.delete('/brochures/:id', deletePlacementBrochure);
+
+// HOD Messages
+router.get('/hod-message', getHodMessages);
+router.post('/hod-message', saveHodMessage);
+router.delete('/hod-message/:deptOrId', deleteHodMessage);
 
 export default router;
 

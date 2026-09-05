@@ -64,11 +64,9 @@ export const departments: Record<string, DepartmentData> = {
         "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=800&auto=format&fit=crop",
     },
     hodMessage: {
-      name: "Head of the Department",
-      message:
-        "The Department offers a 4-year B.Tech degree in Computer Science & Engineering. The department places emphasis on core aspects of computers such as Algorithm Design, Database Systems, Computer Networks, and Artificial Intelligence, while encouraging analytical capabilities and professional excellence.",
-      image:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop",
+      name: "",
+      message: "",
+      image: "",
     },
     faculty: [],
     labs: [],
@@ -96,11 +94,9 @@ export const departments: Record<string, DepartmentData> = {
         "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&auto=format&fit=crop",
     },
     hodMessage: {
-      name: "Head of the Department",
-      message:
-        "Welcome to the Department of Electronics and Communication Engineering. We strive to provide students with rigorous training in cutting-edge communication systems, microelectronics, and signal processing.",
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&auto=format&fit=crop",
+      name: "",
+      message: "",
+      image: "",
     },
     faculty: [],
     labs: [],
@@ -128,11 +124,9 @@ export const departments: Record<string, DepartmentData> = {
         "https://images.unsplash.com/photo-1498084393753-b411b2d26b34?w=800&auto=format&fit=crop",
     },
     hodMessage: {
-      name: "Head of the Department",
-      message:
-        "Our department focuses on academic excellence, hands-on learning, and preparing our students for sustainable engineering solutions in power and automation.",
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&auto=format&fit=crop",
+      name: "",
+      message: "",
+      image: "",
     },
     faculty: [],
     labs: [],
@@ -160,11 +154,9 @@ export const departments: Record<string, DepartmentData> = {
         "https://images.unsplash.com/photo-1537462715879-360eeb61a0ad?w=800&auto=format&fit=crop",
     },
     hodMessage: {
-      name: "Head of the Department",
-      message:
-        "Mechanical Engineering continues to be the foundation of industrial advancement. We empower students with design capabilities, practical problem-solving skills, and ethical professionalism.",
-      image:
-        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&auto=format&fit=crop",
+      name: "",
+      message: "",
+      image: "",
     },
     faculty: [],
     labs: [],
@@ -181,7 +173,7 @@ export const departments: Record<string, DepartmentData> = {
     name: "Civil Engineering",
     shortName: "CE",
     image:
-      "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&auto=format&fit=crop",
     home: {
       paragraphs: [
         "The Department of Civil Engineering is committed to developing engineering professionals who design, construct, and maintain resilient infrastructure.",
@@ -189,14 +181,12 @@ export const departments: Record<string, DepartmentData> = {
         "Emphasis is placed on modern construction management, sustainable green infrastructure, and community development.",
       ],
       image:
-        "https://images.unsplash.com/photo-1541888946425-d0fbb1861564?w=800&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1541888946425-d81bb19240f5?w=800&auto=format&fit=crop",
     },
     hodMessage: {
-      name: "Head of the Department",
-      message:
-        "The aim of the department is to impart sound knowledge of the theory and practice of civil engineering, equipping students to build the sustainable cities of tomorrow.",
-      image:
-        "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&auto=format&fit=crop",
+      name: "",
+      message: "",
+      image: "",
     },
     faculty: [],
     labs: [],
@@ -224,11 +214,9 @@ export const departments: Record<string, DepartmentData> = {
         "https://images.unsplash.com/photo-1532094349884-543bc11b234d?w=800&auto=format&fit=crop",
     },
     hodMessage: {
-      name: "Head of the Department",
-      message:
-        "Basic sciences form the backbone of engineering education. We ensure our students have a solid conceptual foundation and communication proficiency to excel in higher studies.",
-      image:
-        "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&auto=format&fit=crop",
+      name: "",
+      message: "",
+      image: "",
     },
     faculty: [],
     labs: [],

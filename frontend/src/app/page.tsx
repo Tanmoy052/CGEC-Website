@@ -23,16 +23,8 @@ export default function Home() {
 
 
 
-  const DEFAULT_LEADERS = [
-    {
-      name: "Dr. Sushovan Chatterjee",
-      role: "Principal & Associate Professor",
-      dept: "Mechanical Engineering",
-      message:
-        "Welcome to Cooch Behar Government Engineering College. We foster technical innovation, academic rigor, and ethical citizenship across all engineering disciplines.",
-      image: "/img/about_img.webp",
-    },
-  ];
+
+
 
   const testimonials = [
     {
@@ -96,7 +88,7 @@ export default function Home() {
 
   const DEFAULT_RECRUITERS: { name: string; logo: string }[] = [];
 
-  const [leaders, setLeaders] = useState(DEFAULT_LEADERS);
+  const [leaders, setLeaders] = useState<{ name: string; role: string; dept?: string; message: string; image: string }[]>([]);
   const [recruiters, setRecruiters] = useState(DEFAULT_RECRUITERS);
 
   useEffect(() => {

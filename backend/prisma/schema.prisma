@@ -201,3 +201,15 @@ model PlacementBrochure {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }
+
+model HodMessage {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  department    String   @unique // CSE, ECE, EE, ME, CE, BSH
+  name          String
+  designation   String   @default("Head of the Department")
+  message       String
+  image         String?
+  imagePublicId String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}

@@ -66,6 +66,7 @@ export const getStats = async (req: Request, res: Response) => {
       leadershipCount,
       recruiterCount,
       brochureCount,
+      hodMessagesCount,
     ] = await Promise.all([
       prisma.faculty.count(),
       prisma.notice.count(),
@@ -80,6 +81,7 @@ export const getStats = async (req: Request, res: Response) => {
       prisma.leadershipMessage.count(),
       prisma.recruiter.count(),
       prisma.placementBrochure.count(),
+      prisma.hodMessage.count(),
     ]);
 
     const recentNotices = await prisma.notice.findMany({
@@ -107,6 +109,7 @@ export const getStats = async (req: Request, res: Response) => {
         leadership: leadershipCount,
         recruiters: recruiterCount,
         brochures: brochureCount,
+        hodMessages: hodMessagesCount,
       },
       recentNotices,
       recentFaculty,
@@ -720,11 +723,11 @@ export const getAdmissionData = async (req: Request, res: Response) => {
         data: {
           year,
           whatsappLink: '',
-          contactPhone: '9475445190',
-          contactEmail: 'admission@cgec.org.in',
-          officerName: 'Dr. Sushovan Chatterjee',
-          officerRole: `PI Admin, Admission (${year})`,
-          officerDesignation: 'Cooch Behar Government Engineering College',
+          contactPhone: '',
+          contactEmail: '',
+          officerName: '',
+          officerRole: '',
+          officerDesignation: '',
         },
       });
     }
@@ -833,11 +836,11 @@ export const updateAdmissionConfig = async (req: Request, res: Response) => {
       create: {
         year,
         whatsappLink: whatsappLink || '',
-        contactPhone: contactPhone || '9475445190',
-        contactEmail: contactEmail || 'admission@cgec.org.in',
-        officerName: officerName || 'Dr. Sushovan Chatterjee',
-        officerRole: officerRole || `PI Admin, Admission (${year})`,
-        officerDesignation: officerDesignation || 'Cooch Behar Government Engineering College',
+        contactPhone: contactPhone || '',
+        contactEmail: contactEmail || '',
+        officerName: officerName || '',
+        officerRole: officerRole || '',
+        officerDesignation: officerDesignation || '',
       },
     });
     res.json(config);
@@ -891,11 +894,11 @@ export const updateAdmissionYear = async (req: Request, res: Response) => {
           data: {
             year: cleanNewYear,
             whatsappLink: '',
-            contactPhone: '9475445190',
-            contactEmail: 'admission@cgec.org.in',
-            officerName: 'Dr. Sushovan Chatterjee',
-            officerRole: `PI Admin, Admission (${cleanNewYear})`,
-            officerDesignation: 'Cooch Behar Government Engineering College',
+            contactPhone: '',
+            contactEmail: '',
+            officerName: '',
+            officerRole: '',
+            officerDesignation: '',
           },
         });
       }
@@ -1385,6 +1388,108 @@ export const deletePlacementBrochure = async (req: Request, res: Response) => {
 
     await prisma.placementBrochure.delete({ where: { id } });
     res.json({ message: 'Brochure deleted successfully' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// ==================== HOD MESSAGES ====================
+export const getHodMessages = async (req: Request, res: Response) => {
+  try {
+    const { department } = req.query;
+    if (department && typeof department === 'string') {
+      const cleanDept = department.trim().toUpperCase();
+      const message = await prisma.hodMessage.findUnique({
+        where: { department: cleanDept },
+      });
+      return res.json(message || null);
+    }
+
+    const messages = await prisma.hodMessage.findMany({
+      orderBy: { department: 'asc' },
+    });
+    res.json(messages);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const saveHodMessage = async (req: Request, res: Response) => {
+  try {
+    const { department, name, designation, message, image, imagePublicId } = req.body;
+
+    if (!department || typeof department !== 'string' || !department.trim()) {
+      return res.status(400).json({ message: 'Department is required (e.g. CSE, ECE, EE, ME, CE, BSH)' });
+    }
+    if (!name || typeof name !== 'string' || !name.trim()) {
+      return res.status(400).json({ message: 'HOD Name is required' });
+    }
+    if (!message || typeof message !== 'string' || !message.trim()) {
+      return res.status(400).json({ message: 'HOD Message content is required' });
+    }
+
+    const cleanDept = department.trim().toUpperCase();
+    const cleanName = name.trim();
+    const cleanDesig = designation?.trim() || 'Head of the Department';
+    const cleanMsg = message.trim();
+
+    const saved = await prisma.hodMessage.upsert({
+      where: { department: cleanDept },
+      create: {
+        department: cleanDept,
+        name: cleanName,
+        designation: cleanDesig,
+        message: cleanMsg,
+        image: image || null,
+        imagePublicId: imagePublicId || null,
+      },
+      update: {
+        name: cleanName,
+        designation: cleanDesig,
+        message: cleanMsg,
+        ...(image !== undefined && { image: image || null }),
+        ...(imagePublicId !== undefined && { imagePublicId: imagePublicId || null }),
+      },
+    });
+
+    res.json(saved);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteHodMessage = async (req: Request, res: Response) => {
+  try {
+    const raw = req.params.deptOrId;
+    const deptOrId = (Array.isArray(raw) ? raw[0] : raw) || '';
+    if (!deptOrId.trim()) {
+      return res.status(400).json({ message: 'Department or ID is required' });
+    }
+
+    const clean = deptOrId.trim().toUpperCase();
+    let existing = await prisma.hodMessage.findUnique({
+      where: { department: clean },
+    });
+
+    if (!existing && clean.length === 24) {
+      existing = await prisma.hodMessage.findUnique({
+        where: { id: clean.toLowerCase() },
+      });
+    }
+
+    if (!existing) {
+      return res.status(404).json({ message: 'HOD message not found' });
+    }
+
+    if (existing.imagePublicId) {
+      await deleteMediaAsset(existing.image, existing.imagePublicId, 'image');
+    }
+
+    await prisma.hodMessage.delete({
+      where: { id: existing.id },
+    });
+
+    res.json({ message: `HOD message for ${existing.department} deleted successfully` });
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
