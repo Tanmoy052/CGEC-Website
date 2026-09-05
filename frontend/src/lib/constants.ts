@@ -23,7 +23,7 @@ export const NAV_LINKS = [
     label: "ADMISSION",
     href: "/admission",
     children: [
-      { label: "Admission 2025", href: "/admission/2025" },
+      { label: "Admission 2026", href: "/admission" },
       { label: "Fees Structure", href: "/admission/fees" },
     ],
   },

@@ -1421,7 +1421,7 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
     <>
       {/* ── Floating Trigger Button ── */}
       <motion.div
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50"
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ type: "spring", stiffness: 260, damping: 20 }}
@@ -1441,13 +1441,13 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
         </AnimatePresence>
 
         <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.92 }}
           onClick={handleOpen}
           aria-label="Open CGEC Chat Assistant"
-          className="w-16 h-16 bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-full shadow-2xl shadow-blue-600/40 flex items-center justify-center relative"
+          className="w-13 h-13 sm:w-16 sm:h-16 bg-gradient-to-br from-blue-600 to-blue-800 text-white rounded-full shadow-2xl shadow-blue-600/40 flex items-center justify-center relative"
         >
-          <MessageSquare className="w-7 h-7" />
+          <MessageSquare className="w-6 h-6 sm:w-7 sm:h-7" />
           {hasNewMessage && (
             <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 rounded-full border-2 border-white animate-pulse" />
           )}
@@ -1462,7 +1462,7 @@ I'm your official AI guide for **Cooch Behar Government Engineering College**. I
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 80, scale: 0.85 }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed bottom-28 right-6 w-[420px] max-w-[calc(100vw-2rem)] h-[600px] max-h-[calc(100vh-8rem)] bg-white rounded-3xl shadow-2xl shadow-blue-900/20 border border-gray-100 flex flex-col overflow-hidden z-50"
+            className="fixed bottom-20 right-3 sm:bottom-28 sm:right-6 w-[calc(100vw-1.5rem)] sm:w-[420px] max-w-[calc(100vw-1.5rem)] h-[520px] sm:h-[600px] max-h-[calc(100dvh-5.5rem)] bg-white rounded-3xl shadow-2xl shadow-blue-900/20 border border-gray-100 flex flex-col overflow-hidden z-50"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-700 to-blue-900 px-5 py-4 flex items-center justify-between shrink-0">

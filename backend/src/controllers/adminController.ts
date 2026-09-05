@@ -712,7 +712,7 @@ export const getAdmissionData = async (req: Request, res: Response) => {
       if (!config) {
         config = await prisma.admissionConfig.findFirst();
       }
-      year = config?.year || '2025';
+      year = config?.year || '2026';
     }
 
     if (!config) {
@@ -761,7 +761,7 @@ export const getAdmissionData = async (req: Request, res: Response) => {
 
 export const createAdmissionItem = async (req: Request, res: Response) => {
   try {
-    const { year = '2025', category = 'NOTICE', title, fileUrl, filePublicId, order = 0 } = req.body;
+    const { year = '2026', category = 'NOTICE', title, fileUrl, filePublicId, order = 0 } = req.body;
     if (!title || !fileUrl) {
       return res.status(400).json({ message: 'Title and File URL are required' });
     }
@@ -819,7 +819,7 @@ export const deleteAdmissionItem = async (req: Request, res: Response) => {
 
 export const updateAdmissionConfig = async (req: Request, res: Response) => {
   try {
-    const { year = '2025', whatsappLink, contactPhone, contactEmail, officerName, officerRole, officerDesignation } = req.body;
+    const { year = '2026', whatsappLink, contactPhone, contactEmail, officerName, officerRole, officerDesignation } = req.body;
     const config = await prisma.admissionConfig.upsert({
       where: { year },
       update: {

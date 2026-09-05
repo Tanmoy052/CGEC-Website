@@ -199,19 +199,19 @@ export default function FeesStructurePage() {
             </h2>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
-                <tr className="bg-gray-100 text-gray-700 text-sm uppercase tracking-wider">
-                  <th className="px-6 py-4 font-bold border-b border-gray-200">
+                <tr className="bg-gray-100 text-gray-700 text-[11px] sm:text-sm uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 font-bold border-b border-gray-200">
                     Sl. No.
                   </th>
-                  <th className="px-6 py-4 font-bold border-b border-gray-200">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 font-bold border-b border-gray-200">
                     Fee Structure
                   </th>
-                  <th className="px-6 py-4 font-bold border-b border-gray-200 text-right">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 font-bold border-b border-gray-200 text-right whitespace-nowrap">
                     CSE & ECE (Rs.)
                   </th>
-                  <th className="px-6 py-4 font-bold border-b border-gray-200 text-right">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 font-bold border-b border-gray-200 text-right whitespace-nowrap">
                     CE, ME, EE (Rs.)
                   </th>
                 </tr>
@@ -219,7 +219,7 @@ export default function FeesStructurePage() {
               <tbody className="divide-y divide-gray-100">
                 {table1Data.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-6 py-8 text-center text-gray-500 font-medium">
+                    <td colSpan={4} className="px-4 py-8 text-center text-gray-500 font-medium">
                       Fee structure details are currently being updated.
                     </td>
                   </tr>
@@ -238,16 +238,16 @@ export default function FeesStructurePage() {
                             : "hover:bg-blue-50/50 transition-colors"
                         }
                       >
-                        <td className="px-6 py-3 text-gray-500 font-medium">
+                        <td className="px-3 sm:px-6 py-2.5 sm:py-3 text-gray-500 font-medium">
                           {item.id}
                         </td>
-                        <td className={`px-6 py-3 ${isTotal ? "uppercase" : "text-gray-800"}`}>
+                        <td className={`px-3 sm:px-6 py-2.5 sm:py-3 ${isTotal ? "uppercase" : "text-gray-800"}`}>
                           {item.desc}
                         </td>
-                        <td className="px-6 py-3 text-gray-900 font-bold text-right">
+                        <td className="px-3 sm:px-6 py-2.5 sm:py-3 text-gray-900 font-bold text-right">
                           {item.cse}
                         </td>
-                        <td className="px-6 py-3 text-gray-900 font-bold text-right">
+                        <td className="px-3 sm:px-6 py-2.5 sm:py-3 text-gray-900 font-bold text-right">
                           {item.core}
                         </td>
                       </tr>
@@ -272,19 +272,19 @@ export default function FeesStructurePage() {
             </h2>
           </div>
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse text-xs sm:text-sm">
               <thead>
-                <tr className="bg-gray-100 text-gray-700 text-sm uppercase tracking-wider">
-                  <th className="px-6 py-4 font-bold border-b border-gray-200">
+                <tr className="bg-gray-100 text-gray-700 text-[11px] sm:text-sm uppercase tracking-wider">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 font-bold border-b border-gray-200">
                     Sl. No.
                   </th>
-                  <th className="px-6 py-4 font-bold border-b border-gray-200">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 font-bold border-b border-gray-200">
                     Fee Structure
                   </th>
-                  <th className="px-6 py-4 font-bold border-b border-gray-200 text-right">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 font-bold border-b border-gray-200 text-right whitespace-nowrap">
                     CSE & ECE (Rs.)
                   </th>
-                  <th className="px-6 py-4 font-bold border-b border-gray-200 text-right">
+                  <th className="px-3 sm:px-6 py-3 sm:py-4 font-bold border-b border-gray-200 text-right whitespace-nowrap">
                     CE, ME, EE (Rs.)
                   </th>
                 </tr>
@@ -292,7 +292,7 @@ export default function FeesStructurePage() {
               <tbody className="divide-y divide-gray-100">
                 {table2Data.length === 0 ? (
                   <tr>
-                    <td colSpan={4} className="px-6 py-8 text-center text-gray-500 font-medium">
+                    <td colSpan={4} className="px-4 py-8 text-center text-gray-500 font-medium">
                       Fee structure details are currently being updated.
                     </td>
                   </tr>
@@ -311,16 +311,16 @@ export default function FeesStructurePage() {
                             : "hover:bg-blue-50/50 transition-colors"
                         }
                       >
-                        <td className="px-6 py-3 text-gray-500 font-medium">
+                        <td className="px-3 sm:px-6 py-2.5 sm:py-3 text-gray-500 font-medium">
                           {item.id}
                         </td>
-                        <td className={`px-6 py-3 ${isTotal ? "uppercase" : "text-gray-800"}`}>
+                        <td className={`px-3 sm:px-6 py-2.5 sm:py-3 ${isTotal ? "uppercase" : "text-gray-800"}`}>
                           {item.desc}
                         </td>
-                        <td className="px-6 py-3 text-gray-900 font-bold text-right">
+                        <td className="px-3 sm:px-6 py-2.5 sm:py-3 text-gray-900 font-bold text-right">
                           {item.cse}
                         </td>
-                        <td className="px-6 py-3 text-gray-900 font-bold text-right">
+                        <td className="px-3 sm:px-6 py-2.5 sm:py-3 text-gray-900 font-bold text-right">
                           {item.core}
                         </td>
                       </tr>

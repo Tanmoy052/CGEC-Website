@@ -37,8 +37,7 @@ interface AdmissionTabProps {
 
 export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabProps) {
   const [items, setItems] = useState<AdmissionItem[]>([]);
-  const [activeYear, setActiveYear] = useState("2025");
-  const [availableYears, setAvailableYears] = useState<string[]>(["2025"]);
+  const [activeYear, setActiveYear] = useState("2026");
   const [loading, setLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState<"ALL" | "NOTICE" | "DOCUMENT">("ALL");
   const [searchQuery, setSearchQuery] = useState("");
@@ -56,7 +55,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
   const [uploadingPdf, setUploadingPdf] = useState(false);
 
   const [formData, setFormData] = useState({
-    year: "2025",
+    year: "2026",
     category: "NOTICE" as "NOTICE" | "DOCUMENT",
     title: "",
     fileUrl: "",
@@ -90,9 +89,6 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
           setActiveYear(data.activeYear);
           onYearChange?.(data.activeYear);
         }
-        if (Array.isArray(data.availableYears)) {
-          setAvailableYears(data.availableYears);
-        }
         if (data.config) {
           setConfigForm({
             whatsappLink: data.config.whatsappLink || "",
@@ -122,7 +118,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
     setUploadingPdf(true);
     const fd = new FormData();
     fd.append("file", file);
-    fd.append("folder", "admission_2025");
+    fd.append("folder", `admission_${activeYear}`);
 
     try {
       toast.loading("Uploading PDF to Cloudinary...", { id: "pdf-upload" });
@@ -312,94 +308,72 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
   const docsCount = items.filter((i) => i.category === "DOCUMENT").length;
 
   return (
-    <div className="space-y-8 animate-fadeIn">
+    <div className="space-y-6 sm:space-y-8 animate-fadeIn">
       {/* Top Banner */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
           <div>
-            <div className="flex flex-wrap items-center gap-2 mb-1.5">
+            <div className="flex flex-wrap items-center gap-2 mb-2">
               <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/20">
-                Admission Module
+                Admission Portal
               </span>
               <button
                 onClick={() => {
                   setNewYearInput(activeYear);
                   setIsYearModalOpen(true);
                 }}
-                className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 text-xs font-bold transition-all hover:scale-105 cursor-pointer shadow-sm"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-600/20 hover:bg-blue-600/30 text-blue-300 border border-blue-500/40 text-xs font-bold transition-all hover:scale-105 cursor-pointer shadow-sm"
                 title="Click to edit/change admission academic year"
               >
                 <Calendar className="w-3.5 h-3.5 text-blue-400" />
-                <span>Academic Year: {activeYear}</span>
+                <span>Current Year: {activeYear} (Active)</span>
                 <Edit3 className="w-3 h-3 text-blue-300 ml-0.5" />
               </button>
-
-              {availableYears.length > 1 && (
-                <div className="flex items-center gap-1 text-xs text-slate-400 ml-2">
-                  <span className="text-[11px]">View Year:</span>
-                  <select
-                    value={activeYear}
-                    onChange={(e) => {
-                      const sel = e.target.value;
-                      setActiveYear(sel);
-                      onYearChange?.(sel);
-                      fetchAdmissionData(sel);
-                    }}
-                    className="bg-slate-950 border border-slate-700 text-white rounded-lg px-2 py-0.5 text-xs focus:outline-none focus:border-blue-500 font-bold"
-                  >
-                    {availableYears.map((y) => (
-                      <option key={y} value={y}>
-                        {y} {y === activeYear ? "(Active)" : ""}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
             </div>
 
             <div className="flex items-center gap-2">
               <GraduationCap className="w-6 h-6 text-blue-400 shrink-0" />
-              <h2 className="text-xl font-bold text-white">Admission {activeYear} Portal Control</h2>
+              <h2 className="text-xl sm:text-2xl font-bold text-white">Admission {activeYear} Portal Control</h2>
             </div>
-            <p className="text-slate-400 text-sm mt-0.5">
-              Manage all official notices, admission documents, forms, and candidate contact info for {activeYear}.
+            <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl">
+              Only the active year ({activeYear}) is visible to students and visitors on the live website. Use the Change Year button below to switch the portal to another year (e.g. 2027) when needed.
             </p>
           </div>
 
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-col sm:flex-row flex-wrap gap-2.5 shrink-0">
             <button
               onClick={() => {
                 setNewYearInput(activeYear);
                 setIsYearModalOpen(true);
               }}
-              className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-blue-300 font-semibold text-sm border border-slate-700 shadow-md transition-all cursor-pointer hover:border-blue-500/40"
-              title="Change the active admission year (e.g. 2026, 2027)"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-blue-300 font-semibold text-xs sm:text-sm border border-slate-700 shadow-md transition-all cursor-pointer hover:border-blue-500/40 w-full sm:w-auto"
+              title="Change the active admission year"
             >
               <Calendar className="w-4 h-4 text-blue-400" />
               <span>Change Year ({activeYear})</span>
             </button>
             <button
               onClick={() => openAddModal("NOTICE")}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-sm shadow-lg shadow-blue-600/30 transition-all cursor-pointer"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-blue-600/30 transition-all cursor-pointer w-full sm:w-auto"
             >
               <Plus className="w-4 h-4" />
               <span>Add Notice</span>
             </button>
             <button
               onClick={() => openAddModal("DOCUMENT")}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-sm shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
+              className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-emerald-600/30 transition-all cursor-pointer w-full sm:w-auto"
             >
               <Plus className="w-4 h-4" />
-              <span>Add Document / Form</span>
+              <span>Add Document</span>
             </button>
           </div>
         </div>
 
         {/* Quick Filter Badges */}
-        <div className="flex flex-wrap items-center gap-2 mt-6 pt-6 border-t border-slate-800">
+        <div className="flex flex-wrap items-center gap-2 mt-5 pt-4 border-t border-slate-800">
           <button
             onClick={() => setActiveCategory("ALL")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeCategory === "ALL"
                 ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
                 : "bg-slate-800 text-slate-300 hover:text-white"
@@ -409,7 +383,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
           </button>
           <button
             onClick={() => setActiveCategory("NOTICE")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeCategory === "NOTICE"
                 ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
                 : "bg-slate-800 text-slate-300 hover:text-white"
@@ -419,23 +393,23 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
           </button>
           <button
             onClick={() => setActiveCategory("DOCUMENT")}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
               activeCategory === "DOCUMENT"
                 ? "bg-blue-600 text-white shadow-md shadow-blue-600/30"
                 : "bg-slate-800 text-slate-300 hover:text-white"
             }`}
           >
-            Documents & Forms ({docsCount})
+            Documents ({docsCount})
           </button>
         </div>
       </div>
 
       {/* Items Section */}
       <div className="space-y-4">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
             <FileText className="w-5 h-5 text-blue-400" />
-            <span>Admission Documents & Notices Table</span>
+            <span>Admission Documents &amp; Notices ({activeYear})</span>
           </h3>
 
           <div className="relative w-full sm:w-72">
@@ -445,7 +419,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
               placeholder="Search by subject or title..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white text-sm focus:outline-none focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 bg-slate-900 border border-slate-800 rounded-xl text-white text-xs sm:text-sm focus:outline-none focus:border-blue-500"
             />
           </div>
         </div>
@@ -459,30 +433,22 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
           ) : filteredItems.length === 0 ? (
             <div className="p-12 text-center text-slate-400">
               <FileText className="w-12 h-12 mx-auto text-slate-600 mb-3" />
-              <p className="text-base font-semibold text-white mb-1">No items found</p>
-              <p className="text-sm">Add notices or documents to display them on the live Admission page.</p>
+              <p className="text-base font-semibold text-white mb-1">No items found for {activeYear}</p>
+              <p className="text-xs sm:text-sm">Add notices or documents to display them on the live Admission page.</p>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm border-collapse">
-                <thead>
-                  <tr className="bg-slate-800/80 border-b border-slate-700 text-slate-300 font-semibold">
-                    <th className="py-3.5 px-4 w-16 text-center">#</th>
-                    <th className="py-3.5 px-4 w-32">Type</th>
-                    <th className="py-3.5 px-4">Subject / Title</th>
-                    <th className="py-3.5 px-4 w-40">File / Download</th>
-                    <th className="py-3.5 px-4 text-right w-24">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-slate-800 text-slate-300">
-                  {filteredItems.map((item, idx) => (
-                    <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
-                      <td className="py-3.5 px-4 text-center text-slate-400 font-medium">
-                        {item.order || idx + 1}
-                      </td>
-                      <td className="py-3.5 px-4">
+            <div>
+              {/* Mobile Card View (optimized for phones) */}
+              <div className="md:hidden divide-y divide-slate-800/80">
+                {filteredItems.map((item, idx) => (
+                  <div key={item.id} className="p-4 space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="w-6 h-6 rounded-lg bg-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center">
+                          {item.order || idx + 1}
+                        </span>
                         <span
-                          className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                          className={`px-2 py-0.5 rounded-full text-[11px] font-semibold ${
                             item.category === "NOTICE"
                               ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
                               : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
@@ -490,61 +456,124 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                         >
                           {item.category === "NOTICE" ? "Notice" : "Document"}
                         </span>
-                      </td>
-                      <td className="py-3.5 px-4 font-medium text-white">
-                        {item.title}
-                      </td>
-                      <td className="py-3.5 px-4">
-                        <a
-                          href={item.fileUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 font-semibold hover:underline"
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => openEditModal(item)}
+                          className="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-blue-400 cursor-pointer"
+                          title="Edit item"
                         >
-                          <ExternalLink className="w-3.5 h-3.5" />
-                          <span>Download</span>
-                        </a>
-                      </td>
-                      <td className="py-3.5 px-4 text-right">
-                        <div className="flex items-center justify-end gap-2">
-                          <button
-                            onClick={() => openEditModal(item)}
-                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
-                            title="Edit"
-                          >
-                            <Edit className="w-4 h-4" />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(item.id, item.title)}
-                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-900/40 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
-                            title="Delete"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
-                      </td>
+                          <Edit className="w-4 h-4" />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(item.id, item.title)}
+                          className="p-2 rounded-lg bg-slate-800 hover:bg-red-900/40 text-red-400 cursor-pointer"
+                          title="Delete item"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+                    <p className="font-medium text-white text-sm leading-snug">{item.title}</p>
+                    <div>
+                      <a
+                        href={item.fileUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-400 hover:text-blue-300 hover:underline"
+                      >
+                        <ExternalLink className="w-3.5 h-3.5" />
+                        <span>View / Download Attachment</span>
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Desktop Table View */}
+              <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left text-sm border-collapse">
+                  <thead>
+                    <tr className="bg-slate-800/80 border-b border-slate-700 text-slate-300 font-semibold">
+                      <th className="py-3.5 px-4 w-16 text-center">#</th>
+                      <th className="py-3.5 px-4 w-32">Type</th>
+                      <th className="py-3.5 px-4">Subject / Title</th>
+                      <th className="py-3.5 px-4 w-40">File / Download</th>
+                      <th className="py-3.5 px-4 text-right w-24">Actions</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="divide-y divide-slate-800 text-slate-300">
+                    {filteredItems.map((item, idx) => (
+                      <tr key={item.id} className="hover:bg-slate-800/40 transition-colors">
+                        <td className="py-3.5 px-4 text-center text-slate-400 font-medium">
+                          {item.order || idx + 1}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <span
+                            className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+                              item.category === "NOTICE"
+                                ? "bg-blue-500/10 text-blue-400 border border-blue-500/20"
+                                : "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                            }`}
+                          >
+                            {item.category === "NOTICE" ? "Notice" : "Document"}
+                          </span>
+                        </td>
+                        <td className="py-3.5 px-4 font-medium text-white">
+                          {item.title}
+                        </td>
+                        <td className="py-3.5 px-4">
+                          <a
+                            href={item.fileUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 text-blue-400 hover:text-blue-300 font-semibold hover:underline"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            <span>Download</span>
+                          </a>
+                        </td>
+                        <td className="py-3.5 px-4 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <button
+                              onClick={() => openEditModal(item)}
+                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+                              title="Edit"
+                            >
+                              <Edit className="w-4 h-4" />
+                            </button>
+                            <button
+                              onClick={() => handleDelete(item.id, item.title)}
+                              className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-900/40 text-red-400 hover:text-red-300 transition-colors cursor-pointer"
+                              title="Delete"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           )}
         </div>
       </div>
 
       {/* Admission Contact & WhatsApp Configuration Card */}
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-xl space-y-6">
+      <div className="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-5">
         <div className="border-b border-slate-800 pb-4">
-          <h3 className="text-lg font-bold text-white flex items-center gap-2">
+          <h3 className="text-base sm:text-lg font-bold text-white flex items-center gap-2">
             <MessageCircle className="w-5 h-5 text-emerald-400" />
-            <span>Admission WhatsApp Group & Assistance Contact Details</span>
+            <span>Admission WhatsApp Group &amp; Assistance Contact Details ({activeYear})</span>
           </h3>
-          <p className="text-slate-400 text-sm mt-1">
-            These details appear at the top and bottom banner of the public Admission 2025 page.
+          <p className="text-slate-400 text-xs sm:text-sm mt-1">
+            These details appear at the top and bottom banner of the live Admission {activeYear} page.
           </p>
         </div>
 
-        <form onSubmit={handleConfigSave} className="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <form onSubmit={handleConfigSave} className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           <div className="md:col-span-2">
             <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
               WhatsApp Group Invite Link
@@ -554,7 +583,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
               placeholder="https://chat.whatsapp.com/..."
               value={configForm.whatsappLink}
               onChange={(e) => setConfigForm({ ...configForm, whatsappLink: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-emerald-500"
             />
           </div>
 
@@ -567,7 +596,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
               placeholder="e.g. 9475445190"
               value={configForm.contactPhone}
               onChange={(e) => setConfigForm({ ...configForm, contactPhone: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-emerald-500"
             />
           </div>
 
@@ -580,7 +609,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
               placeholder="e.g. admission@cgec.org.in"
               value={configForm.contactEmail}
               onChange={(e) => setConfigForm({ ...configForm, contactEmail: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-emerald-500"
             />
           </div>
 
@@ -593,7 +622,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
               placeholder="e.g. Dr. Sushovan Chatterjee"
               value={configForm.officerName}
               onChange={(e) => setConfigForm({ ...configForm, officerName: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-emerald-500"
             />
           </div>
 
@@ -603,10 +632,10 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
             </label>
             <input
               type="text"
-              placeholder="e.g. PI Admin, Admission (2025)"
+              placeholder={`e.g. PI Admin, Admission (${activeYear})`}
               value={configForm.officerRole}
               onChange={(e) => setConfigForm({ ...configForm, officerRole: e.target.value })}
-              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500"
+              className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-emerald-500"
             />
           </div>
 
@@ -614,7 +643,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
             <button
               type="submit"
               disabled={savingConfig}
-              className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-sm shadow-lg shadow-emerald-600/30 transition-all cursor-pointer"
+              className="flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-semibold text-xs sm:text-sm shadow-lg shadow-emerald-600/30 transition-all cursor-pointer w-full sm:w-auto"
             >
               {savingConfig ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
               <span>Save Contact Info</span>
@@ -625,13 +654,13 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
 
       {/* Item Modal (Add/Edit) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm animate-fadeIn">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden">
-            <div className="flex items-center justify-between p-6 border-b border-slate-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg shadow-2xl overflow-hidden max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-slate-800 shrink-0">
               <div className="flex items-center gap-2">
                 <FileText className="w-5 h-5 text-blue-400" />
-                <h3 className="text-lg font-bold text-white">
-                  {editingItem ? "Edit Admission Item" : "Add Admission Item"}
+                <h3 className="text-base sm:text-lg font-bold text-white">
+                  {editingItem ? "Edit Admission Item" : `Add Admission Item (${activeYear})`}
                 </h3>
               </div>
               <button
@@ -642,7 +671,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
               </button>
             </div>
 
-            <form onSubmit={handleSubmit} className="p-6 space-y-4">
+            <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-4 overflow-y-auto">
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
                   Item Category *
@@ -650,7 +679,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                 <select
                   value={formData.category}
                   onChange={(e) => setFormData({ ...formData, category: e.target.value as "NOTICE" | "DOCUMENT" })}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-blue-500"
                 >
                   <option value="NOTICE">Admission Notice</option>
                   <option value="DOCUMENT">Admission Document / Form</option>
@@ -664,10 +693,10 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                 <textarea
                   required
                   rows={3}
-                  placeholder="e.g. Reporting Notice for 1st year student 2025"
+                  placeholder={`e.g. Reporting Notice for 1st year student ${activeYear}`}
                   value={formData.title}
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500 resize-none"
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl p-3 text-xs sm:text-sm focus:outline-none focus:border-blue-500 resize-none"
                 />
               </div>
 
@@ -676,7 +705,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                   Upload PDF to Cloudinary OR Paste URL *
                 </label>
                 <div className="space-y-2">
-                  <label className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-dashed border-slate-700 bg-slate-800/60 hover:bg-slate-800 text-slate-300 hover:text-white cursor-pointer transition-colors text-sm">
+                  <label className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-dashed border-slate-700 bg-slate-800/60 hover:bg-slate-800 text-slate-300 hover:text-white cursor-pointer transition-colors text-xs sm:text-sm">
                     {uploadingPdf ? (
                       <>
                         <Loader2 className="w-4 h-4 animate-spin text-blue-400" />
@@ -700,10 +729,10 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                   <input
                     type="text"
                     required
-                    placeholder="/admission/2025/filename.pdf or https://res.cloudinary.com/..."
+                    placeholder={`/admission/${activeYear}/filename.pdf or https://res.cloudinary.com/...`}
                     value={formData.fileUrl}
                     onChange={(e) => setFormData({ ...formData, fileUrl: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500"
+                    className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-blue-500"
                   />
                 </div>
               </div>
@@ -717,7 +746,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                   min="0"
                   value={formData.order}
                   onChange={(e) => setFormData({ ...formData, order: parseInt(e.target.value) || 0 })}
-                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500"
+                  className="w-full bg-slate-800 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-xs sm:text-sm focus:outline-none focus:border-blue-500"
                 />
               </div>
 
@@ -725,14 +754,14 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-xl cursor-pointer"
+                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-semibold rounded-xl cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={submitting || uploadingPdf}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 cursor-pointer"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 cursor-pointer"
                 >
                   {submitting ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                   <span>{editingItem ? "Update Item" : "Save Item"}</span>
@@ -760,7 +789,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
               </button>
             </div>
 
-            <form onSubmit={handleUpdateYear} className="p-6 space-y-4">
+            <form onSubmit={handleUpdateYear} className="p-5 sm:p-6 space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
                   Current Active Year
@@ -768,7 +797,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                 <div className="px-3.5 py-2.5 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-300 font-mono flex items-center justify-between">
                   <span>{activeYear}</span>
                   <span className="text-[11px] font-sans text-emerald-400 font-semibold bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
-                    Active
+                    Currently Active
                   </span>
                 </div>
               </div>
@@ -786,7 +815,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                   className="w-full bg-slate-950 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 font-bold"
                 />
                 <p className="text-[11px] text-slate-400 mt-1">
-                  Updates sidebar tab (&quot;Admission {newYearInput.trim() || activeYear}&quot;), portal titles, and website navigation.
+                  Updates sidebar tab (&quot;Admission {newYearInput.trim() || activeYear}&quot;), public admission page, and website navigation.
                 </p>
               </div>
 
@@ -807,14 +836,14 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                 <button
                   type="button"
                   onClick={() => setIsYearModalOpen(false)}
-                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm font-semibold rounded-xl cursor-pointer"
+                  className="px-4 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-semibold rounded-xl cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={updatingYear || !newYearInput.trim()}
-                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 cursor-pointer"
+                  className="flex items-center gap-2 px-5 py-2.5 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white text-xs sm:text-sm font-semibold rounded-xl shadow-lg shadow-blue-600/30 cursor-pointer"
                 >
                   {updatingYear ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
                   <span>Save &amp; Update Year</span>

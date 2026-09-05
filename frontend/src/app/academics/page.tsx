@@ -158,7 +158,7 @@ const AcademicsPage = () => {
                 className="flex flex-col lg:flex-row gap-12 p-8 md:p-12 rounded-[2rem] border border-gray-100 shadow-2xl shadow-blue-900/5 hover:shadow-blue-900/10 transition-all bg-white overflow-hidden group"
               >
                 {/* Left Side - Info */}
-                <div className="lg:w-2/3 space-y-8">
+                <div className="w-full lg:w-2/3 space-y-8">
                   <div className="flex items-center space-x-4">
                     <div
                       className={`w-20 h-20 ${dept.color} text-white rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform`}

@@ -81,7 +81,7 @@ export default function AdminDashboardPage() {
   const [adminName, setAdminName] = useState("Administrator");
   const [adminEmail, setAdminEmail] = useState("admin@cgec.org.in");
   const [activeTab, setActiveTab] = useState<AdminTabType>("overview");
-  const [admissionYear, setAdmissionYear] = useState("2025");
+  const [admissionYear, setAdmissionYear] = useState("2026");
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -939,7 +939,7 @@ export default function AdminDashboardPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     {[
                       { label: "Committees (10)", value: stats.committees, icon: ShieldCheck, color: "from-blue-600 to-indigo-600", tab: "committees" },
-                      { label: "Admission 2025", value: stats.admission, icon: GraduationCap, color: "from-cyan-600 to-blue-600", tab: "admission" },
+                      { label: `Admission ${admissionYear}`, value: stats.admission, icon: GraduationCap, color: "from-cyan-600 to-blue-600", tab: "admission" },
                       { label: "Fees Structure", value: stats.fees, icon: Receipt, color: "from-emerald-600 to-teal-600", tab: "fees" },
                       { label: "Leadership Messages", value: stats.leadership, icon: Award, color: "from-purple-600 to-pink-600", tab: "leadership" },
                       { label: "Our Recruiters", value: stats.recruiters, icon: Briefcase, color: "from-amber-500 to-orange-600", tab: "recruiters" },
@@ -992,7 +992,7 @@ export default function AdminDashboardPage() {
                         className="p-4 rounded-2xl bg-cyan-600/10 hover:bg-cyan-600/20 border border-cyan-500/20 text-cyan-300 flex flex-col items-center text-center space-y-2 cursor-pointer transition-all"
                       >
                         <GraduationCap className="w-6 h-6 text-cyan-400" />
-                        <span className="text-xs font-bold">Admission 2025</span>
+                        <span className="text-xs font-bold">Admission {admissionYear}</span>
                       </button>
 
                       <button

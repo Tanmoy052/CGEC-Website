@@ -13,7 +13,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [admissionYear, setAdmissionYear] = useState("2025");
+  const [admissionYear, setAdmissionYear] = useState("2026");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -22,6 +22,11 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    setIsOpen(false);
+    setActiveDropdown(null);
+  }, [pathname]);
 
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"}/public/admission`)
@@ -56,16 +61,14 @@ export default function Navbar() {
     <>
       <nav
         className={cn(
-          "fixed top-0 w-full z-50 transition-all duration-300 flex items-center",
-          scrolled
-            ? "bg-white/90 backdrop-blur-md shadow-md h-20"
-            : "bg-transparent h-24",
+          "fixed top-0 w-full z-50 transition-all duration-300 flex items-center bg-white border-b border-gray-200/90 shadow-sm",
+          scrolled ? "h-16 sm:h-20 shadow-md" : "h-16 sm:h-20",
         )}
       >
-        <div className="container mx-auto px-4 h-full flex justify-between items-center pb-2">
+        <div className="container mx-auto px-4 h-full flex justify-between items-center">
           {/* Logo */}
-          <Link href="/" className="flex items-center h-full group">
-            <div className="relative h-20 w-59 overflow-hidden shrink-0 flex items-center justify-center">
+          <Link href="/" className="flex items-center h-full group py-1.5">
+            <div className="relative h-11 sm:h-14 md:h-16 w-48 sm:w-56 md:w-64 overflow-hidden shrink-0 flex items-center justify-start">
               <Image
                 src="/img/cgec_logo.png"
                 alt="CGEC Logo"
@@ -88,21 +91,17 @@ export default function Navbar() {
                 {link.children ? (
                   <button
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 flex items-center gap-1 uppercase leading-none",
-                      scrolled
-                        ? pathname.startsWith(link.href)
-                          ? "text-blue-600 bg-blue-50"
-                          : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                        : pathname.startsWith(link.href)
-                          ? "text-blue-600 bg-white"
-                          : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
+                      "px-3.5 py-2 rounded-full text-xs xl:text-sm font-bold transition-all duration-200 flex items-center gap-1 uppercase leading-none",
+                      pathname.startsWith(link.href)
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/80",
                     )}
                   >
                     <span>{link.label}</span>
                     <ChevronDown
                       className={cn(
                         "w-4 h-4 transition-transform duration-200",
-                        activeDropdown === link.label ? "rotate-180" : "",
+                        activeDropdown === link.label ? "rotate-180 text-blue-600" : "text-gray-400",
                       )}
                     />
                   </button>
@@ -110,14 +109,10 @@ export default function Navbar() {
                   <a
                     href={link.href}
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 uppercase leading-none flex items-center",
-                      scrolled
-                        ? pathname === link.href
-                          ? "text-blue-600 bg-blue-50"
-                          : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                        : pathname === link.href
-                          ? "text-blue-600 bg-white"
-                          : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
+                      "px-3.5 py-2 rounded-full text-xs xl:text-sm font-bold transition-all duration-200 uppercase leading-none flex items-center",
+                      pathname === link.href
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/80",
                     )}
                   >
                     {link.label}
@@ -126,14 +121,10 @@ export default function Navbar() {
                   <Link
                     href={link.href}
                     className={cn(
-                      "px-4 py-2 rounded-full text-sm font-bold transition-all duration-200 uppercase leading-none flex items-center",
-                      scrolled
-                        ? pathname === link.href
-                          ? "text-blue-600 bg-blue-50"
-                          : "text-gray-700 hover:text-blue-600 hover:bg-blue-50"
-                        : pathname === link.href
-                          ? "text-blue-600 bg-white"
-                          : "text-blue-900 hover:text-blue-600 hover:bg-white/20",
+                      "px-3.5 py-2 rounded-full text-xs xl:text-sm font-bold transition-all duration-200 uppercase leading-none flex items-center",
+                      pathname === link.href
+                        ? "text-blue-600 bg-blue-50"
+                        : "text-gray-700 hover:text-blue-600 hover:bg-blue-50/80",
                     )}
                   >
                     {link.label}
@@ -144,24 +135,24 @@ export default function Navbar() {
                 {link.children && (
                   <div
                     className={cn(
-                      "absolute top-full left-1/2 -translate-x-1/2 pt-4 transition-all duration-200",
+                      "absolute top-full left-1/2 -translate-x-1/2 pt-2 transition-all duration-200",
                       activeDropdown === link.label
                         ? "opacity-100 visible translate-y-0"
                         : "opacity-0 invisible -translate-y-2",
                     )}
                   >
-                    <div className="bg-[#435356] rounded-lg shadow-2xl py-2 min-w-[240px] relative">
+                    <div className="bg-white rounded-2xl shadow-xl border border-gray-100 py-2 min-w-[240px] relative">
                       {/* Triangle Arrow */}
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-[#435356]"></div>
+                      <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-b-[8px] border-b-white"></div>
 
                       {link.children.map((child, idx) => (
                         <Link
                           key={child.label}
                           href={getChildHref(child)}
                           className={cn(
-                            "block px-6 py-3 text-sm text-white hover:bg-white/10 transition-colors",
+                            "block px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 transition-colors",
                             idx !== link.children.length - 1
-                              ? "border-b border-white/10 border-dashed"
+                              ? "border-b border-gray-100"
                               : "",
                           )}
                         >
@@ -185,23 +176,21 @@ export default function Navbar() {
 
           {/* Mobile Menu Button */}
           <button
-            className={cn(
-              "lg:hidden p-2 rounded-lg transition-colors",
-              scrolled ? "text-gray-900" : "text-blue-900",
-            )}
+            className="lg:hidden p-2 rounded-xl text-gray-800 hover:text-blue-600 hover:bg-blue-50 transition-colors cursor-pointer"
             onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle navigation menu"
           >
-            {isOpen ? <X size={28} /> : <Menu size={28} />}
+            {isOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
 
         {/* Mobile Navigation */}
         <div
           className={cn(
-            "fixed inset-x-0 top-[72px] bg-white border-t border-gray-100 shadow-xl transition-all duration-300 lg:hidden overflow-hidden",
+            "fixed inset-x-0 top-16 sm:top-20 bg-white border-t border-gray-100 shadow-2xl transition-all duration-300 lg:hidden overflow-hidden z-40",
             isOpen
-              ? "max-h-[calc(100vh-72px)] py-6 opacity-100 overflow-y-auto"
-              : "max-h-0 py-0 opacity-0",
+              ? "max-h-[calc(100dvh-4rem)] sm:max-h-[calc(100dvh-5rem)] py-6 opacity-100 overflow-y-auto"
+              : "max-h-0 py-0 opacity-0 pointer-events-none",
           )}
         >
           <div className="container mx-auto px-4 flex flex-col space-y-2">

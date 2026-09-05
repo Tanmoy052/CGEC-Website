@@ -17,6 +17,19 @@ import { COLLEGE_NAME, COLLEGE_SHORT_NAME } from "@/lib/constants";
 
 const Footer = () => {
   const pathname = usePathname();
+  const [admissionYear, setAdmissionYear] = React.useState("2026");
+
+  React.useEffect(() => {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"}/public/admission`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.activeYear) {
+          setAdmissionYear(data.activeYear);
+        }
+      })
+      .catch(() => {});
+  }, []);
+
   if (pathname?.startsWith("/admin")) {
     return null;
   }
@@ -90,7 +103,7 @@ const Footer = () => {
                   href="/admission"
                   className="hover:text-blue-500 hover:underline transition-colors"
                 >
-                  Admission 2026
+                  Admission {admissionYear}
                 </Link>
               </li>
               <li>
