@@ -17,9 +17,11 @@ import { COLLEGE_NAME, COLLEGE_SHORT_NAME } from "@/lib/constants";
 
 const Footer = () => {
   const pathname = usePathname();
-  const [admissionYear, setAdmissionYear] = React.useState("2027");
+  const [mounted, setMounted] = React.useState(false);
+  const [admissionYear, setAdmissionYear] = React.useState("");
 
   React.useEffect(() => {
+    setMounted(true);
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("cgec_admission_year");
       if (stored) setAdmissionYear(stored);
@@ -111,7 +113,9 @@ const Footer = () => {
                   suppressHydrationWarning
                   className="hover:text-blue-500 hover:underline transition-colors"
                 >
-                  Admission {admissionYear}
+                  <span suppressHydrationWarning>
+                    {mounted && admissionYear ? `Admission ${admissionYear}` : "Admission"}
+                  </span>
                 </Link>
               </li>
               <li>

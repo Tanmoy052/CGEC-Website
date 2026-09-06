@@ -13,9 +13,11 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [admissionYear, setAdmissionYear] = useState("2027");
+  const [mounted, setMounted] = useState(false);
+  const [admissionYear, setAdmissionYear] = useState("");
 
   useEffect(() => {
+    setMounted(true);
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("cgec_admission_year");
       if (stored) setAdmissionYear(stored);
@@ -52,7 +54,7 @@ export default function Navbar() {
 
   const getChildLabel = (child: { label: string; href: string }) => {
     if (child.href.startsWith("/admission") && !child.href.includes("fees")) {
-      return `Admission ${admissionYear}`;
+      return mounted && admissionYear ? `Admission ${admissionYear}` : child.label;
     }
     return child.label;
   };
