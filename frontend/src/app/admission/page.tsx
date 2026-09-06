@@ -96,7 +96,7 @@ export default function AdmissionDynamicPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-16">
+    <div className="min-h-screen bg-slate-50/50 pb-16" suppressHydrationWarning>
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 py-3.5 sm:py-4 mb-6 sm:mb-8">
         <div className="container mx-auto px-4 max-w-6xl">
@@ -107,7 +107,7 @@ export default function AdmissionDynamicPage() {
             <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 mx-1.5 sm:mx-2 text-gray-400" />
             <span className="text-gray-900">Admission</span>
             <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4 mx-1.5 sm:mx-2 text-gray-400" />
-            <span className="font-semibold text-blue-600">Admission {year}</span>
+            <span className="font-semibold text-blue-600" suppressHydrationWarning>Admission {year}</span>
           </div>
         </div>
       </div>
@@ -121,10 +121,10 @@ export default function AdmissionDynamicPage() {
           <div className="relative z-10 max-w-3xl mx-auto">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-blue-200 text-xs font-semibold mb-3">
               <Calendar className="w-3.5 h-3.5" />
-              <span>Current Academic Session {year}</span>
+              <span suppressHydrationWarning>Current Academic Session {year}</span>
             </div>
 
-            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3 sm:mb-4">
+            <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight mb-3 sm:mb-4" suppressHydrationWarning>
               Admission {year}
             </h1>
 
