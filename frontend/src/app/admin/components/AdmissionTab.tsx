@@ -32,15 +32,23 @@ interface AdmissionItem {
 
 interface AdmissionTabProps {
   adminToken: string | null;
+  initialYear?: string;
   onYearChange?: (newYear: string) => void;
 }
 
-export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabProps) {
+export default function AdmissionTab({ adminToken, initialYear, onYearChange }: AdmissionTabProps) {
   const [items, setItems] = useState<AdmissionItem[]>([]);
-  const [activeYear, setActiveYear] = useState("2026");
+  const [activeYear, setActiveYear] = useState(initialYear || "2027");
   const [loading, setLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState<"ALL" | "NOTICE" | "DOCUMENT">("ALL");
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Keep activeYear synced if initialYear prop changes
+  useEffect(() => {
+    if (initialYear && initialYear !== activeYear) {
+      setActiveYear(initialYear);
+    }
+  }, [initialYear, activeYear]);
 
   // Year Change Modal State
   const [isYearModalOpen, setIsYearModalOpen] = useState(false);
@@ -55,7 +63,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
   const [uploadingPdf, setUploadingPdf] = useState(false);
 
   const [formData, setFormData] = useState({
-    year: "2026",
+    year: initialYear || "2027",
     category: "NOTICE" as "NOTICE" | "DOCUMENT",
     title: "",
     fileUrl: "",
@@ -78,16 +86,23 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
     if (!adminToken) return;
     setLoading(true);
     try {
-      const qYear = yearToFetch || activeYear;
-      const res = await fetch(`${API_URL}/admin/admission?year=${qYear}`, {
+      const url = yearToFetch
+        ? `${API_URL}/admin/admission?year=${encodeURIComponent(yearToFetch)}`
+        : `${API_URL}/admin/admission`;
+      const res = await fetch(url, {
         headers: { Authorization: `Bearer ${adminToken}` },
       });
       if (res.ok) {
         const data = await res.json();
         setItems(data.items || []);
         if (data.activeYear) {
-          setActiveYear(data.activeYear);
+          const currentYear = yearToFetch || data.selectedYear || data.activeYear;
+          setActiveYear(currentYear);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("cgec_admission_year", data.activeYear);
+          }
           onYearChange?.(data.activeYear);
+          setFormData((prev) => ({ ...prev, year: currentYear }));
         }
         if (data.config) {
           setConfigForm({
@@ -105,7 +120,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
     } finally {
       setLoading(false);
     }
-  }, [adminToken, activeYear, onYearChange]);
+  }, [adminToken, onYearChange]);
 
   useEffect(() => {
     fetchAdmissionData();
@@ -204,6 +219,9 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
         const updatedYear = data.activeYear || newYearInput.trim();
         toast.success(data.message || `Admission year updated to ${updatedYear}!`);
         setActiveYear(updatedYear);
+        if (typeof window !== "undefined") {
+          localStorage.setItem("cgec_admission_year", updatedYear);
+        }
         onYearChange?.(updatedYear);
         setIsYearModalOpen(false);
         fetchAdmissionData(updatedYear);
@@ -247,7 +265,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
       if (res.ok) {
         toast.success(editingItem ? "Item updated successfully!" : "Item added successfully!");
         setIsModalOpen(false);
-        fetchAdmissionData();
+        fetchAdmissionData(activeYear);
       } else {
         const err = await res.json();
         toast.error(err.message || "Failed to save item");
@@ -344,7 +362,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
               <h2 className="text-xl sm:text-2xl font-bold text-white">Admission {activeYear} Portal Control</h2>
             </div>
             <p className="text-slate-400 text-xs sm:text-sm mt-1 max-w-2xl">
-              Only the active year ({activeYear}) is visible to students and visitors on the live website. Use the Change Year button below to switch the portal to another year (e.g. 2027) when needed.
+              Only the active year ({activeYear}) is visible to students and visitors on the live website. Use the Change Year button below to switch the portal to another year (e.g. 2028) when needed.
             </p>
           </div>
 
@@ -817,7 +835,7 @@ export default function AdmissionTab({ adminToken, onYearChange }: AdmissionTabP
                 <input
                   type="text"
                   required
-                  placeholder="e.g. 2026 or 2027"
+                  placeholder="e.g. 2027 or 2028"
                   value={newYearInput}
                   onChange={(e) => setNewYearInput(e.target.value)}
                   className="w-full bg-slate-950 border border-slate-700 text-white rounded-xl px-4 py-2.5 text-sm focus:outline-none focus:border-blue-500 font-bold"

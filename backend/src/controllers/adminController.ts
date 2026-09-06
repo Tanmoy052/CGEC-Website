@@ -700,40 +700,55 @@ export const deleteWallMagazine = async (req: Request, res: Response) => {
 // ==================== ADMISSION PORTAL & CONFIG ====================
 export const getAdmissionData = async (req: Request, res: Response) => {
   try {
-    let year = req.query.year as string;
+    const rawYear = req.query.year as string | undefined;
+    const requestedYear = rawYear ? rawYear.trim() : undefined;
 
-    let config = null;
-    if (year) {
-      config = await prisma.admissionConfig.findUnique({
-        where: { year },
-      });
-    } else {
-      // Find the active / most recently updated admission config
-      config = await prisma.admissionConfig.findFirst({
+    // 1. Determine the globally active admission configuration
+    let activeConfig = await prisma.admissionConfig.findFirst({
+      where: { isActive: true },
+      orderBy: { updatedAt: 'desc' },
+    });
+
+    if (!activeConfig) {
+      activeConfig = await prisma.admissionConfig.findFirst({
         orderBy: { updatedAt: 'desc' },
       });
-      if (!config) {
-        config = await prisma.admissionConfig.findFirst();
+      if (activeConfig) {
+        activeConfig = await prisma.admissionConfig.update({
+          where: { id: activeConfig.id },
+          data: { isActive: true },
+        });
       }
-      year = config?.year || '2026';
     }
 
-    if (!config) {
-      config = await prisma.admissionConfig.create({
+    if (!activeConfig) {
+      const fallbackYear = new Date().getFullYear().toString();
+      activeConfig = await prisma.admissionConfig.create({
         data: {
-          year,
+          year: fallbackYear,
+          isActive: true,
           whatsappLink: '',
           contactPhone: '',
           contactEmail: '',
           officerName: '',
-          officerRole: '',
+          officerRole: `PI Admin, Admission (${fallbackYear})`,
           officerDesignation: '',
         },
       });
     }
 
+    const activeYear = activeConfig.year;
+    const selectedYear = requestedYear || activeYear;
+
+    let targetConfig: typeof activeConfig | null = activeConfig;
+    if (requestedYear && requestedYear !== activeYear) {
+      targetConfig = await prisma.admissionConfig.findUnique({
+        where: { year: requestedYear },
+      });
+    }
+
     const items = await prisma.admissionItem.findMany({
-      where: { year },
+      where: { year: selectedYear },
       orderBy: [{ order: 'asc' }, { createdAt: 'desc' }],
     });
 
@@ -748,13 +763,22 @@ export const getAdmissionData = async (req: Request, res: Response) => {
     });
 
     const availableYears = Array.from(
-      new Set([year, ...allConfigs.map((c) => c.year), ...allItems.map((i) => i.year)])
+      new Set([activeYear, selectedYear, ...allConfigs.map((c) => c.year), ...allItems.map((i) => i.year)])
     ).filter(Boolean).sort().reverse();
 
     res.json({
       items,
-      config,
-      activeYear: config.year || year,
+      config: targetConfig || {
+        year: selectedYear,
+        whatsappLink: '',
+        contactPhone: '',
+        contactEmail: '',
+        officerName: '',
+        officerRole: '',
+        officerDesignation: '',
+      },
+      activeYear,
+      selectedYear,
       availableYears,
     });
   } catch (error: any) {
@@ -764,13 +788,18 @@ export const getAdmissionData = async (req: Request, res: Response) => {
 
 export const createAdmissionItem = async (req: Request, res: Response) => {
   try {
-    const { year = '2026', category = 'NOTICE', title, fileUrl, filePublicId, order = 0 } = req.body;
+    const { year, category = 'NOTICE', title, fileUrl, filePublicId, order = 0 } = req.body;
     if (!title || !fileUrl) {
       return res.status(400).json({ message: 'Title and File URL are required' });
     }
+    let targetYear = year;
+    if (!targetYear) {
+      const active = await prisma.admissionConfig.findFirst({ where: { isActive: true } });
+      targetYear = active?.year || new Date().getFullYear().toString();
+    }
     const item = await prisma.admissionItem.create({
       data: {
-        year,
+        year: targetYear,
         category,
         title,
         fileUrl,
@@ -822,9 +851,16 @@ export const deleteAdmissionItem = async (req: Request, res: Response) => {
 
 export const updateAdmissionConfig = async (req: Request, res: Response) => {
   try {
-    const { year = '2026', whatsappLink, contactPhone, contactEmail, officerName, officerRole, officerDesignation } = req.body;
+    const { year, whatsappLink, contactPhone, contactEmail, officerName, officerRole, officerDesignation } = req.body;
+    let configYear = year;
+    if (!configYear) {
+      const active = await prisma.admissionConfig.findFirst({ where: { isActive: true } });
+      configYear = active?.year || new Date().getFullYear().toString();
+    }
+    const existing = await prisma.admissionConfig.findUnique({ where: { year: configYear } });
+
     const config = await prisma.admissionConfig.upsert({
-      where: { year },
+      where: { year: configYear },
       update: {
         ...(whatsappLink !== undefined && { whatsappLink }),
         ...(contactPhone !== undefined && { contactPhone }),
@@ -834,13 +870,14 @@ export const updateAdmissionConfig = async (req: Request, res: Response) => {
         ...(officerDesignation !== undefined && { officerDesignation }),
       },
       create: {
-        year,
+        year: configYear,
         whatsappLink: whatsappLink || '',
         contactPhone: contactPhone || '',
         contactEmail: contactEmail || '',
         officerName: officerName || '',
         officerRole: officerRole || '',
         officerDesignation: officerDesignation || '',
+        isActive: existing ? existing.isActive : true,
       },
     });
     res.json(config);
@@ -858,50 +895,65 @@ export const updateAdmissionYear = async (req: Request, res: Response) => {
     const cleanNewYear = newYear.trim();
     const cleanCurrentYear = currentYear ? String(currentYear).trim() : null;
 
+    // Deactivate all configs so only the designated year is active
+    await prisma.admissionConfig.updateMany({
+      data: { isActive: false },
+    });
+
     // Check if newYear config exists
     let targetConfig = await prisma.admissionConfig.findUnique({
       where: { year: cleanNewYear },
     });
 
     if (targetConfig) {
-      // Just touch updatedAt to make it the active year
       targetConfig = await prisma.admissionConfig.update({
         where: { id: targetConfig.id },
-        data: { updatedAt: new Date() },
+        data: {
+          isActive: true,
+          updatedAt: new Date(),
+        },
       });
     } else {
-      // If currentYear config exists, we update it or clone it to newYear
+      // Inherit baseline details from previous year if available
+      let baseline = {
+        whatsappLink: '',
+        contactPhone: '',
+        contactEmail: '',
+        officerName: '',
+        officerRole: `PI Admin, Admission (${cleanNewYear})`,
+        officerDesignation: '',
+      };
+
       if (cleanCurrentYear) {
         const oldConfig = await prisma.admissionConfig.findUnique({
           where: { year: cleanCurrentYear },
         });
         if (oldConfig) {
-          targetConfig = await prisma.admissionConfig.update({
-            where: { id: oldConfig.id },
-            data: {
-              year: cleanNewYear,
-              officerRole: oldConfig.officerRole?.includes(cleanCurrentYear)
-                ? oldConfig.officerRole.replace(cleanCurrentYear, cleanNewYear)
-                : `PI Admin, Admission (${cleanNewYear})`,
-              updatedAt: new Date(),
-            },
-          });
+          baseline = {
+            whatsappLink: oldConfig.whatsappLink || '',
+            contactPhone: oldConfig.contactPhone || '',
+            contactEmail: oldConfig.contactEmail || '',
+            officerName: oldConfig.officerName || '',
+            officerDesignation: oldConfig.officerDesignation || '',
+            officerRole: oldConfig.officerRole?.includes(cleanCurrentYear)
+              ? oldConfig.officerRole.replace(cleanCurrentYear, cleanNewYear)
+              : `PI Admin, Admission (${cleanNewYear})`,
+          };
         }
       }
 
-      if (!targetConfig) {
-        targetConfig = await prisma.admissionConfig.create({
-          data: {
-            year: cleanNewYear,
-            whatsappLink: '',
-            contactPhone: '',
-            contactEmail: '',
-            officerName: '',
-            officerRole: '',
-            officerDesignation: '',
-          },
-        });
-      }
+      targetConfig = await prisma.admissionConfig.create({
+        data: {
+          year: cleanNewYear,
+          isActive: true,
+          whatsappLink: baseline.whatsappLink,
+          contactPhone: baseline.contactPhone,
+          contactEmail: baseline.contactEmail,
+          officerName: baseline.officerName,
+          officerRole: baseline.officerRole,
+          officerDesignation: baseline.officerDesignation,
+        },
+      });
     }
 
     // Migrate existing items if requested

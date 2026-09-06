@@ -83,7 +83,7 @@ export default function AdminDashboardPage() {
   const [adminName, setAdminName] = useState("");
   const [adminEmail, setAdminEmail] = useState("");
   const [activeTab, setActiveTab] = useState<AdminTabType>("overview");
-  const [admissionYear, setAdmissionYear] = useState("2026");
+  const [admissionYear, setAdmissionYear] = useState("2027");
   const [isLoading, setIsLoading] = useState(true);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -324,6 +324,9 @@ export default function AdminDashboardPage() {
         const admData = await admRes.json();
         if (admData.activeYear) {
           setAdmissionYear(admData.activeYear);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("cgec_admission_year", admData.activeYear);
+          }
         }
       }
     } catch {
@@ -345,6 +348,9 @@ export default function AdminDashboardPage() {
       router.push("/admin/login/cgec");
       return;
     }
+
+    const storedYear = localStorage.getItem("cgec_admission_year");
+    if (storedYear) setAdmissionYear(storedYear);
 
     setAdminToken(token);
     if (name) setAdminName(name);
@@ -1617,7 +1623,16 @@ export default function AdminDashboardPage() {
 
               {/* ADMISSION TAB */}
               {activeTab === "admission" && (
-                <AdmissionTab adminToken={adminToken} onYearChange={(newYear) => setAdmissionYear(newYear)} />
+                <AdmissionTab
+                  adminToken={adminToken}
+                  initialYear={admissionYear}
+                  onYearChange={(newYear) => {
+                    setAdmissionYear(newYear);
+                    if (typeof window !== "undefined") {
+                      localStorage.setItem("cgec_admission_year", newYear);
+                    }
+                  }}
+                />
               )}
 
               {/* FEES STRUCTURE TAB */}

@@ -17,14 +17,21 @@ import { COLLEGE_NAME, COLLEGE_SHORT_NAME } from "@/lib/constants";
 
 const Footer = () => {
   const pathname = usePathname();
-  const [admissionYear, setAdmissionYear] = React.useState("2026");
+  const [admissionYear, setAdmissionYear] = React.useState("2027");
 
   React.useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("cgec_admission_year");
+      if (stored) setAdmissionYear(stored);
+    }
     fetch(`${process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"}/public/admission`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data?.activeYear) {
           setAdmissionYear(data.activeYear);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("cgec_admission_year", data.activeYear);
+          }
         }
       })
       .catch(() => {});
@@ -101,6 +108,7 @@ const Footer = () => {
               <li>
                 <Link
                   href="/admission"
+                  suppressHydrationWarning
                   className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Admission {admissionYear}

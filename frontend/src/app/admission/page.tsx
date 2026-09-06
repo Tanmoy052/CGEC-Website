@@ -32,7 +32,7 @@ const DEFAULT_NOTICES: AdmissionNoticeRow[] = [];
 const DEFAULT_DOCUMENTS: AdmissionNoticeRow[] = [];
 
 export default function AdmissionDynamicPage() {
-  const [year, setYear] = useState("2026");
+  const [year, setYear] = useState("2027");
   const [notices, setNotices] = useState(DEFAULT_NOTICES);
   const [documents, setDocuments] = useState(DEFAULT_DOCUMENTS);
   const [config, setConfig] = useState({
@@ -45,12 +45,20 @@ export default function AdmissionDynamicPage() {
   });
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("cgec_admission_year");
+      if (stored) setYear(stored);
+    }
+
     fetch(`${API_URL}/public/admission`)
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => {
         if (data) {
-          const currentYear = data.activeYear || data.config?.year || "2026";
+          const currentYear = data.activeYear || data.config?.year || "2027";
           setYear(currentYear);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("cgec_admission_year", currentYear);
+          }
 
           if (Array.isArray(data.items) && data.items.length > 0) {
             const apiNotices = data.items

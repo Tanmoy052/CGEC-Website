@@ -13,7 +13,14 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [admissionYear, setAdmissionYear] = useState("2026");
+  const [admissionYear, setAdmissionYear] = useState("2027");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("cgec_admission_year");
+      if (stored) setAdmissionYear(stored);
+    }
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,6 +42,9 @@ export default function Navbar() {
       .then((data) => {
         if (data?.activeYear) {
           setAdmissionYear(data.activeYear);
+          if (typeof window !== "undefined") {
+            localStorage.setItem("cgec_admission_year", data.activeYear);
+          }
         }
       })
       .catch(() => {});
@@ -150,6 +160,7 @@ export default function Navbar() {
                         <Link
                           key={child.label}
                           href={getChildHref(child)}
+                          suppressHydrationWarning
                           className={cn(
                             "block px-5 py-2.5 text-sm font-medium text-gray-700 hover:text-blue-600 hover:bg-blue-50/80 transition-colors",
                             idx !== link.children.length - 1
@@ -227,6 +238,7 @@ export default function Navbar() {
                         <Link
                           key={child.label}
                           href={getChildHref(child)}
+                          suppressHydrationWarning
                           className="px-4 py-2 text-base text-gray-600 hover:text-blue-600 border-l-2 border-gray-100 hover:border-blue-600 transition-all"
                           onClick={() => setIsOpen(false)}
                         >
