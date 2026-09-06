@@ -67,6 +67,7 @@ export const getStats = async (req: Request, res: Response) => {
       recruiterCount,
       brochureCount,
       hodMessagesCount,
+      messagesCount,
     ] = await Promise.all([
       prisma.faculty.count(),
       prisma.notice.count(),
@@ -82,6 +83,7 @@ export const getStats = async (req: Request, res: Response) => {
       prisma.recruiter.count(),
       prisma.placementBrochure.count(),
       prisma.hodMessage.count(),
+      prisma.contactMessage.count(),
     ]);
 
     const recentNotices = await prisma.notice.findMany({
@@ -110,6 +112,7 @@ export const getStats = async (req: Request, res: Response) => {
         recruiters: recruiterCount,
         brochures: brochureCount,
         hodMessages: hodMessagesCount,
+        messages: messagesCount,
       },
       recentNotices,
       recentFaculty,
@@ -1546,5 +1549,71 @@ export const deleteHodMessage = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// ==================== CONTACT MESSAGES ====================
+export const submitContactMessage = async (req: Request, res: Response) => {
+  try {
+    const { name, email, subject, message } = req.body;
+    if (!name?.trim() || !email?.trim() || !subject?.trim() || !message?.trim()) {
+      return res.status(400).json({ message: 'All fields (name, email, subject, message) are required.' });
+    }
+
+    const newMessage = await prisma.contactMessage.create({
+      data: {
+        name: name.trim(),
+        email: email.trim().toLowerCase(),
+        subject: subject.trim(),
+        message: message.trim(),
+      },
+    });
+
+    res.status(201).json({ message: 'Contact message submitted successfully', data: newMessage });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message || 'Failed to submit contact message' });
+  }
+};
+
+export const getContactMessages = async (req: Request, res: Response) => {
+  try {
+    const messages = await prisma.contactMessage.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(messages);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteContactMessage = async (req: Request, res: Response) => {
+  try {
+    const id = getParamId(req);
+    await prisma.contactMessage.delete({
+      where: { id },
+    });
+    res.json({ message: 'Message deleted successfully' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const deleteMultipleMessages = async (req: Request, res: Response) => {
+  try {
+    const { ids } = req.body;
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).json({ message: 'Valid array of message IDs is required.' });
+    }
+
+    const result = await prisma.contactMessage.deleteMany({
+      where: {
+        id: { in: ids },
+      },
+    });
+
+    res.json({ message: `${result.count} message(s) deleted successfully`, count: result.count });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 

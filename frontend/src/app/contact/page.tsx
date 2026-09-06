@@ -1,12 +1,48 @@
 "use client";
 
-import React from "react";
-import { MapPin, Phone, Mail } from "lucide-react";
+import React, { useState } from "react";
+import { MapPin, Phone, Mail, Loader2, CheckCircle2 } from "lucide-react";
+import { toast } from "react-hot-toast";
+import { API_URL } from "@/lib/constants";
 
 const ContactPage = () => {
-  const handleSubmit = (e: React.FormEvent) => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [loading, setLoading] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted");
+    if (!formData.name.trim() || !formData.email.trim() || !formData.subject.trim() || !formData.message.trim()) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/public/contact`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        toast.success("Thank you! Your message has been sent successfully.");
+        setFormData({ name: "", email: "", subject: "", message: "" });
+        setSubmitted(true);
+      } else {
+        toast.error(data.message || "Failed to send message. Please try again.");
+      }
+    } catch {
+      toast.error("Network error. Could not send your message.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -76,6 +112,13 @@ const ContactPage = () => {
               <div className="flex-grow h-[1px] bg-gray-200"></div>
             </div>
 
+            {submitted && (
+              <div className="mb-6 p-4 bg-emerald-50 border border-emerald-200 rounded-xl flex items-center gap-3 text-emerald-800 text-sm animate-fadeIn">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
+                <span>Your message has been sent successfully. We will get back to you soon!</span>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="flex items-center">
                 <label className="w-1/3 text-right text-gray-700 font-bold pr-6">
@@ -84,7 +127,9 @@ const ContactPage = () => {
                 <input
                   type="text"
                   placeholder="Your name"
-                  className="w-2/3 px-3 py-2.5 border border-gray-300 rounded shadow-sm outline-none focus:border-blue-400 transition-all"
+                  value={formData.name}
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  className="w-2/3 px-3 py-2.5 border border-gray-300 rounded shadow-sm outline-none focus:border-blue-400 transition-all text-gray-900"
                   required
                 />
               </div>
@@ -96,7 +141,9 @@ const ContactPage = () => {
                 <input
                   type="email"
                   placeholder="Your email"
-                  className="w-2/3 px-3 py-2.5 border border-gray-300 rounded shadow-sm outline-none focus:border-blue-400 transition-all"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="w-2/3 px-3 py-2.5 border border-gray-300 rounded shadow-sm outline-none focus:border-blue-400 transition-all text-gray-900"
                   required
                 />
               </div>
@@ -108,7 +155,9 @@ const ContactPage = () => {
                 <input
                   type="text"
                   placeholder="Type Subject"
-                  className="w-2/3 px-3 py-2.5 border border-gray-300 rounded shadow-sm outline-none focus:border-blue-400 transition-all"
+                  value={formData.subject}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  className="w-2/3 px-3 py-2.5 border border-gray-300 rounded shadow-sm outline-none focus:border-blue-400 transition-all text-gray-900"
                   required
                 />
               </div>
@@ -120,7 +169,9 @@ const ContactPage = () => {
                 <textarea
                   rows={4}
                   placeholder="Please enter your message here..."
-                  className="w-2/3 px-3 py-2.5 border border-gray-300 rounded shadow-sm outline-none focus:border-blue-400 resize-none transition-all"
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="w-2/3 px-3 py-2.5 border border-gray-300 rounded shadow-sm outline-none focus:border-blue-400 resize-none transition-all text-gray-900"
                   required
                 ></textarea>
               </div>
@@ -128,9 +179,11 @@ const ContactPage = () => {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="px-8 py-2.5 bg-[#337ab7] hover:bg-[#286090] text-white rounded text-lg font-medium shadow-sm transition-colors"
+                  disabled={loading}
+                  className="inline-flex items-center gap-2 px-8 py-2.5 bg-[#337ab7] hover:bg-[#286090] disabled:bg-blue-400 text-white rounded text-lg font-medium shadow-sm transition-colors cursor-pointer disabled:cursor-not-allowed active:scale-95"
                 >
-                  Submit
+                  {loading && <Loader2 className="w-5 h-5 animate-spin" />}
+                  <span>{loading ? "Submitting..." : "Submit"}</span>
                 </button>
               </div>
             </form>

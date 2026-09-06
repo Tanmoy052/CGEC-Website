@@ -37,6 +37,7 @@ import {
   Receipt,
   Briefcase,
   Award,
+  MessageSquare,
 } from "lucide-react";
 import { toast, Toaster } from "react-hot-toast";
 import { API_URL } from "@/lib/constants";
@@ -48,6 +49,7 @@ import LeadershipTab from "./components/LeadershipTab";
 import RecruitersTab from "./components/RecruitersTab";
 import PlacementBrochureTab from "./components/PlacementBrochureTab";
 import HodMessageTab from "./components/HodMessageTab";
+import MessagesTab from "./components/MessagesTab";
 
 const DEPARTMENTS = ["CSE", "ECE", "EE", "ME", "CE", "BSH"];
 const SEMESTERS = ["1st Semester", "2nd Semester", "3rd Semester", "4th Semester", "5th Semester", "6th Semester", "7th Semester", "8th Semester", "All Semesters"];
@@ -57,6 +59,7 @@ const GALLERY_CATEGORIES = ["Campus", "Events", "Sports", "Labs", "Cultural"];
 
 type AdminTabType =
   | "overview"
+  | "messages"
   | "hod-message"
   | "faculty"
   | "syllabus"
@@ -102,6 +105,7 @@ export default function AdminDashboardPage() {
     recruiters: 0,
     brochures: 0,
     hodMessages: 0,
+    messages: 0,
   });
 
   // Data Collections
@@ -267,6 +271,11 @@ export default function AdminDashboardPage() {
         setAdminEmail(data.email || "");
       }
     } catch {}
+  }, []);
+
+  // Handle live messages count update without re-render loop
+  const handleMessagesCountUpdate = useCallback((count: number) => {
+    setStats((prev) => (prev.messages === count ? prev : { ...prev, messages: count }));
   }, []);
 
   // Fetch Dashboard Stats & All Collections
@@ -779,6 +788,7 @@ export default function AdminDashboardPage() {
         <nav className="p-3 space-y-1 flex-1 overflow-y-auto min-h-0 custom-sidebar-scrollbar">
           {[
             { id: "overview", label: "Dashboard Overview", icon: LayoutDashboard, count: null },
+            { id: "messages", label: "Messages", icon: MessageSquare, count: stats.messages || null },
             { id: "hod-message", label: "HOD Messages", icon: UserCheck, count: stats.hodMessages || null },
             { id: "committees", label: "Committees (All 10)", icon: ShieldCheck, count: stats.committees || null },
             { id: "admission", label: `Admission ${admissionYear}`, icon: GraduationCap, count: stats.admission || null },
@@ -857,6 +867,8 @@ export default function AdminDashboardPage() {
             <h1 className="text-lg sm:text-xl font-extrabold text-white capitalize truncate tracking-tight">
               {activeTab === "overview"
                 ? "System Overview"
+                : activeTab === "messages"
+                ? "Contact Messages"
                 : activeTab === "hod-message"
                 ? "Department HOD Messages"
                 : activeTab === "settings"
@@ -884,6 +896,7 @@ export default function AdminDashboardPage() {
 
           <div className="flex items-center gap-3 shrink-0">
             {activeTab !== "overview" &&
+              activeTab !== "messages" &&
               activeTab !== "settings" &&
               activeTab !== "hod-message" &&
               activeTab !== "admission" &&
@@ -951,6 +964,7 @@ export default function AdminDashboardPage() {
                   {/* KPI Stats Cards */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
                     {[
+                      { label: "Contact Messages", value: stats.messages, icon: MessageSquare, color: "from-blue-600 to-cyan-600", tab: "messages" },
                       { label: "HOD Messages", value: stats.hodMessages, icon: UserCheck, color: "from-blue-600 to-teal-600", tab: "hod-message" },
                       { label: "Committees (10)", value: stats.committees, icon: ShieldCheck, color: "from-blue-600 to-indigo-600", tab: "committees" },
                       { label: `Admission ${admissionYear}`, value: stats.admission, icon: GraduationCap, color: "from-cyan-600 to-blue-600", tab: "admission" },
@@ -1646,6 +1660,14 @@ export default function AdminDashboardPage() {
 
               {/* PLACEMENT BROCHURE TAB */}
               {activeTab === "brochure" && <PlacementBrochureTab adminToken={adminToken} />}
+
+              {/* CONTACT MESSAGES TAB */}
+              {activeTab === "messages" && (
+                <MessagesTab
+                  adminToken={adminToken}
+                  onCountUpdate={handleMessagesCountUpdate}
+                />
+              )}
 
               {/* ========================================================================= */}
               {/* ADMIN CREDENTIALS & ACCOUNT SECURITY TAB */}

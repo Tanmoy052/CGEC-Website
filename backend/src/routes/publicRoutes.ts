@@ -15,9 +15,14 @@ import {
   getLatestBrochure,
   getBrochureById,
   getHodMessages,
+  submitContactMessage,
 } from '../controllers/adminController';
 
 const router = Router();
+
+// Public Contact Form Submission
+router.post('/contact', submitContactMessage);
+router.post('/messages', submitContactMessage);
 
 // Public Read-Only endpoints
 router.get('/faculty', getFacultyList);
@@ -42,3 +47,4 @@ router.get('/hod-message', getHodMessages);
 router.get('/hod-messages', getHodMessages);
 
 export default router;
+

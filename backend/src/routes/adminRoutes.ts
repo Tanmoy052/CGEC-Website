@@ -56,6 +56,9 @@ import {
   getHodMessages,
   saveHodMessage,
   deleteHodMessage,
+  getContactMessages,
+  deleteContactMessage,
+  deleteMultipleMessages,
 } from '../controllers/adminController';
 
 import multer from 'multer';
@@ -159,5 +162,11 @@ router.get('/hod-message', getHodMessages);
 router.post('/hod-message', saveHodMessage);
 router.delete('/hod-message/:deptOrId', deleteHodMessage);
 
+// Contact Messages
+router.get('/messages', getContactMessages);
+router.delete('/messages/:id', deleteContactMessage);
+router.post('/messages/batch-delete', deleteMultipleMessages);
+
 export default router;
+
 
