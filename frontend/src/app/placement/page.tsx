@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ChevronRight, Phone, Mail, FileText } from "lucide-react";
+import { ChevronRight, ChevronDown, Phone, Mail, FileText } from "lucide-react";
 import { API_URL } from "@/lib/constants";
 
 export default function PlacementPage() {
@@ -13,6 +13,7 @@ export default function PlacementPage() {
     fileType?: string | null;
     fileSize?: string | null;
   } | null>(null);
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   useEffect(() => {
     fetch(`${API_URL}/public/brochures/latest`)
@@ -34,6 +35,12 @@ export default function PlacementPage() {
 
   const representatives: RepresentativeItem[] = [];
 
+  const descriptionText =
+    brochure?.description ||
+    "Official Training & Placement brochures detailing student demographics, skill matrices, recruiter profiles, and campus hiring guidelines.";
+  const isLongDescription =
+    descriptionText.length > 160 || descriptionText.includes("\n");
+
   return (
     <div className="min-h-screen bg-white pb-12">
       {/* Breadcrumb */}
@@ -51,27 +58,54 @@ export default function PlacementPage() {
 
       <div className="container mx-auto px-4 max-w-6xl">
         {/* Placement Brochure Banner */}
-        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white rounded-2xl p-6 sm:p-8 mb-10 shadow-xl border border-blue-800/60 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-          <div className="space-y-2">
+        <div className="bg-gradient-to-r from-blue-900 via-indigo-900 to-blue-950 text-white rounded-2xl p-6 sm:p-8 mb-10 shadow-xl border border-blue-800/60 flex flex-col">
+          {/* Top in Center: View Placement Brochures Button */}
+          <div className="flex justify-center pb-6 border-b border-blue-800/50">
+            <Link
+              href="/placement/brochure"
+              className="inline-flex items-center gap-2.5 px-6 sm:px-8 py-3 sm:py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm sm:text-base transition-all shadow-lg shadow-blue-500/30 hover:scale-105 active:scale-95"
+            >
+              <FileText className="w-4 h-4 sm:w-5 sm:h-5" />
+              <span>View Placement Brochures</span>
+            </Link>
+          </div>
+
+          <div className="pt-6 space-y-3">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold border border-blue-400/30">
               <span className="w-2 h-2 rounded-full bg-blue-300" />
               <span>Official Recruiter Guide</span>
             </div>
-            <h2 className="text-xl sm:text-2xl font-black tracking-tight">
+
+            <h2 className="text-xl sm:text-2xl font-black tracking-tight text-white">
               {brochure?.title || "CGEC Placement Brochure"}
             </h2>
-            <p className="text-sm text-blue-200 max-w-2xl leading-relaxed">
-              {brochure?.description || "Official Training & Placement brochures detailing student demographics, skill matrices, recruiter profiles, and campus hiring guidelines."}
-            </p>
-          </div>
 
-          <Link
-            href="/placement/brochure"
-            className="inline-flex items-center gap-2.5 px-6 py-3.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl font-bold text-sm transition-all shadow-lg shadow-blue-500/30 hover:scale-105 active:scale-95 shrink-0"
-          >
-            <FileText className="w-4 h-4" />
-            <span>View Placement Brochures</span>
-          </Link>
+            {/* Description with formatting preserved & collapsing */}
+            <div className="space-y-2">
+              <div
+                className={`text-sm text-blue-200 leading-relaxed whitespace-pre-wrap break-words ${
+                  !isDescriptionExpanded && isLongDescription ? "line-clamp-3" : ""
+                }`}
+              >
+                {descriptionText}
+              </div>
+
+              {isLongDescription && (
+                <button
+                  type="button"
+                  onClick={() => setIsDescriptionExpanded((prev) => !prev)}
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-blue-300 hover:text-white transition-colors cursor-pointer bg-blue-800/40 hover:bg-blue-800/70 px-3 py-1.5 rounded-lg border border-blue-700/50 mt-1"
+                >
+                  <span>{isDescriptionExpanded ? "Show Less" : "Read More"}</span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-200 ${
+                      isDescriptionExpanded ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+              )}
+            </div>
+          </div>
         </div>
 
         <h1 className="text-3xl font-bold text-blue-900 mb-8">

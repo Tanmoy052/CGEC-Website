@@ -63,3 +63,4 @@ export const COLORS = {
 };
 
 export const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+export const PORTAL_URL = process.env.NEXT_PUBLIC_PORTAL_URL || "https://cgec-sms-portal.vercel.app/";

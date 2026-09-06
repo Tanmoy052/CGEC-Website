@@ -341,8 +341,6 @@ const Footer = () => {
                   </div>
                 </div>
 
-                <span className="hidden sm:inline text-gray-600">•</span>
-
                 {/* Development Contributors */}
                 <div className="flex items-center gap-1.5">
                   <span className="text-gray-400">Development Contributor:</span>

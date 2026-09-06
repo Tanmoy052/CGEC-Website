@@ -6,7 +6,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_LINKS } from "@/lib/constants";
+import { NAV_LINKS, PORTAL_URL } from "@/lib/constants";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -180,7 +180,7 @@ export default function Navbar() {
               </div>
             ))}
             <a
-              href="https://cgec-sms-portal.vercel.app/"
+              href={PORTAL_URL}
               className="ml-4 h-full flex items-center"
             >
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-full text-sm font-bold transition-all shadow-lg hover:shadow-blue-200 active:scale-95 flex items-center justify-center">
@@ -271,7 +271,7 @@ export default function Navbar() {
             ))}
             <div className="pt-4 border-t border-gray-100 mt-2">
               <a
-                href="https://cgec-sms-portal.vercel.app/"
+                href={PORTAL_URL}
                 onClick={() => setIsOpen(false)}
               >
                 <button className="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg">

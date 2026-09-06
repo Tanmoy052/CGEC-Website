@@ -143,7 +143,7 @@ export default async function PlacementBrochuresPage() {
                     </div>
 
                     {/* Description */}
-                    <p className="text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed mb-6">
+                    <p className="text-xs sm:text-sm text-slate-300 line-clamp-3 leading-relaxed mb-6 whitespace-pre-wrap break-words">
                       {item.description || "Training & Placement Brochure for CGEC."}
                     </p>
 
