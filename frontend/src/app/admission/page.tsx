@@ -136,11 +136,11 @@ export default function AdmissionDynamicPage() {
                 className="inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white text-xs sm:text-sm font-bold shadow-lg shadow-emerald-950/20 transition-all hover:scale-105 active:scale-95"
               >
                 <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
-                <span>Join Official WhatsApp Group for Admission {year}</span>
+                <span suppressHydrationWarning>Join Official WhatsApp Group for Admission {year}</span>
                 <ExternalLink className="w-3.5 h-3.5 ml-1 opacity-80" />
               </a>
             ) : (
-              <p className="text-blue-100 text-sm sm:text-base font-medium">
+              <p className="text-blue-100 text-sm sm:text-base font-medium" suppressHydrationWarning>
                 Official Admission Portal for Academic Year {year}
               </p>
             )}
@@ -154,7 +154,7 @@ export default function AdmissionDynamicPage() {
             <div className="bg-blue-50/70 px-5 sm:px-6 py-4 border-b border-blue-100 flex items-center justify-between">
               <h2 className="text-lg sm:text-xl font-bold text-blue-950 flex items-center gap-2">
                 <FileText className="w-5 h-5 text-blue-600 shrink-0" />
-                <span>Admission Related Notices {year}</span>
+                <span suppressHydrationWarning>Admission Related Notices {year}</span>
               </h2>
               <span className="text-xs font-bold text-blue-700 bg-blue-100/80 px-2.5 py-1 rounded-full">
                 {notices.length}
@@ -165,7 +165,7 @@ export default function AdmissionDynamicPage() {
               {notices.length === 0 ? (
                 <div className="py-12 text-center text-gray-500">
                   <FileText className="w-10 h-10 mx-auto text-gray-300 mb-2" />
-                  <p className="text-sm font-medium">No admission notices currently available for {year}.</p>
+                  <p className="text-sm font-medium" suppressHydrationWarning>No admission notices currently available for {year}.</p>
                 </div>
               ) : (
                 <div className="space-y-3">
@@ -275,7 +275,7 @@ export default function AdmissionDynamicPage() {
                   className="inline-flex items-center gap-2.5 bg-green-50 hover:bg-green-100 text-green-800 px-4 py-2.5 rounded-xl border border-green-200 transition-colors font-bold text-xs sm:text-sm"
                 >
                   <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-600 shrink-0" />
-                  <span>Click here to join Admission {year} WhatsApp Group</span>
+                  <span suppressHydrationWarning>Click here to join Admission {year} WhatsApp Group</span>
                 </a>
               </div>
             )}
