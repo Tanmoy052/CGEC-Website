@@ -17,6 +17,7 @@ export default function Navbar() {
   const [admissionYear, setAdmissionYear] = useState("");
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("cgec_admission_year");

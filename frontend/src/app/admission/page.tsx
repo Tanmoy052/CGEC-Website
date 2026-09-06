@@ -47,6 +47,7 @@ export default function AdmissionDynamicPage() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("cgec_admission_year");
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (stored) setYear(stored);
     }
 

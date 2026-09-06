@@ -2514,6 +2514,7 @@ export default function AdminDashboardPage() {
                       <p className="text-[11px] text-slate-500">Paste an existing image URL or click &quot;Upload Cover Image&quot; to pick from your device (supports JPG, PNG, JPEG, WEBP)</p>
                       {wallMagazineForm.imageUrl && (
                         <div className="flex items-center gap-3 p-2.5 bg-slate-900/80 border border-purple-500/20 rounded-xl">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={wallMagazineForm.imageUrl}
                             alt="Cover Preview"
