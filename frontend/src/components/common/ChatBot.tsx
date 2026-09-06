@@ -356,7 +356,6 @@ What would you like to know?`,
 **${KB.college.name}**
 
 | Field | Details |
-|---|---|
 | **Established** | ${KB.college.established} |
 | **Type** | Government Engineering College |
 | **Governed By** | ${KB.college.governedBy} |
