@@ -1997,7 +1997,7 @@ export default function AdminDashboardPage() {
                             )}
                             <input
                               type="file"
-                              accept="image/*"
+                              accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.avif"
                               className="hidden"
                               disabled={uploadingField === "faculty-photo"}
                               onChange={(e) =>
@@ -2395,7 +2395,7 @@ export default function AdminDashboardPage() {
                             )}
                             <input
                               type="file"
-                              accept="image/*"
+                              accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.avif"
                               className="hidden"
                               disabled={uploadingField === "gallery-photo"}
                               onChange={(e) =>
@@ -2489,14 +2489,14 @@ export default function AdminDashboardPage() {
                           )}
                           <input
                             type="file"
-                            accept="image/*"
+                            accept="image/*,.jpg,.jpeg,.png,.webp,.gif,.avif"
                             className="hidden"
                             disabled={uploadingField === "wallmag-cover"}
                             onChange={(e) =>
                               handleFileUpload(
                                 e,
                                 (url, publicId) => setWallMagazineForm((prev) => ({ ...prev, imageUrl: url, imagePublicId: publicId || prev.imagePublicId })),
-                                "wall_magazine",
+                                "wall_magazine_covers",
                                 "wallmag-cover"
                               )
                             }
@@ -2511,7 +2511,30 @@ export default function AdminDashboardPage() {
                         placeholder="https://res.cloudinary.com/... or image URL"
                         className="w-full px-3.5 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-sm text-white focus:outline-none focus:border-purple-500"
                       />
-                      <p className="text-[11px] text-slate-500">Paste an existing image URL or click &quot;Upload Cover Image&quot; to pick from your device</p>
+                      <p className="text-[11px] text-slate-500">Paste an existing image URL or click &quot;Upload Cover Image&quot; to pick from your device (supports JPG, PNG, JPEG, WEBP)</p>
+                      {wallMagazineForm.imageUrl && (
+                        <div className="flex items-center gap-3 p-2.5 bg-slate-900/80 border border-purple-500/20 rounded-xl">
+                          <img
+                            src={wallMagazineForm.imageUrl}
+                            alt="Cover Preview"
+                            className="w-12 h-16 object-cover rounded-lg border border-slate-700 shadow-sm"
+                            onError={(e) => {
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-semibold text-slate-200 truncate">Cover Image Attached</p>
+                            <p className="text-[11px] text-purple-400 truncate">{wallMagazineForm.imageUrl}</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setWallMagazineForm((prev) => ({ ...prev, imageUrl: "", imagePublicId: "" }))}
+                            className="text-xs text-slate-400 hover:text-red-400 px-2 py-1 rounded-md hover:bg-slate-800 transition-colors"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

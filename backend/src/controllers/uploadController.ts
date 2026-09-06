@@ -12,15 +12,25 @@ export const uploadMediaToCloudinary = async (req: Request, res: Response) => {
 
     const { folder = 'general' } = req.body;
     const ext = file.originalname.split('.').pop()?.toLowerCase() || '';
-    const isImage = file.mimetype.startsWith('image/') || ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg'].includes(ext);
+    const isImage = file.mimetype.startsWith('image/') || ['jpg', 'jpeg', 'png', 'webp', 'gif', 'svg', 'bmp', 'avif'].includes(ext);
     const isVideo = file.mimetype.startsWith('video/') || ['mp4', 'webm', 'mov'].includes(ext);
     // Non-media documents (PDF, DOC, DOCX, PPT, PPTX, etc.) MUST be uploaded as 'raw' in Cloudinary
     const resourceType = isImage ? 'image' : isVideo ? 'video' : 'raw';
 
-    // Enforce PDF-only for document folders (notices, admission, syllabus, fees, brochures, wall magazines)
-    const documentFolders = ['admission', 'notices', 'syllabus', 'fees', 'wall_magazine', 'brochure', 'faculty_cv'];
-    const isDocumentFolder = documentFolders.some((df) => folder.toLowerCase().startsWith(df));
-    if (isDocumentFolder) {
+    const normalizedFolder = folder.toLowerCase();
+
+    // Document folders that require PDF files (unless it's an image for a cover/photo/media)
+    const isCoverOrImageContext =
+      isImage ||
+      normalizedFolder.includes('cover') ||
+      normalizedFolder.includes('photo') ||
+      normalizedFolder.includes('gallery') ||
+      normalizedFolder.includes('image');
+
+    // Strict document folders (where only PDFs are allowed)
+    const documentFolders = ['admission', 'notices', 'syllabus', 'fees', 'brochure', 'faculty_cv', 'wall_magazine_pdf'];
+    const isDocumentFolder = documentFolders.some((df) => normalizedFolder.startsWith(df));
+    if (isDocumentFolder && !isCoverOrImageContext) {
       const isPdf = file.mimetype === 'application/pdf' || ext === 'pdf';
       if (!isPdf) {
         return res.status(400).json({ message: 'Only PDF files are allowed for document uploads.' });
