@@ -12,6 +12,8 @@ import {
   Mail,
   Phone,
   MapPin,
+  Github,
+  Code2,
 } from "lucide-react";
 import { COLLEGE_NAME, COLLEGE_SHORT_NAME } from "@/lib/constants";
 
@@ -299,11 +301,85 @@ const Footer = () => {
           </div>
         </div>
 
+        {/* Developer Details - Home page only (Centered to prevent ChatBot icon overlap) */}
+        {pathname === "/" && (
+          <div className="mb-6 pt-6 border-t border-gray-800/80 flex justify-center">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 px-6 py-2.5 rounded-xl bg-gray-800/50 border border-gray-700/50 text-xs shadow-sm max-w-3xl w-full mx-auto text-center">
+              <div className="flex items-center justify-center gap-2 text-gray-300">
+                <Code2 className="w-4 h-4 text-blue-400 shrink-0" />
+                <span className="font-semibold text-gray-200 tracking-wide whitespace-nowrap">Developer Details</span>
+              </div>
+
+              <div className="hidden sm:block w-px h-4 bg-gray-700" />
+
+              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-gray-300">
+                {/* Main Developer */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-400">Main Developer:</span>
+                  <span className="font-medium text-white">Tanmoy Pal</span>
+                  <div className="flex items-center gap-1 ml-0.5">
+                    <a
+                      href="https://github.com/Tanmoy052/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1 rounded text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+                      title="GitHub Profile"
+                      aria-label="Tanmoy Pal GitHub"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/tanmoy-pal-755611294/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1 rounded text-gray-400 hover:text-blue-400 hover:bg-gray-700 transition-colors"
+                      title="LinkedIn Profile"
+                      aria-label="Tanmoy Pal LinkedIn"
+                    >
+                      <Linkedin className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+
+                <span className="hidden sm:inline text-gray-600">•</span>
+
+                {/* Development Contributors */}
+                <div className="flex items-center gap-1.5">
+                  <span className="text-gray-400">Development Contributor:</span>
+                  <span className="font-medium text-white">Sabir Ali Mondal</span>
+                  <div className="flex items-center gap-1 ml-0.5">
+                    <a
+                      href="https://github.com/Sabir-Ali-Mondal"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1 rounded text-gray-400 hover:text-white hover:bg-gray-700 transition-colors"
+                      title="GitHub Profile"
+                      aria-label="Sabir Ali Mondal GitHub"
+                    >
+                      <Github className="w-3.5 h-3.5" />
+                    </a>
+                    <a
+                      href="https://www.linkedin.com/in/sabir-ali-mondal/"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="p-1 rounded text-gray-400 hover:text-blue-400 hover:bg-gray-700 transition-colors"
+                      title="LinkedIn Profile"
+                      aria-label="Sabir Ali Mondal LinkedIn"
+                    >
+                      <Linkedin className="w-3.5 h-3.5" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm">
           <p>
             © {new Date().getFullYear()} {COLLEGE_NAME}. All Rights Reserved.
           </p>
-          <div className="flex space-x-6 text-gray-400">
+          <div className="flex space-x-6 text-gray-400 md:pr-16">
             <span>
               Designed & Developed by{" "}
               <Link

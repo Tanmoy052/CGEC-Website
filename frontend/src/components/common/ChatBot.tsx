@@ -320,18 +320,150 @@ const KB = {
   },
 };
 
-// ─── RESPONSE ENGINE ────────────────────────────────────────────────────────
+// ─── RESPONSE ENGINE (NLP & FUZZY MATCHING) ──────────────────────────────────
+
+const STOP_WORDS = new Set([
+  // WH-words
+  "what", "which", "who", "whom", "whose", "where", "when", "why", "how",
+  // Auxiliary verbs & to-be
+  "is", "am", "are", "was", "were", "be", "been", "being",
+  "do", "does", "did",
+  "have", "has", "had",
+  "can", "could", "would", "should", "will", "shall", "may", "might", "must",
+  // Articles & prepositions
+  "a", "an", "the", "and", "or", "to", "for", "in", "on", "at", "by", "from",
+  "with", "about", "into", "through", "during", "before", "after", "above", "below",
+  "of", "off", "over", "under", "again", "further", "then", "once",
+  // Pronouns & conversational fillers
+  "i", "you", "he", "she", "it", "we", "they", "me", "him", "her", "us", "them",
+  "my", "your", "his", "their", "our",
+  "this", "that", "these", "those",
+  "there", "here", "any", "both", "each", "few", "more", "most", "some",
+  "tell", "show", "give", "please", "want", "know", "need", "like",
+  "detail", "details", "info", "information", "let", "cgec"
+]);
+
+function cleanPunctuation(text: string): string {
+  return text
+    .replace(/[`.:;"'?!,\-_()[\]{}/\\*&%$#@~^+<>|=]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function hasWord(text: string, ...words: string[]): boolean {
+  return words.some((w) => {
+    const escaped = w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    return new RegExp(`(^|[^a-z0-9])${escaped}([^a-z0-9]|$)`, "i").test(text);
+  });
+}
 
 function contains(text: string, ...keywords: string[]): boolean {
   return keywords.some((kw) => text.includes(kw));
 }
 
-function getBotResponse(rawInput: string): { content: string; suggestions: string[] } {
-  const q = rawInput.toLowerCase().trim();
+function stemWord(word: string): string {
+  if (word.length <= 3) return word;
+  const w = word.toLowerCase();
+  if (w === "departments") return "department";
+  if (w === "branches") return "branch";
+  if (w === "faculties") return "faculty";
+  if (w === "professors") return "professor";
+  if (w === "teachers") return "teacher";
+  if (w === "admissions") return "admission";
+  if (w === "placements") return "placement";
+  if (w === "hostels") return "hostel";
+  if (w === "libraries") return "library";
+  if (w === "syllabi" || w === "syllabuses") return "syllabus";
+  if (w === "fees") return "fee";
+  if (w === "laboratories" || w === "labs") return "lab";
+  if (w === "trainings") return "training";
+  if (w === "internships") return "internship";
+  if (w === "notices") return "notice";
+  if (w === "courses") return "course";
+  if (w === "scholarships") return "scholarship";
+  if (w === "exams" || w === "examinations") return "exam";
 
-  // GREETING
-  if (contains(q, "hello", "hi ", "hey", "greet", "good morning", "good evening", "good afternoon", "namaste") || q === "hi" || q === "hello" || q === "hey") {
-    return {
+  if (w.endsWith("ies") && w.length > 5) return w.slice(0, -3) + "y";
+  if (w.endsWith("es") && w.length > 4 && !w.endsWith("ces") && !w.endsWith("ges")) return w.slice(0, -2);
+  if (w.endsWith("ing") && w.length > 5) return w.slice(0, -3);
+  if (w.endsWith("ed") && w.length > 4) return w.slice(0, -2);
+  if (w.endsWith("s") && !w.endsWith("ss") && w.length > 3) return w.slice(0, -1);
+  return w;
+}
+
+function levenshteinDistance(s1: string, s2: string): number {
+  const m = s1.length;
+  const n = s2.length;
+  const dp: number[][] = [];
+  for (let i = 0; i <= m; i++) dp[i] = [i];
+  for (let j = 0; j <= n; j++) dp[0][j] = j;
+
+  for (let i = 1; i <= m; i++) {
+    for (let j = 1; j <= n; j++) {
+      const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+      dp[i][j] = Math.min(
+        dp[i - 1][j] + 1,
+        dp[i][j - 1] + 1,
+        dp[i - 1][j - 1] + cost
+      );
+    }
+  }
+  return dp[m][n];
+}
+
+function tokenSimilarity(a: string, b: string): number {
+  if (a === b) return 1.0;
+  if (!a || !b) return 0.0;
+  const maxLen = Math.max(a.length, b.length);
+  if (maxLen === 0) return 1.0;
+  if (a.length <= 3 || b.length <= 3) {
+    return a === b ? 1.0 : 0.0;
+  }
+  const dist = levenshteinDistance(a, b);
+  return Math.max(0, 1 - dist / maxLen);
+}
+
+interface PreprocessedQuery {
+  raw: string;
+  cleaned: string;
+  rawTokens: string[];
+  tokens: string[];
+}
+
+function preprocessQuery(raw: string): PreprocessedQuery {
+  const cleaned = cleanPunctuation(raw.toLowerCase());
+  const rawTokens = cleaned.split(/\s+/).filter(Boolean);
+  const filteredTokens = rawTokens
+    .filter((t) => !STOP_WORDS.has(t))
+    .map((t) => stemWord(t));
+  return {
+    raw,
+    cleaned,
+    rawTokens,
+    tokens: filteredTokens.length > 0 ? filteredTokens : rawTokens.map(stemWord),
+  };
+}
+
+interface BotIntent {
+  id: string;
+  title: string;
+  keywords: string[];
+  negativeKeywords?: string[];
+  priorityMatch?: (prep: PreprocessedQuery, q: string) => number;
+  generate: () => { content: string; suggestions: string[] };
+}
+
+const INTENTS: BotIntent[] = [
+  // 1. GREETING
+  {
+    id: "greeting",
+    title: "Greeting & Welcome",
+    keywords: ["hello", "hi", "hey", "greet", "greetings", "good morning", "good evening", "good afternoon", "namaste"],
+    priorityMatch: (prep, q) => {
+      if (/^(hi|hello|hey|namaste)\b/i.test(q) || /^(good\s+(morning|afternoon|evening))/i.test(q)) return 1.0;
+      return 0;
+    },
+    generate: () => ({
       content: `### 👋 Welcome to CGEC Smart Assistant!
 
 I'm the official AI assistant of **Cooch Behar Government Engineering College**. I can help you with:
@@ -345,12 +477,19 @@ I'm the official AI assistant of **Cooch Behar Government Engineering College**.
 
 What would you like to know?`,
       suggestions: ["Admission Process", "Fee Structure", "All Departments", "Placement Records"],
-    };
-  }
+    }),
+  },
 
-  // ABOUT COLLEGE
-  if (contains(q, "about cgec", "about college", "what is cgec", "tell me about", "overview", "history", "established", "founded", "institution", "mission", "vision", "motto", "affiliation", "makaut", "aicte", "government college", "west bengal") || (contains(q, "college") && !contains(q, "engineering"))) {
-    return {
+  // 2. ABOUT COLLEGE
+  {
+    id: "about_college",
+    title: "About CGEC College Profile",
+    keywords: ["about cgec", "about college", "overview cgec", "history cgec", "established", "founded", "institution", "mission", "vision", "motto", "affiliation", "makaut", "aicte", "government college", "west bengal"],
+    priorityMatch: (prep, q) => {
+      if (/\babout\s+(cgec|college)\b/i.test(q) || (/\bcollege\b/i.test(q) && !/\b(engineering|department|fee|admission)\b/i.test(q))) return 0.95;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🏫 About CGEC — Institutional Profile
 
 **${KB.college.name}**
@@ -370,12 +509,19 @@ What would you like to know?`,
 
 **📞 Contact:** ${KB.college.phone} | ✉️ ${KB.college.email}`,
       suggestions: ["Departments", "Leadership", "Infrastructure", "Admission Process"],
-    };
-  }
+    }),
+  },
 
-  // PRINCIPAL / LEADERSHIP
-  if (contains(q, "principal", "leadership", "hod", "head of department", "registrar", "kingshuk", "sushovan")) {
-    return {
+  // 3. LEADERSHIP & HODs
+  {
+    id: "leadership",
+    title: "Leadership & Heads of Departments",
+    keywords: ["principal", "leadership", "hod", "head of department", "registrar", "administration", "director", "kingshuk", "sushovan"],
+    priorityMatch: (prep, q) => {
+      if (/\b(principal|leadership|registrar|hods?|head of department)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 👨‍💼 CGEC Leadership & Heads of Departments
 
 **Principal:**
@@ -398,12 +544,23 @@ What would you like to know?`,
 • **CE:** ${KB.departments.ce.hod}
 • **BSH:** ${KB.departments.bsh.hod}`,
       suggestions: ["TPO & Placement", "CSE Department", "Faculty Details", "Contact Us"],
-    };
-  }
+    }),
+  },
 
-  // ALL DEPARTMENTS OVERVIEW
-  if ((contains(q, "department", "departments", "all dept", "branch", "branches", "course", "courses", "b.tech", "btech", "program", "engineering") && !contains(q, "cse", "ece", "ee", "me", "ce", "bsh", "computer", "electronics", "electrical", "mechanical", "civil", "science", "humanit"))) {
-    return {
+  // 4. ALL DEPARTMENTS OVERVIEW
+  {
+    id: "all_departments",
+    title: "All Academic Departments",
+    keywords: ["all departments", "department", "departments", "department list", "departments list", "all dept", "all depts", "branch", "branches", "course", "courses", "btech", "b.tech", "programs", "engineering branches", "discipline", "disciplines", "courses offered", "programs offered"],
+    negativeKeywords: ["cse", "cs", "ece", "ee", "bsh", "computer", "electronics", "electrical", "mechanical", "civil"],
+    priorityMatch: (prep, q) => {
+      if (
+        /^(all\s+(departments?|branches?|depts?)|departments?|branches?)$/i.test(q) ||
+        /\b(all\s+departments?|all\s+branches?|list\s+of\s+departments?|department\s+list|engineering\s+branches)\b/i.test(q)
+      ) return 1.0;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🎓 Academic Departments at CGEC
 
 Cooch Behar Government Engineering College offers 4-year B.Tech degree programs affiliated with **MAKAUT** and approved by **AICTE**.
@@ -473,14 +630,22 @@ Cooch Behar Government Engineering College offers 4-year B.Tech degree programs 
 • **Industry Exposure:** Industrial visits to NTPC, WBSEDCL, and power plants
 • **Projects:** Mandatory final-year capstone projects & industry-oriented training`,
       suggestions: ["CSE Department", "ECE Department", "EE Department", "ME Department", "CE Department", "Fee Structure", "Placement Records"],
-    };
-  }
+    }),
+  },
 
-  // CSE DEPARTMENT
-  if (contains(q, "cse", "computer science", "computer engineering", "cs dept")) {
-    const dept = KB.departments.cse;
-    return {
-      content: `### 💻 ${dept.name} (${dept.shortName})
+  // 5. CSE DEPARTMENT
+  {
+    id: "dept_cse",
+    title: "Computer Science & Engineering (CSE)",
+    keywords: ["cse", "computer science", "computer engineering", "cs dept", "cse dept", "software engineering", "coding", "computer center"],
+    priorityMatch: (prep, q) => {
+      if (hasWord(q, "cse", "cs") || /\bcomputer\s+science\b/i.test(q)) return 1.0;
+      return 0;
+    },
+    generate: () => {
+      const dept = KB.departments.cse;
+      return {
+        content: `### 💻 ${dept.name} (${dept.shortName})
 
 **HOD:** ${dept.hod}
 *${dept.hodQual}*
@@ -497,15 +662,24 @@ ${dept.faculty.map((f) => `• ${f}`).join("\n")}
 **📰 Wall Magazine:** ${dept.wallMag}
 
 🔗 Visit: [CSE Department Page](${dept.pageUrl})`,
-      suggestions: ["CSE Faculty", "CSE Labs", "CSE Syllabus", "Placement Records"],
-    };
-  }
+        suggestions: ["CSE Faculty", "CSE Labs", "CSE Syllabus", "Placement Records"],
+      };
+    },
+  },
 
-  // ECE DEPARTMENT
-  if (contains(q, "ece", "electronics", "communication engineering", "vlsi", "embedded")) {
-    const dept = KB.departments.ece;
-    return {
-      content: `### 📡 ${dept.name} (${dept.shortName})
+  // 6. ECE DEPARTMENT
+  {
+    id: "dept_ece",
+    title: "Electronics & Communication Engineering (ECE)",
+    keywords: ["ece", "electronics", "communication engineering", "ece dept", "vlsi", "embedded", "robotica", "signal processing"],
+    priorityMatch: (prep, q) => {
+      if (hasWord(q, "ece") || /\belectronics\b/i.test(q)) return 1.0;
+      return 0;
+    },
+    generate: () => {
+      const dept = KB.departments.ece;
+      return {
+        content: `### 📡 ${dept.name} (${dept.shortName})
 
 **HOD:** ${dept.hod}
 *${dept.hodQual}*
@@ -523,15 +697,24 @@ ${dept.faculty.map((f) => `• ${f}`).join("\n")}
 **🤖 Club:** Robotica Club — for robotics enthusiasts
 
 🔗 Visit: [ECE Department Page](${dept.pageUrl})`,
-      suggestions: ["ECE Faculty", "ECE Labs", "VLSI Research", "Placement Records"],
-    };
-  }
+        suggestions: ["ECE Faculty", "ECE Labs", "VLSI Research", "Placement Records"],
+      };
+    },
+  },
 
-  // EE DEPARTMENT
-  if (contains(q, " ee ", "electrical engineering", "power system", "electrical dept", "power electronics", "smart grid") || q === "ee" || q.startsWith("ee ")) {
-    const dept = KB.departments.ee;
-    return {
-      content: `### ⚡ ${dept.name} (${dept.shortName})
+  // 7. EE DEPARTMENT
+  {
+    id: "dept_ee",
+    title: "Electrical Engineering (EE)",
+    keywords: ["ee", "electrical engineering", "electrical", "ee dept", "power system", "power electronics", "smart grid", "electric drive"],
+    priorityMatch: (prep, q) => {
+      if (hasWord(q, "ee") || /\belectrical\b/i.test(q)) return 1.0;
+      return 0;
+    },
+    generate: () => {
+      const dept = KB.departments.ee;
+      return {
+        content: `### ⚡ ${dept.name} (${dept.shortName})
 
 **HOD:** ${dept.hod}
 *${dept.hodQual}*
@@ -548,15 +731,24 @@ ${dept.faculty.map((f) => `• ${f}`).join("\n")}
 **📰 Wall Magazine:** ${dept.wallMag}
 
 🔗 Visit: [EE Department Page](${dept.pageUrl})`,
-      suggestions: ["EE Faculty", "EE Labs", "Power System", "Placement Records"],
-    };
-  }
+        suggestions: ["EE Faculty", "EE Labs", "Power System", "Placement Records"],
+      };
+    },
+  },
 
-  // ME DEPARTMENT
-  if (contains(q, " me ", "mechanical engineering", "mechanical dept", "thermodynamics", "cad cam", "fluid mechanics", "workshop") || q === "me" || q.startsWith("me ")) {
-    const dept = KB.departments.me;
-    return {
-      content: `### ⚙️ ${dept.name} (${dept.shortName})
+  // 8. ME DEPARTMENT
+  {
+    id: "dept_me",
+    title: "Mechanical Engineering (ME)",
+    keywords: ["mechanical", "mech", "mechanical engineering", "me dept", "thermodynamics", "cad cam", "cad/cam", "fluid mechanics", "workshop"],
+    priorityMatch: (prep, q) => {
+      if (/\bmechanical\b/i.test(q) || q === "me" || (hasWord(q, "me") && /\b(dept|department|branch|faculty|lab|syllabus|course|hod|engineering)\b/i.test(q))) return 1.0;
+      return 0;
+    },
+    generate: () => {
+      const dept = KB.departments.me;
+      return {
+        content: `### ⚙️ ${dept.name} (${dept.shortName})
 
 **HOD:** ${dept.hod}
 *${dept.hodQual}*
@@ -573,15 +765,24 @@ ${dept.faculty.map((f) => `• ${f}`).join("\n")}
 **📰 Wall Magazine:** ${dept.wallMag}
 
 🔗 Visit: [ME Department Page](${dept.pageUrl})`,
-      suggestions: ["ME Faculty", "ME Workshop", "CAD/CAM", "Placement Records"],
-    };
-  }
+        suggestions: ["ME Faculty", "ME Workshop", "CAD/CAM", "Placement Records"],
+      };
+    },
+  },
 
-  // CE DEPARTMENT
-  if (contains(q, " ce ", "civil engineering", "civil dept", "structural", "geotechnical", "surveying", "construction") || q === "ce" || q.startsWith("ce ")) {
-    const dept = KB.departments.ce;
-    return {
-      content: `### 🏗️ ${dept.name} (${dept.shortName})
+  // 9. CE DEPARTMENT
+  {
+    id: "dept_ce",
+    title: "Civil Engineering (CE)",
+    keywords: ["ce", "civil", "civil engineering", "ce dept", "structural", "geotechnical", "surveying", "construction", "soil mechanics"],
+    priorityMatch: (prep, q) => {
+      if (/\bcivil\b/i.test(q) || q === "ce" || (hasWord(q, "ce") && /\b(dept|department|branch|faculty|lab|syllabus|course|hod|engineering)\b/i.test(q))) return 1.0;
+      return 0;
+    },
+    generate: () => {
+      const dept = KB.departments.ce;
+      return {
+        content: `### 🏗️ ${dept.name} (${dept.shortName})
 
 **HOD:** ${dept.hod}
 *${dept.hodQual}*
@@ -598,15 +799,24 @@ ${dept.faculty.map((f) => `• ${f}`).join("\n")}
 **📰 Wall Magazine:** ${dept.wallMag}
 
 🔗 Visit: [CE Department Page](${dept.pageUrl})`,
-      suggestions: ["CE Faculty", "CE Labs", "Soil Mechanics", "Placement Records"],
-    };
-  }
+        suggestions: ["CE Faculty", "CE Labs", "Soil Mechanics", "Placement Records"],
+      };
+    },
+  },
 
-  // BSH DEPARTMENT
-  if (contains(q, "bsh", "basic science", "humanities", "physics", "chemistry", "math", "language lab")) {
-    const dept = KB.departments.bsh;
-    return {
-      content: `### 🔭 ${dept.name} (${dept.shortName})
+  // 10. BSH DEPARTMENT
+  {
+    id: "dept_bsh",
+    title: "Basic Science & Humanities (BSH)",
+    keywords: ["bsh", "basic science", "humanities", "physics", "chemistry", "mathematics", "language lab", "bsh dept"],
+    priorityMatch: (prep, q) => {
+      if (hasWord(q, "bsh") || /\bbasic\s+science\b/i.test(q)) return 1.0;
+      return 0;
+    },
+    generate: () => {
+      const dept = KB.departments.bsh;
+      return {
+        content: `### 🔭 ${dept.name} (${dept.shortName})
 
 **In-charge:** ${dept.hod}
 
@@ -622,13 +832,21 @@ ${dept.faculty.map((f) => `• ${f}`).join("\n")}
 *BSH provides the foundational knowledge that forms the backbone of all engineering disciplines at CGEC.*
 
 🔗 Visit: [BSH Department Page](${dept.pageUrl})`,
-      suggestions: ["Physics Lab", "Chemistry Lab", "Language Skills", "All Departments"],
-    };
-  }
+        suggestions: ["Physics Lab", "Chemistry Lab", "Language Skills", "All Departments"],
+      };
+    },
+  },
 
-  // ADMISSION
-  if (contains(q, "admission", "apply", "entrance", "wbjee", "jelet", "cut off", "rank", "counselling", "eligibility", "how to get admission", "enroll")) {
-    return {
+  // 11. ADMISSION
+  {
+    id: "admission",
+    title: "Admission Process & WBJEE",
+    keywords: ["admission", "admissions", "wbjee", "jelet", "counselling", "cut off", "rank", "eligibility", "entrance", "apply", "enroll", "seat allotment", "counselling process", "documents required"],
+    priorityMatch: (prep, q) => {
+      if (/\b(admission|wbjee|jelet|counselling|eligibility)\b/i.test(q) && !/\bfee\b/i.test(q)) return 0.96;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📋 Admission Process 2025-26
 
 **B.Tech (1st Year) — via WBJEE:**
@@ -648,12 +866,19 @@ ${KB.admission.seats}
 
 > ⚠️ Always check the official WBJEE Board website and the CGEC notice board for the latest dates and notifications.`,
       suggestions: ["Fee Structure", "Available Scholarships", "Documents Required", "Contact Admissions"],
-    };
-  }
+    }),
+  },
 
-  // FEES
-  if (contains(q, "fee", "fees", "cost", "payment", "tuition", "money", "expense", "how much", "charge")) {
-    return {
+  // 12. FEES
+  {
+    id: "fees",
+    title: "Fee Structure & Expenses",
+    keywords: ["fee", "fees", "cost", "tuition", "expense", "payment", "hostel fee", "annual fee", "charges", "how much fee", "money"],
+    priorityMatch: (prep, q) => {
+      if (/\b(fees?|tuition|cost|expense)\b/i.test(q) && !/\bhostel\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 💰 Fee Structure (Government Subsidized)
 
 As a Government College, CGEC offers world-class education at minimal cost:
@@ -673,12 +898,19 @@ ${KB.fees.scholarships.map((s) => `• ${s}`).join("\n")}
 
 > Scholarship applications are typically processed through the West Bengal e-District portal or directly through the college.`,
       suggestions: ["Hostel Details", "Scholarship Process", "Admission Process", "Contact Us"],
-    };
-  }
+    }),
+  },
 
-  // SCHOLARSHIP
-  if (contains(q, "scholarship", "financial aid", "stipend", "swami vivekananda", "inspire", "sc st scholarship", "obc scholarship")) {
-    return {
+  // 13. SCHOLARSHIP
+  {
+    id: "scholarship",
+    title: "Scholarships & Financial Aid",
+    keywords: ["scholarship", "scholarships", "financial aid", "stipend", "swami vivekananda", "svmcm", "inspire", "sc st scholarship", "obc scholarship", "post matric"],
+    priorityMatch: (prep, q) => {
+      if (/\b(scholarships?|financial\s+aid|stipend|svmcm)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🎓 Scholarships Available at CGEC
 
 Students at CGEC are eligible for multiple government scholarships:
@@ -693,12 +925,19 @@ ${KB.fees.scholarships.map((s, i) => `${i + 1}. **${s}**`).join("\n")}
 
 > Contact the college office or Student Counsellor for guidance on scholarship applications.`,
       suggestions: ["Contact College Office", "Student Counsellor", "Fee Structure", "Admission"],
-    };
-  }
+    }),
+  },
 
-  // PLACEMENT
-  if (contains(q, "placement", "job", "recruit", "salary", "package", "lpa", "company", "campus placement", "off campus", "tpo", "training")) {
-    return {
+  // 14. PLACEMENT
+  {
+    id: "placement",
+    title: "Training & Placement Cell (TPO)",
+    keywords: ["placement", "placements", "job", "recruit", "recruiter", "recruiters", "salary", "package", "lpa", "highest package", "average package", "company", "companies", "campus placement", "tpo", "training and placement"],
+    priorityMatch: (prep, q) => {
+      if (/\b(placements?|recruiters?|packages?|salary|tpo)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🏆 Training & Placement Cell
 
 **Head TPO:** ${KB.placement.tpoHead}
@@ -717,12 +956,19 @@ ${KB.placement.training.map((t) => `• ${t}`).join("\n")}
 **👥 Department-wise TPO Representatives:**
 ${KB.placement.representatives.map((r) => `• ${r}`).join("\n")}`,
       suggestions: ["TPO Contact", "Top Recruiters", "Internships", "Resume Workshop"],
-    };
-  }
+    }),
+  },
 
-  // INFRASTRUCTURE / CAMPUS
-  if (contains(q, "campus", "infrastructure", "facility", "facilities", "building", "hostel", "library", "canteen", "sports", "ground", "computer lab", "wi-fi", "internet")) {
-    return {
+  // 15. INFRASTRUCTURE / CAMPUS
+  {
+    id: "infrastructure",
+    title: "Campus Infrastructure & Facilities",
+    keywords: ["campus", "infrastructure", "facility", "facilities", "building", "ground", "sports", "canteen", "wifi", "internet", "computer lab"],
+    priorityMatch: (prep, q) => {
+      if (/\b(infrastructure|facilities|campus\s+facilities|sports\s+ground|canteen)\b/i.test(q)) return 0.96;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🏫 Campus Infrastructure & Facilities
 
 **💻 Computing:**
@@ -749,12 +995,19 @@ ${KB.placement.representatives.map((r) => `• ${r}`).join("\n")}`,
 **📍 Address:**
 ${KB.infrastructure.location}`,
       suggestions: ["Hostel Details", "Library Website", "Contact College", "Location Map"],
-    };
-  }
+    }),
+  },
 
-  // HOSTEL
-  if (contains(q, "hostel", "accommodation", "mess", "room", "stay", "boys hostel", "girls hostel", "dormitory")) {
-    return {
+  // 16. HOSTEL
+  {
+    id: "hostel",
+    title: "Hostel Facilities & Accommodation",
+    keywords: ["hostel", "hostels", "accommodation", "mess", "room", "stay", "boys hostel", "girls hostel", "dormitory", "hostel fee"],
+    priorityMatch: (prep, q) => {
+      if (/\b(hostels?|accommodation|mess|dormitory)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🏠 Hostel Facilities at CGEC
 
 CGEC provides **5 dedicated hostels** on campus for boys and girls:
@@ -770,12 +1023,19 @@ CGEC provides **5 dedicated hostels** on campus for boys and girls:
 
 > For hostel allotment, apply through the college administration office after admission confirmation.`,
       suggestions: ["Fee Structure", "Contact College", "Campus Facilities", "Admission"],
-    };
-  }
+    }),
+  },
 
-  // LIBRARY
-  if (contains(q, "library", "book", "reading room", "digital library", "cgeclibrary")) {
-    return {
+  // 17. LIBRARY
+  {
+    id: "library",
+    title: "Central Library & E-Resources",
+    keywords: ["library", "book", "books", "reading room", "digital library", "cgeclibrary", "nptel", "journals"],
+    priorityMatch: (prep, q) => {
+      if (/\b(library|cgeclibrary|reading\s+room)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📚 CGEC Central Library
 
 • **Collection:** 7,000+ volumes covering all engineering disciplines
@@ -788,12 +1048,19 @@ CGEC provides **5 dedicated hostels** on campus for boys and girls:
 
 The library is continuously expanding its collection to support academic and research needs of all departments.`,
       suggestions: ["Campus Facilities", "Hostel", "Contact Us"],
-    };
-  }
+    }),
+  },
 
-  // CONTACT / LOCATION
-  if (contains(q, "contact", "address", "phone", "email", "location", "where is", "how to reach", "map", "direction", "distance", "nearest")) {
-    return {
+  // 18. CONTACT / LOCATION
+  {
+    id: "contact",
+    title: "Contact Information & Location",
+    keywords: ["contact", "address", "phone", "email", "location", "where is", "how to reach", "map", "direction", "distance", "nearest railway station"],
+    priorityMatch: (prep, q) => {
+      if (/\b(contact|phone|email|address|where\s+is|reach\s+college)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📞 Contact & Location — CGEC
 
 **📍 Address:**
@@ -813,12 +1080,19 @@ ${KB.college.location}
 
 🗺️ [View on Google Maps](${KB.college.locationMapLink})`,
       suggestions: ["Principal's Office", "TPO Contact", "Campus Tour", "Admission Office"],
-    };
-  }
+    }),
+  },
 
-  // COMMITTEES
-  if (contains(q, "committee", "anti ragging", "icc", "grievance", "grc", "iqac", "iic", "sc st", "counsellor", "student committee")) {
-    return {
+  // 19. COMMITTEES
+  {
+    id: "committees",
+    title: "College Committees",
+    keywords: ["committee", "committees", "icc", "grievance", "grc", "iqac", "iic", "sc st", "counsellor", "student committee"],
+    priorityMatch: (prep, q) => {
+      if (/\b(committees?|icc|iqac|grc|iic)\b/i.test(q) && !/\bragging\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🏛️ College Committees at CGEC
 
 CGEC maintains various statutory and welfare committees:
@@ -829,12 +1103,19 @@ Each committee ensures a safe, fair, and inclusive environment for all students 
 
 > For specific committee details, member lists, or to file a complaint, visit the respective committee page on the CGEC website or contact the administrative office.`,
       suggestions: ["Anti-Ragging Info", "Student Counsellor", "Contact College", "IQAC Details"],
-    };
-  }
+    }),
+  },
 
-  // ANTI RAGGING
-  if (contains(q, "ragging", "anti ragging", "safety", "secure", "harassment")) {
-    return {
+  // 20. ANTI RAGGING
+  {
+    id: "anti_ragging",
+    title: "Anti-Ragging Policy & Helpline",
+    keywords: ["ragging", "anti ragging", "safety", "secure", "harassment", "zero tolerance", "helpline"],
+    priorityMatch: (prep, q) => {
+      if (/\bragging\b/i.test(q)) return 1.0;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🛡️ Anti-Ragging Policy at CGEC
 
 CGEC strictly follows UGC/AICTE Anti-Ragging Guidelines:
@@ -853,12 +1134,19 @@ CGEC strictly follows UGC/AICTE Anti-Ragging Guidelines:
 
 All complaints are treated with utmost confidentiality.`,
       suggestions: ["Student Counsellor", "Contact College", "Grievance Redressal", "College Committees"],
-    };
-  }
+    }),
+  },
 
-  // STUDENT LIFE / FEST / CLUBS
-  if (contains(q, "fest", "festival", "zeal", "club", "nss", "event", "activity", "student life", "extra", "co-curricular", "wall magazine", "magazine", "robotica")) {
-    return {
+  // 21. STUDENT LIFE & FEST
+  {
+    id: "student_life",
+    title: "Student Life, Clubs & Fest (Zeal)",
+    keywords: ["fest", "festival", "zeal", "club", "clubs", "nss", "event", "events", "student life", "extra curricular", "co curricular", "wall magazine", "magazine"],
+    priorityMatch: (prep, q) => {
+      if (/\b(fest|zeal|clubs?|student\s+life|wall\s+magazine)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🎉 Student Life & Activities at CGEC
 
 **🎪 Annual Fest:** **${KB.studentLife.fest}**
@@ -879,12 +1167,19 @@ Cricket, Football, Volleyball, Badminton — regular inter-departmental tourname
 
 *"Student life at CGEC is a perfect blend of academics, creativity, and teamwork."*`,
       suggestions: ["Annual Fest", "Robotica Club", "NSS Activities", "Wall Magazine CSE"],
-    };
-  }
+    }),
+  },
 
-  // SYLLABUS
-  if (contains(q, "syllabus", "curriculum", "semester", "subject", "makaut syllabus", "course content", "study material")) {
-    return {
+  // 22. SYLLABUS & CURRICULUM
+  {
+    id: "syllabus",
+    title: "Syllabus & Curriculum",
+    keywords: ["syllabus", "curriculum", "makaut syllabus", "semester syllabus", "subject", "subjects", "course content", "study material"],
+    priorityMatch: (prep, q) => {
+      if (/\b(syllabus|curriculum|course\s+content)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📖 Syllabus & Curriculum at CGEC
 
 All departments follow the **MAKAUT** (Maulana Abul Kalam Azad University of Technology) curriculum.
@@ -902,12 +1197,19 @@ All departments follow the **MAKAUT** (Maulana Abul Kalam Azad University of Tec
 📎 Syllabus PDFs can be downloaded from each department's page on the website.
 🔗 Visit: [CGEC Academics](https://cgec.org.in)`,
       suggestions: ["CSE Syllabus", "ECE Syllabus", "EE Syllabus", "ME Syllabus", "CE Syllabus"],
-    };
-  }
+    }),
+  },
 
-  // RESEARCH / PUBLICATIONS
-  if (contains(q, "research", "publication", "journal", "paper", "phd", "project", "innovation", "lab research")) {
-    return {
+  // 23. RESEARCH & INNOVATION
+  {
+    id: "research",
+    title: "Research & Publications",
+    keywords: ["research", "publication", "publications", "journal", "paper", "papers", "phd", "project", "innovation", "lab research"],
+    priorityMatch: (prep, q) => {
+      if (/\b(research|publications?|journals?)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🔬 Research & Publications at CGEC
 
 CGEC faculty are actively engaged in research across various disciplines:
@@ -933,12 +1235,19 @@ CGEC faculty are actively engaged in research across various disciplines:
 
 Faculty members regularly publish in **reputed national/international journals** and participate in conferences. Students are also encouraged to co-author research papers.`,
       suggestions: ["Faculty Publications", "CSE Research", "ECE Research", "Lab Facilities"],
-    };
-  }
+    }),
+  },
 
-  // WBJEE / RANK BASED QUERIES
-  if (contains(q, "wbjee", "rank", "cut off", "closing rank", "opening rank", "last rank")) {
-    return {
+  // 24. WBJEE RANKS & CUTOFFS
+  {
+    id: "wbjee_ranks",
+    title: "WBJEE Ranks & Cut-offs",
+    keywords: ["wbjee", "rank", "cut off", "cutoff", "closing rank", "opening rank", "last rank"],
+    priorityMatch: (prep, q) => {
+      if (/\b(cut\s*off|closing\s+rank|opening\s+rank|ranks?)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📊 WBJEE Ranks & Cut-offs for CGEC
 
 CGEC is a highly sought-after government engineering college in West Bengal. Admission is through **WBJEE counselling**.
@@ -956,12 +1265,19 @@ CGEC is a highly sought-after government engineering college in West Bengal. Adm
 
 > Cut-offs change every year based on the number of applicants and seat availability.`,
       suggestions: ["Admission Process", "WBJEE Counselling Steps", "Available Seats", "Fee Structure"],
-    };
-  }
+    }),
+  },
 
-  // NOTICE / OFFICIAL UPDATES
-  if (contains(q, "notice", "notification", "update", "announcement", "circular", "exam notice", "result", "date sheet", "schedule")) {
-    return {
+  // 25. NOTICES & UPDATES
+  {
+    id: "notices",
+    title: "Notices & Official Circulars",
+    keywords: ["notice", "notices", "notification", "notifications", "update", "updates", "announcement", "circular", "exam notice", "date sheet", "schedule"],
+    priorityMatch: (prep, q) => {
+      if (/\b(notices?|notifications?|circulars?)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📢 Notices & Official Updates
 
 For the latest official notices, check:
@@ -981,12 +1297,19 @@ For the latest official notices, check:
 
 > 🔗 You can also check the **Notices page** on this website for the latest updates.`,
       suggestions: ["Latest Notices", "Placement Notices", "Exam Schedule", "Academic Calendar"],
-    };
-  }
+    }),
+  },
 
-  // THANK YOU / GOODBYE
-  if (contains(q, "thank", "thanks", "bye", "goodbye", "see you", "take care", "good night", "ok thanks", "thx")) {
-    return {
+  // 26. THANK YOU / GOODBYE
+  {
+    id: "thanks",
+    title: "Thank You & Goodbye",
+    keywords: ["thank", "thanks", "thank you", "bye", "goodbye", "see you", "take care", "good night", "ok thanks", "thx"],
+    priorityMatch: (prep, q) => {
+      if (/\b(thanks?|thank\s+you|bye|goodbye|thx)\b/i.test(q)) return 1.0;
+      return 0;
+    },
+    generate: () => ({
       content: `### 😊 You're welcome!
 
 It was my pleasure to assist you. If you have any more questions about CGEC — academics, admissions, placements, or anything else — feel free to ask anytime!
@@ -998,12 +1321,19 @@ It was my pleasure to assist you. If you have any more questions about CGEC — 
 
 *Wishing you all the best! 🎓*`,
       suggestions: ["About CGEC", "Admission Process", "Contact Us"],
-    };
-  }
+    }),
+  },
 
-  // WHO ARE YOU / BOT IDENTITY
-  if (contains(q, "who are you", "your name", "what are you", "chatbot", "bot", "assistant", "what can you do", "help me", "how to use")) {
-    return {
+  // 27. WHO ARE YOU / BOT IDENTITY
+  {
+    id: "bot_identity",
+    title: "About CGEC Smart Assistant",
+    keywords: ["who are you", "your name", "what are you", "chatbot", "bot", "assistant", "what can you do", "help me", "how to use"],
+    priorityMatch: (prep, q) => {
+      if (/\b(who\s+are\s+you|what\s+are\s+you|what\s+can\s+you\s+do|chatbot)\b/i.test(q)) return 1.0;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🤖 About CGEC Smart Assistant
 
 I am the **CGEC Smart Assistant** — the official AI-powered digital assistant for Cooch Behar Government Engineering College.
@@ -1024,12 +1354,19 @@ I am the **CGEC Smart Assistant** — the official AI-powered digital assistant 
 
 *I'm available 24/7 to help you! 😊*`,
       suggestions: ["About CGEC", "Departments", "Admission", "Placement", "Contact Us"],
-    };
-  }
+    }),
+  },
 
-  // EXAM / RESULT / ACADEMIC CALENDAR
-  if (contains(q, "exam", "result", "marksheet", "grade", "sgpa", "cgpa", "backlog", "supplementary", "academic calendar", "date sheet", "internal", "assessment", "ca1", "ca2", "ca3", "ca4")) {
-    return {
+  // 28. EXAM & RESULTS
+  {
+    id: "exam_results",
+    title: "Examinations & MAKAUT Results",
+    keywords: ["exam", "exams", "result", "results", "marksheet", "grade", "sgpa", "cgpa", "backlog", "supplementary", "academic calendar", "internal assessment", "ca1", "ca2", "ca3", "ca4"],
+    priorityMatch: (prep, q) => {
+      if (/\b(exams?|results?|sgpa|cgpa|backlog|ca1|ca2|ca3|ca4)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📝 Examinations & Results at CGEC
 
 **Evaluation System (MAKAUT Pattern):**
@@ -1054,12 +1391,19 @@ I am the **CGEC Smart Assistant** — the official AI-powered digital assistant 
 
 > 📌 Check the [Notices page](/notices) for exam schedules and internal assessment dates.`,
       suggestions: ["Syllabus", "Academic Calendar", "Departments", "Contact College"],
-    };
-  }
+    }),
+  },
 
-  // INTERNSHIP
-  if (contains(q, "internship", "intern", "industrial training", "summer training", "winter training", "industry visit", "ntpc", "wbsedcl")) {
-    return {
+  // 29. INTERNSHIP & INDUSTRIAL TRAINING
+  {
+    id: "internship",
+    title: "Internships & Industrial Training",
+    keywords: ["internship", "internships", "intern", "industrial training", "summer training", "winter training", "industry visit", "ntpc", "wbsedcl"],
+    priorityMatch: (prep, q) => {
+      if (/\b(internships?|industrial\s+training|summer\s+training)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🏭 Internships & Industrial Training
 
 **Mandatory Training Programs:**
@@ -1081,12 +1425,19 @@ I am the **CGEC Smart Assistant** — the official AI-powered digital assistant 
 📞 ${KB.placement.tpoPhone} | ✉️ ${KB.placement.tpoEmail}
 TPO Head: ${KB.placement.tpoHead}`,
       suggestions: ["Placement Records", "Top Recruiters", "TPO Contact", "Industry Visits"],
-    };
-  }
+    }),
+  },
 
-  // TRANSPORT / HOW TO REACH
-  if (contains(q, "transport", "bus", "train", "railway", "airport", "how to reach", "travel", "distance", "route", "auto", "cab", "rickshaw", "nearest station")) {
-    return {
+  // 30. TRANSPORT / HOW TO REACH
+  {
+    id: "transport",
+    title: "Transport & How to Reach",
+    keywords: ["transport", "bus", "train", "railway", "airport", "how to reach", "travel", "distance", "route", "auto", "cab", "rickshaw", "nearest station", "bagdogra"],
+    priorityMatch: (prep, q) => {
+      if (/\b(transport|how\s+to\s+reach|railway\s+station|airport)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 🚌 How to Reach CGEC
 
 **📍 Campus Address:**
@@ -1112,12 +1463,19 @@ ${KB.college.location}
 
 > 💡 The college is situated in a scenic location near the Torsha River banks.`,
       suggestions: ["Campus Facilities", "Hostel", "Contact Us", "About CGEC"],
-    };
-  }
+    }),
+  },
 
-  // GALLERY
-  if (contains(q, "gallery", "photos", "images", "campus photo", "picture", "campus view", "campus tour")) {
-    return {
+  // 31. CAMPUS GALLERY
+  {
+    id: "gallery",
+    title: "Campus Photo Gallery",
+    keywords: ["gallery", "photos", "images", "campus photo", "picture", "pictures", "campus view", "campus tour"],
+    priorityMatch: (prep, q) => {
+      if (/\b(gallery|photos?|images?|pictures?)\b/i.test(q)) return 0.98;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📸 Campus Gallery
 
 CGEC's 21-acre green campus offers a beautiful learning environment:
@@ -1142,42 +1500,19 @@ CGEC's 21-acre green campus offers a beautiful learning environment:
 
 *The gallery is regularly updated with photos from campus events, fests, and department activities.*`,
       suggestions: ["Campus Facilities", "Hostel Details", "Student Life", "About CGEC"],
-    };
-  }
+    }),
+  },
 
-  // FACULTY NAME LOOKUP — searches all departments
-  if (contains(q, "arnab", "shahid", "pranab", "umakanta", "supriyo", "prabir", "gautam das", "soumik", "avisek", "palash", "rajib", "abhijit", "rabiul", "atanu", "tanumay", "deepjyoti", "goutam panda", "mafizul", "sushovan", "prasenjit", "gyan", "provas", "masud", "sanchayan", "sudipta", "nikhilesh", "ziaul", "biren", "kingshuk", "asif", "shyamal", "chhandamay", "mithun", "ansarul", "samik", "arghya", "biplab", "tanmay", "salim", "somen")) {
-    // Build a search of all faculty
-    const allFaculty: { name: string; dept: string }[] = [];
-    Object.values(KB.departments).forEach((dept) => {
-      dept.faculty.forEach((f) => {
-        allFaculty.push({ name: f, dept: dept.shortName });
-      });
-    });
-    const matches = allFaculty.filter((f) => {
-      const fLower = f.name.toLowerCase();
-      return q.split(/\s+/).some((word) => word.length > 2 && fLower.includes(word));
-    });
-
-    if (matches.length > 0) {
-      return {
-        content: `### 👨‍🏫 Faculty Search Results
-
-${matches.length === 1 ? "Found 1 matching faculty member:" : `Found ${matches.length} matching faculty members:`}
-
-${matches.map((m) => `**[${m.dept}]** ${m.name}`).join("\n\n")}
-
-> For detailed profiles, visit the respective department page.`,
-        suggestions: matches.length === 1
-          ? [`${matches[0].dept} Department`, "All Faculty", "Contact College"]
-          : ["CSE Faculty", "ECE Faculty", "All Departments"],
-      };
-    }
-  }
-
-  // ACADEMIC YEAR / SEMESTER INFO
-  if (contains(q, "semester", "year", "duration", "how many year", "how long", "4 year", "eight semester", "1st year", "2nd year", "3rd year", "4th year", "first year", "second year")) {
-    return {
+  // 32. ACADEMIC STRUCTURE & SEMESTERS
+  {
+    id: "academic_structure",
+    title: "Academic Structure & Semesters",
+    keywords: ["semester", "semesters", "duration", "how many years", "how long", "4 year", "eight semester", "1st year", "2nd year", "3rd year", "4th year", "first year", "second year", "academic calendar"],
+    priorityMatch: (prep, q) => {
+      if (/\b(duration|how\s+many\s+years?|4\s+years?|semesters?)\b/i.test(q) && !/\bsyllabus\b/i.test(q)) return 0.96;
+      return 0;
+    },
+    generate: () => ({
       content: `### 📅 Academic Structure at CGEC
 
 **Program Duration:** 4 Years (8 Semesters)
@@ -1211,12 +1546,23 @@ ${matches.map((m) => `**[${m.dept}]** ${m.name}`).join("\n\n")}
 • Even Semester: January – June
 • Exam: End of each semester by MAKAUT`,
       suggestions: ["Syllabus", "Departments", "Admission Process", "Placement"],
-    };
-  }
+    }),
+  },
 
-  // SPECIFIC FACULTY QUERIES (general)
-  if (contains(q, "faculty", "teacher", "professor", "staff", "lecturer") && !contains(q, "cse", "ece", "ee", "me", "ce", "bsh", "computer", "electronics", "electrical", "mechanical", "civil")) {
-    return {
+  // 33. ALL FACULTY DIRECTORY
+  {
+    id: "all_faculty",
+    title: "Faculty Directory — All Departments",
+    keywords: ["faculty", "faculties", "teacher", "teachers", "professor", "professors", "staff", "lecturer", "lecturers", "all faculty", "faculty directory"],
+    negativeKeywords: ["cse", "ece", "ee", "me", "ce", "bsh", "computer", "electronics", "electrical", "mechanical", "civil"],
+    priorityMatch: (prep, q) => {
+      if (
+        /^(all\s+faculty|facult(?:y|ies)|teachers?|professors?)$/i.test(q) ||
+        (/\b(all\s+faculty|faculty\s+directory|list\s+of\s+faculty)\b/i.test(q) && !hasWord(q, "cse", "cs", "ece", "ee", "me", "ce", "bsh"))
+      ) return 1.0;
+      return 0;
+    },
+    generate: () => ({
       content: `### 👨‍🏫 Faculty Directory — All Departments
 
 CGEC has **40+ dedicated faculty members** across all departments:
@@ -1241,10 +1587,144 @@ ${KB.departments.bsh.faculty.slice(0, 3).map((f) => `• ${f}`).join("\n")}
 
 > Click a department below for the **complete faculty list** with qualifications, specializations, and experience.`,
       suggestions: ["CSE Faculty", "ECE Faculty", "EE Faculty", "ME Faculty", "CE Faculty"],
+    }),
+  },
+];
+
+function scoreIntent(prep: PreprocessedQuery, intent: BotIntent): number {
+  const { cleaned, tokens } = prep;
+
+  // 1. Priority match handler
+  if (intent.priorityMatch) {
+    const p = intent.priorityMatch(prep, cleaned);
+    if (p > 0) return p;
+  }
+
+  // 2. Negative keyword check
+  if (intent.negativeKeywords) {
+    for (const neg of intent.negativeKeywords) {
+      if (hasWord(cleaned, neg) || tokens.includes(neg)) {
+        return 0;
+      }
+    }
+  }
+
+  // 3. Exact phrase match
+  for (const kw of intent.keywords) {
+    const cleanKw = cleanPunctuation(kw.toLowerCase());
+    if (cleaned === cleanKw) return 1.0;
+    if (new RegExp(`\\b${cleanKw.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\b`, "i").test(cleaned)) {
+      return 0.95;
+    }
+  }
+
+  // 4. Token-level overlap & fuzzy match
+  let tokenMatches = 0;
+  let totalSim = 0;
+
+  for (const qToken of tokens) {
+    let maxSim = 0;
+    for (const kw of intent.keywords) {
+      const kwTokens = cleanPunctuation(kw.toLowerCase()).split(/\s+/).map(stemWord);
+      for (const kToken of kwTokens) {
+        const sim = tokenSimilarity(qToken, kToken);
+        if (sim > maxSim) maxSim = sim;
+      }
+    }
+    if (maxSim >= 0.70) {
+      tokenMatches++;
+      totalSim += maxSim;
+    }
+  }
+
+  if (tokenMatches === 0) return 0;
+  const coverage = tokenMatches / tokens.length;
+  const avgSim = totalSim / tokenMatches;
+  return Math.min(1.0, coverage * 0.65 + avgSim * 0.35);
+}
+
+function getBotResponse(rawInput: string): { content: string; suggestions: string[] } {
+  const prep = preprocessQuery(rawInput);
+  const { cleaned, rawTokens } = prep;
+
+  // ─── DYNAMIC FACULTY NAME LOOKUP ──────────────────────────────────────────
+  const allFaculty: { name: string; dept: string }[] = [];
+  Object.values(KB.departments).forEach((dept) => {
+    dept.faculty.forEach((f) => {
+      allFaculty.push({ name: f, dept: dept.shortName });
+    });
+  });
+
+  const facultyMatches = allFaculty.filter((f) => {
+    const fLower = f.name.toLowerCase();
+    return rawTokens.some((token) => token.length > 2 && fLower.includes(token));
+  });
+
+  // Only trigger faculty search if user actually mentions a faculty name
+  const isKnownFacultyName = contains(
+    cleaned,
+    "arnab", "shahid", "pranab", "umakanta", "supriyo", "prabir",
+    "gautam", "soumik", "avisek", "palash", "rajib", "abhijit",
+    "rabiul", "atanu", "tanumay", "deepjyoti", "panda", "mafizul",
+    "sushovan", "prasenjit", "gyan", "provas", "masud", "sanchayan",
+    "sudipta", "nikhilesh", "ziaul", "biren", "dan", "asif", "shyamal",
+    "chhandamay", "mithun", "ansarul", "samik", "arghya", "biplab",
+    "tanmay", "salim", "somen"
+  );
+
+  if (isKnownFacultyName && facultyMatches.length > 0) {
+    return {
+      content: `### 👨‍🏫 Faculty Search Results
+
+${facultyMatches.length === 1 ? "Found 1 matching faculty member:" : `Found ${facultyMatches.length} matching faculty members:`}
+
+${facultyMatches.map((m) => `**[${m.dept}]** ${m.name}`).join("\n\n")}
+
+> For detailed profiles, visit the respective department page.`,
+      suggestions: facultyMatches.length === 1
+        ? [`${facultyMatches[0].dept} Department`, "All Faculty", "Contact College"]
+        : ["CSE Faculty", "ECE Faculty", "All Departments"],
     };
   }
 
-  // DEFAULT FALLBACK
+  // ─── SCORE ALL INTENTS (NLP & FUZZY MATCHING) ─────────────────────────────
+  let bestIntent: BotIntent | null = null;
+  let bestScore = 0;
+  const scoredCandidates: { intent: BotIntent; score: number }[] = [];
+
+  for (const intent of INTENTS) {
+    const score = scoreIntent(prep, intent);
+    if (score > 0.20) {
+      scoredCandidates.push({ intent, score });
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestIntent = intent;
+    }
+  }
+
+  scoredCandidates.sort((a, b) => b.score - a.score);
+
+  // ─── CONFIDENCE THRESHOLD 1: HIGH CONFIDENCE (>= 70%) ──────────────────────
+  if (bestIntent && bestScore >= 0.70) {
+    return bestIntent.generate();
+  }
+
+  // ─── CONFIDENCE THRESHOLD 2: LIKELY MATCH (50% – 69%) ──────────────────────
+  if (bestIntent && bestScore >= 0.50) {
+    const result = bestIntent.generate();
+    const matchPct = Math.round(bestScore * 100);
+    return {
+      content: `> 💡 *Likely you are asking about: **${bestIntent.title}** (${matchPct}% match)*\n\n${result.content}`,
+      suggestions: result.suggestions,
+    };
+  }
+
+  // ─── CONFIDENCE THRESHOLD 3: FALLBACK (< 50%) ──────────────────────────────
+  const fallbackSuggestions = scoredCandidates.length > 0
+    ? Array.from(new Set(scoredCandidates.slice(0, 3).map((c) => c.intent.title))).slice(0, 4)
+    : ["About CGEC", "Departments", "Admission", "Placement", "Fee Structure", "Contact Us"];
+
   return {
     content: `I apologize — I don't have specific information about *"${rawInput}"* in my knowledge base right now.
 
@@ -1255,7 +1735,9 @@ For the most accurate and up-to-date details, please:
 • 📋 Check the Notices section on this website
 
 You can also try asking me about:`,
-    suggestions: ["About CGEC", "Departments", "Admission", "Placement", "Fee Structure", "Contact Us"],
+    suggestions: fallbackSuggestions.length >= 3
+      ? fallbackSuggestions
+      : ["About CGEC", "Departments", "Admission", "Placement", "Fee Structure", "Contact Us"],
   };
 }
 
