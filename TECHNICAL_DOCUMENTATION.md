@@ -48,38 +48,55 @@ The platform combines a **modern server-driven client layer (Next.js 16 App Rout
 
 The system operates across three distinct tiers: **Client Presentation Tier**, **API Gateway & Middleware Tier**, and **Persistence & Cloud Media Tier**.
 
-```mermaid
-flowchart LR
-    subgraph Architecture ["CGEC Full Working System Architecture (3-Tier Model)"]
-        
-        subgraph ClientTier ["1. Client Presentation Tier (Port 3000)"]
-            ClientUsers["User Devices\n- Mobile, Tablet & Desktop Browsers\n- Modern Responsive Viewports"]
-            PublicPortals["Public Web Portal (Next.js 16)\n- Dynamic Hero Carousel & QR Modal\n- 6 Department Portals & Syllabi\n- Central Notices with Direct PDFs\n- Admissions & Fee Structure Tables\n- 10 Statutory Committee Rosters\n- Dedicated /developers Directory\n- Floating AI Campus Assistant"]
-            AdminPortal["Admin Management CMS\n- Obscured Route: /admin/login/cgec\n- 17 Tab-based Data Managers\n- Instant Publish & Active Toggles\n- Direct Media & PDF Buffer Uploads"]
-        end
+```text
+===========================================================================
+               CGEC PLATFORM: 3-TIER SYSTEM ARCHITECTURE
+===========================================================================
 
-        subgraph GatewayTier ["2. Application Gateway & API Tier (Port 5000)"]
-            APIGateway["Express.js 5 REST Gateway\n- CORS Whitelist (Local & Vercel)\n- Route Middlewares & JSON Parsers\n- Request Validation & Error Handling"]
-            SecurityPipes["Security & Auth Pipeline\n- JWT Bearer Token Verification\n- Role Authorization Guard (ADMIN)\n- Bcrypt Salted Password Hashing\n- Auto Admin Initialization"]
-            StreamPipeline["Multer & Memory Streamer\n- Zero Local Disk File Persistence\n- 100MB Stream Memory Buffer Pipe\n- Multi-format File Type Enforcer"]
-        end
-
-        subgraph PersistenceTier ["3. Persistence & Cloud Media Tier"]
-            PrismaEngine["Prisma ORM 6 Engine\n- Type-safe Generated Data Client\n- Auto-indexing & Relations\n- Connection Pooling & Transaction Safe"]
-            MongoDatabase["MongoDB Atlas Database\n- 17 Institutional Collections\n- JSON Document Data Model\n- High-speed Scalable Cluster"]
-            CloudinaryMedia["Cloudinary Global Edge CDN\n- Auto Format (WebP, AVIF) & Compression\n- Secure Document & PDF Delivery\n- Two-Phase Automated Purging"]
-        end
-    end
-
-    ClientUsers --> PublicPortals
-    ClientUsers --> AdminPortal
-    PublicPortals --> APIGateway
-    AdminPortal --> SecurityPipes
-    SecurityPipes --> APIGateway
-    APIGateway --> StreamPipeline
-    APIGateway --> PrismaEngine
-    StreamPipeline --> CloudinaryMedia
-    PrismaEngine --> MongoDatabase
+ [1] CLIENT PRESENTATION TIER (Next.js 16 App Router · Port 3000)
+ ┌───────────────────────────────────────────────────────────────────────┐
+ │ Devices: Mobile Phones · Tablets · Desktop Workstations               │
+ │                                                                       │
+ │ • Public Academic Interface:                                          │
+ │   - Dynamic Hero Slider with Ken Burns Effect & QR Lightbox Modal     │
+ │   - 6 Department Portals (CSE, ECE, EE, ME, CE, BSH)                  │
+ │   - Central Notice Board with Direct PDF Attachment Viewer            │
+ │   - Admission Portal & Regular vs. Lateral Fee Breakdown Tables       │
+ │   - 10 Statutory Committee Rosters & Compliance Pages                 │
+ │   - Dedicated Open Developer Directory (/developers)                  │
+ │   - Floating AI Campus Assistant Chatbot                              │
+ │                                                                       │
+ │ • Administrative CMS Portal:                                          │
+ │   - Obscured SuperAdmin Route: /admin/login/cgec                      │
+ │   - 17 Modular Management Tabs for Full Institutional Governance      │
+ └───────────────────────────────────┬───────────────────────────────────┘
+                                     │
+                 HTTP REST Requests  │  JWT Bearer Authorization
+                                     ▼
+ [2] APPLICATION GATEWAY & API TIER (Express.js 5 / Node.js · Port 5000)
+ ┌───────────────────────────────────────────────────────────────────────┐
+ │ • CORS Gateway: Whitelist for localhost:3000 & Vercel Production      │
+ │ • Security Middleware: JWT Auth Guard (protect, authorize('ADMIN'))   │
+ │ • Password Security: 10-Round Salted Bcrypt Encryption                │
+ │ • Memory Stream Pipeline: Multer In-Memory Storage (100MB Max Buffer) │
+ │ • Routing Subsystems:                                                 │
+ │   - /api/public/*  ──► Open Read Endpoints for Fast Client Caching    │
+ │   - /api/admin/*   ──► Protected Full CRUD & Cascade Media Cleanup   │
+ │   - /api/auth/*    ──► SuperAdmin Login & Session Verification        │
+ └───────────────────┬───────────────────────────────┬───────────────────┘
+                     │                               │
+        Prisma ORM 6 │ Type-Safe Queries             │ Streaming Buffer
+                     ▼                               ▼
+ [3] PERSISTENCE & CLOUD MEDIA TIER
+ ┌───────────────────────────────────┐   ┌───────────────────────────────┐
+ │ MongoDB Atlas Cloud Database      │   │ Cloudinary Global Edge CDN    │
+ │ (Cluster: cgec_website)           │   │ (Folder: cgec_website/*)      │
+ │                                   │   │                               │
+ │ • 17 Structured Data Collections  │   │ • Automated Image Delivery    │
+ │ • BSON Documents with ObjectIds   │   │ • Raw Curriculum & Notice PDFs│
+ │ • Indexed Unique Emails & Slugs   │   │ • Two-Phase Purge on Deletion │
+ └───────────────────────────────────┘   └───────────────────────────────┘
+===========================================================================
 ```
 
 ---
@@ -88,48 +105,81 @@ flowchart LR
 
 Every feature of the CGEC platform is structured into clean institutional modules, serving both public users and administrative maintainers.
 
-```mermaid
-flowchart LR
-    subgraph Root ["CGEC Institutional Platform (v1.0.0)"]
-        
-        subgraph PublicFeatures ["Public-Facing Portals"]
-            HeroCarousel["Dynamic Hero Slider\n- Ken Burns Cinematic Zoom\n- Dynamic Badges & Themes\n- Event Date & Venue Chips\n- Interactive QR Registration\n- Auto-play Progress Bar\n- 5 Campus Fallback Slides"]
-            
-            AcademicPortals["Academic Departments\n- CSE, ECE, EE, ME, CE, BSH\n- HOD Welcome Address\n- Faculty Directory & CVs\n- Hi-Tech Laboratories\n- Semester Syllabi PDFs\n- Department Wall Magazines"]
-            
-            NoticeSystem["Central Notice Board\n- Priority: NORMAL, HIGH, URGENT\n- Category: General, Academic, Tender\n- Direct PDF Attachment Viewer\n- Real-time Expiry Automation"]
-            
-            AdmissionFee["Admission & Fees Hub\n- Admission Circulars & Docs\n- WhatsApp Helpdesk & Officers\n- Regular 1st Sem Fee Table\n- Lateral 3rd Sem Fee Table"]
-            
-            PlacementRecruiter["Placement & Career Cell\n- Placement Statistics & Logs\n- Recruiter Partner Marquee\n- PDF Brochure Viewer/Download"]
-            
-            StatutoryBodies["Statutory Committees\n- Academic Council\n- Anti-Ragging Committee\n- Anti-Ragging Squad\n- Internal Complaints (ICC)\n- IQAC Quality Cell\n- Grievance Redressal (GRC)\n- Student GRC\n- SC/ST Welfare Cell\n- Industry Cell (IIC)\n- Student Counsellor"]
-            
-            CampusMedia["Campus Life & Gallery\n- Campus, Events, Sports\n- Student Cultural Fests\n- High-Resolution Lightbox"]
-            
-            TeamDirectory["Developers Directory\n- Dedicated /developers Page\n- Tanmoy Pal (Lead Architect)\n- Sabir Ali Mondal (Contributor)\n- 100% Hardcoded / Fast Load\n- Easy Git PR Contribution"]
-            
-            Assistant["AI Campus Assistant\n- Floating Knowledge Chatbot\n- Instant Admissions Answers\n- Academic & Campus FAQ"]
-        end
+```text
+===========================================================================
+                   CGEC PLATFORM: FULL FEATURE MATRIX
+===========================================================================
 
-        subgraph CMSFeatures ["Administrative Management CMS"]
-            HeroCMS["Hero Banner CMS\n- Create Bespoke Slides\n- Cloudinary Banner Upload\n- Optional QR Code Upload\n- Live Status Toggle\n- Drag / Order Priority"]
-            
-            FacultyCMS["Faculty Roster CMS\n- Profile Photo Upload\n- CV PDF Attachment\n- Qualifications & Research\n- Department Filter"]
-            
-            SyllabusCMS["Syllabus PDF Manager\n- Department & Semester Tagging\n- Academic Year Metadata\n- Direct PDF Cloudinary Pipe"]
-            
-            NoticeCMS["Notice & Tender Publisher\n- Category & Priority Selector\n- PDF Document Streaming\n- Instant Live Broadcast"]
-            
-            AdmissionCMS["Admission & Fee Manager\n- Annual Config & Helpdesk\n- Fee Head Slabs Manager\n- Regular & Lateral Rows"]
-            
-            GovCMS["Committee CMS\n- 10 Committee Slugs\n- Member Designation & Phone\n- Order Sorting"]
-            
-            MediaCMS["Gallery & Magazine CMS\n- Wall Magazine PDF & Covers\n- High-res Photo Manager"]
-            
-            SecurityCMS["SuperAdmin Credentials\n- Change Admin Username\n- Bcrypt Salted Password Reset\n- Session Revocation"]
-        end
-    end
+ ┌───────────────────────────────────────────────────────────────────────┐
+ │                     PUBLIC INSTITUTIONAL PORTALS                      │
+ ├───────────────────────────────────────────────────────────────────────┤
+ │ 1. Dynamic Hero Carousel                                              │
+ │    • Ken Burns cinematic zoom transition & 6-second auto-cycle        │
+ │    • Dynamic badges (Hackathon, Tech Fest, Urgent Announcement)       │
+ │    • Event date chips, venue location chips & dual CTA buttons        │
+ │    • Interactive registration QR code card with click-to-zoom modal   │
+ │    • High-availability fallback to 5 default campus slides            │
+ │                                                                       │
+ │ 2. Academic Department Portals (/academics/[dept])                    │
+ │    • 6 Branches: CSE, ECE, EE, ME, CE, and Basic Science (BSH)        │
+ │    • HOD Welcome Address, photo & departmental vision statement       │
+ │    • Faculty Roster with degrees, research domains, and CV downloads  │
+ │    • Laboratory directories with specs, room numbers & lab in-charges │
+ │    • Semester-wise syllabus PDF downloads (Semesters 1 through 8)     │
+ │    • Student Wall Magazines (digital covers and full issue PDFs)      │
+ │                                                                       │
+ │ 3. Central Notice Board (/notices)                                    │
+ │    • Category filtering: General, Academic, Tender, Recruitment       │
+ │    • Priority badges: NORMAL, HIGH, and flashing URGENT alerts        │
+ │    • Embedded PDF viewer & direct document download stream            │
+ │    • Automatic expiry date filtering for outdated notices             │
+ │                                                                       │
+ │ 4. Admission & Fee Structure Portal (/admission & /fees)              │
+ │    • Annual admission guidelines, procedures, and required documents  │
+ │    • Admission Officer / Convener contacts and WhatsApp helpdesk link │
+ │    • Complete tabular fee breakdown: Regular (1st Sem) vs. Lateral    │
+ │    • Differential fee heads for Tech (CSE/ECE) vs. Core (EE/ME/CE)    │
+ │                                                                       │
+ │ 5. Training & Placement Cell (/placement)                             │
+ │    • Placement record statistics & historical achievement highlights  │
+ │    • Interactive corporate recruiting partners logo marquee           │
+ │    • Placement Brochure PDF viewer and direct download button         │
+ │                                                                       │
+ │ 6. Statutory Regulatory Committees (/committee/*)                     │
+ │    • 10 Mandatory Bodies: Academic Council, Anti-Ragging Committee,   │
+ │      Anti-Ragging Squad, ICC, IQAC, GRC, Student GRC, SC/ST Cell,     │
+ │      Industry-Institute Cell (IIC), and Student Counsellor            │
+ │    • Complete member directory with designation, phone & email        │
+ │                                                                       │
+ │ 7. Campus Life, Gallery & Community                                   │
+ │    • Multi-album photo gallery: Campus, Events, Sports, Labs, Cultural│
+ │    • Fullscreen lightbox viewer with high-resolution edge caching     │
+ │    • Public contact & grievance submission form                       │
+ │                                                                       │
+ │ 8. Developers Directory (/developers)                                 │
+ │    • Dedicated contributor page honoring student developers           │
+ │    • 100% hardcoded for ultra-fast load time and zero DB dependency   │
+ │    • Clear open-source contribution guide for future student batches  │
+ │                                                                       │
+ │ 9. Embedded AI Campus Assistant                                       │
+ │    • Floating interactive assistant with quick suggestion pills       │
+ │    • Instant answers for admissions, academics, fees, and campus FAQs │
+ └───────────────────────────────────────────────────────────────────────┘
+
+ ┌───────────────────────────────────────────────────────────────────────┐
+ │                   ADMINISTRATIVE MANAGEMENT CMS (/admin)              │
+ ├───────────────────────────────────────────────────────────────────────┤
+ │ • Hero Banner CMS: Create, preview, order, and toggle event banners   │
+ │ • Faculty CMS: Profile images, credentials, research & CV PDFs        │
+ │ • Syllabus CMS: Semester & branch syllabus PDF manager                │
+ │ • Notice & Tender CMS: Category, priority & attachment publisher      │
+ │ • Admission & Fees CMS: Annual config, helpdesk & fee head ledgers    │
+ │ • Committees CMS: 10 Committee rosters, member order & designations   │
+ │ • Placement CMS: Brochure PDF updates & recruiter logo manager        │
+ │ • Messages & Inquiries CMS: Filter, review & batch delete submissions │
+ │ • SuperAdmin Security: Username & salted bcrypt password updater      │
+ └───────────────────────────────────────────────────────────────────────┘
+===========================================================================
 ```
 
 ---
@@ -138,244 +188,220 @@ flowchart LR
 
 The complete MongoDB persistence model contains **17 distinct collections** managed strictly through **Prisma ORM 6**. All entities enforce strict typing, indexing, and cascade asset cleanup.
 
-```mermaid
-erDiagram
-    User ||--o{ Notice : author
-    
-    User {
-        ObjectId id PK
-        String email UK "Unique administrator email"
-        String password "Bcrypt salted hash"
-        String name "Full administrator name"
-        Role role "STUDENT | FACULTY | ADMIN (Default: STUDENT)"
-        String dept "Optional department affiliation"
-        DateTime createdAt "Audit creation timestamp"
-        DateTime updatedAt "Audit update timestamp"
-    }
+```text
+===========================================================================
+             CGEC DATABASE SCHEMA: 17 PERSISTENCE COLLECTIONS
+                         (Prisma ORM 6 / MongoDB Atlas)
+===========================================================================
 
-    HeroSlide {
-        ObjectId id PK
-        String title "Slide main headline"
-        String subtitle "Optional presenting department"
-        String description "Detailed event / announcement text"
-        String badge "e.g. HACKATHON, TECH FEST, ANNOUNCEMENT"
-        String badgeColor "blue | purple | cyan | emerald | amber | rose"
-        String bgImage "Cloudinary secure CDN URL"
-        String bgImagePublicId "Cloudinary public ID for asset deletion"
-        String primaryBtnText "CTA button label (e.g. Register Now)"
-        String primaryBtnLink "Target URL (internal route or external link)"
-        String secondaryBtnText "Secondary button label"
-        String secondaryBtnLink "Secondary target URL"
-        String eventDate "e.g. Oct 24 - 26, 2026"
-        String venue "e.g. Main Auditorium & Central Labs"
-        String qrCodeImage "Cloudinary URL for registration QR"
-        String qrCodePublicId "Cloudinary public ID for QR deletion"
-        Int order "Priority sequence index (0 = Top / First)"
-        Boolean isActive "Publish toggle (Default: true)"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ [RELATIONAL MAP]
+  ┌──────────────┐         1:N          ┌──────────────┐
+  │     User     │ ────────────────────►│    Notice    │
+  │ (SuperAdmin) │  (authorId -> id)   │  (Circulars) │
+  └──────────────┘                      └──────────────┘
 
-    Faculty {
-        ObjectId id PK
-        String name "Faculty full name"
-        String designation "Professor, Assoc Prof, Asst Prof, etc."
-        String department "CSE | ECE | EE | ME | CE | BSH"
-        String email UK "Unique academic email"
-        String phone "Contact number"
-        String experience "Years of teaching/research experience"
-        String[] specialization "List of specialized research domains"
-        String[] qualifications "B.Tech, M.Tech, Ph.D degrees"
-        String image "Cloudinary profile photo URL"
-        String imagePublicId "Cloudinary public ID for photo cleanup"
-        String cvLink "Cloudinary raw PDF download URL"
-        String cvPublicId "Cloudinary public ID for CV cleanup"
-        String[] publications "Indexed journal/conference papers"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+---------------------------------------------------------------------------
+ 1. User (Administrative Authentication & Access Control)
+    - id                 : ObjectId (Primary Key)
+    - email              : String (Unique, Indexed)
+    - password           : String (Bcrypt Salted Hash, 10 Rounds)
+    - name               : String (Full Display Name)
+    - role               : Enum (STUDENT | FACULTY | ADMIN) [Default: STUDENT]
+    - dept               : String? (Optional Academic Department Tag)
+    - createdAt / updatedAt : DateTime (Audit Timestamps)
 
-    Notice {
-        ObjectId id PK
-        String title "Notice circular heading"
-        String content "Detailed body text of notice"
-        String category "General | Academic | Tender | Recruitment"
-        String priority "NORMAL | HIGH | URGENT"
-        DateTime expiryDate "Optional auto-expiry timestamp"
-        String attachment "Cloudinary PDF attachment URL"
-        String attachmentPublicId "Cloudinary public ID for PDF cleanup"
-        String authorId "User ID of posting administrator"
-        String authorName "Display name of posting authority"
-        String department "Optional department tag"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 2. HeroSlide (Homepage Event Banner & Announcement CMS)
+    - id                 : ObjectId (Primary Key)
+    - title              : String (Main Event / Announcement Headline)
+    - subtitle           : String? (Department / Host Label)
+    - description        : String (Detailed Body Description)
+    - badge              : String? (e.g., "HACKATHON 2026", "TECH FEST")
+    - badgeColor         : String? (blue | purple | cyan | emerald | amber | rose)
+    - bgImage            : String (Cloudinary CDN Image URL)
+    - bgImagePublicId    : String? (Cloudinary Asset ID for Deletion)
+    - primaryBtnText     : String? (e.g., "Register Now")
+    - primaryBtnLink     : String? (Target Registration URL)
+    - secondaryBtnText   : String? (e.g., "Download Rulebook")
+    - secondaryBtnLink   : String? (Target Information URL)
+    - eventDate          : String? (e.g., "Oct 24 - 26, 2026")
+    - venue              : String? (e.g., "Central Auditorium & Labs")
+    - qrCodeImage        : String? (Cloudinary QR Image URL)
+    - qrCodePublicId     : String? (Cloudinary Asset ID for Deletion)
+    - order              : Int (Sequence Index, 0 = Highest Priority)
+    - isActive           : Boolean (Publish Toggle, Default: true)
+    - createdAt / updatedAt : DateTime
 
-    Syllabus {
-        ObjectId id PK
-        String department "CSE | ECE | EE | ME | CE | BSH"
-        String semester "1st to 8th Semester | All Semesters"
-        String title "Curriculum document title"
-        String description "Optional summary of syllabus structure"
-        String pdfLink "Cloudinary raw PDF URL"
-        String pdfPublicId "Cloudinary public ID for PDF cleanup"
-        String academicYear "e.g. 2024-2025"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 3. Faculty (Academic Faculty Directory & Credentials)
+    - id                 : ObjectId (Primary Key)
+    - name               : String (Faculty Member Name)
+    - designation        : String (Professor, Associate Professor, Asst Prof)
+    - department         : String (CSE | ECE | EE | ME | CE | BSH)
+    - email              : String (Unique Academic Email)
+    - phone              : String? (Contact Number)
+    - experience         : String? (Years of Teaching / Industrial Research)
+    - specialization     : String[] (Array of Research Domains)
+    - qualifications     : String[] (Array of Academic Degrees)
+    - image              : String? (Cloudinary Profile Photo URL)
+    - imagePublicId      : String? (Cloudinary Asset ID for Deletion)
+    - cvLink             : String? (Cloudinary Curriculum Vitae PDF URL)
+    - cvPublicId         : String? (Cloudinary Asset ID for Deletion)
+    - publications       : String[] (Array of Published Research Papers)
+    - createdAt / updatedAt : DateTime
 
-    Lab {
-        ObjectId id PK
-        String department "CSE | ECE | EE | ME | CE"
-        String name "Laboratory title (e.g. AI & Robotics Lab)"
-        String description "Equipment and software capabilities"
-        String image "Cloudinary laboratory photo URL"
-        String imagePublicId "Cloudinary public ID for lab photo"
-        String roomNumber "Room / Floor identification"
-        String facultyInCharge "Name of supervising professor"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 4. Notice (Central Notice Board & Institutional Circulars)
+    - id                 : ObjectId (Primary Key)
+    - title              : String (Notice Subject / Circular Heading)
+    - content            : String (Detailed Notice Body Text)
+    - category           : String (General | Academic | Tender | Recruitment)
+    - priority           : String (NORMAL | HIGH | URGENT)
+    - expiryDate         : DateTime? (Optional Automated Expiration Date)
+    - attachment         : String? (Cloudinary PDF Attachment URL)
+    - attachmentPublicId : String? (Cloudinary Asset ID for Deletion)
+    - authorId           : String? (Foreign Key -> User.id)
+    - authorName         : String? (Display Name of Publishing Authority)
+    - department         : String? (Optional Department Classification)
+    - createdAt / updatedAt : DateTime
 
-    AdmissionConfig {
-        ObjectId id PK
-        String year UK "Academic admission year (Default: 2025)"
-        String whatsappLink "Official WhatsApp inquiry group invite"
-        String contactPhone "Admission officer contact number"
-        String contactEmail "Admission desk email"
-        String officerName "Convener / In-charge name"
-        String officerRole "e.g. Admission In-Charge"
-        String officerDesignation "e.g. Associate Professor"
-        Boolean isActive "Portal activity toggle"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 5. Syllabus (Semester-wise Curriculum Repository)
+    - id                 : ObjectId (Primary Key)
+    - department         : String (CSE | ECE | EE | ME | CE | BSH)
+    - semester           : String (1st, 2nd, 3rd ... 8th, All Semesters)
+    - title              : String (Curriculum Document Title)
+    - description        : String? (Syllabus Structure Overview)
+    - pdfLink            : String (Cloudinary Raw PDF Document URL)
+    - pdfPublicId        : String? (Cloudinary Asset ID for Deletion)
+    - academicYear       : String? (e.g., "2024-2025")
+    - createdAt / updatedAt : DateTime
 
-    AdmissionItem {
-        ObjectId id PK
-        String year "Target admission year"
-        String category "NOTICE | DOCUMENT"
-        String title "Document / announcement title"
-        String fileUrl "Cloudinary PDF / notice URL"
-        String filePublicId "Cloudinary public ID"
-        Int order "Sorting priority index"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 6. Lab (Departmental Laboratories & Infrastructure)
+    - id                 : ObjectId (Primary Key)
+    - department         : String (CSE | ECE | EE | ME | CE)
+    - name               : String (Laboratory Name e.g., AI & Robotics Lab)
+    - description        : String (Equipment, Tools & Computational Power)
+    - image              : String? (Cloudinary Laboratory Photo URL)
+    - imagePublicId      : String? (Cloudinary Asset ID for Deletion)
+    - roomNumber         : String? (Room & Floor Location)
+    - facultyInCharge    : String? (Supervising Professor Name)
+    - createdAt / updatedAt : DateTime
 
-    FeeItem {
-        ObjectId id PK
-        String academicYear "e.g. 2025-26"
-        String admissionType "REGULAR (1st sem) | LATERAL (3rd sem)"
-        String slNo "Serial number in institutional ledger"
-        String feeHead "Tuition, Lab Fee, Caution Deposit, etc."
-        String cseEce "Fee amount for CSE and ECE branches"
-        String core "Fee amount for EE, ME, and CE branches"
-        Int order "Table display sequence index"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 7. AdmissionConfig (Annual Admission Desk Configuration)
+    - id                 : ObjectId (Primary Key)
+    - year               : String (Unique Academic Year e.g., "2025")
+    - whatsappLink       : String? (Official Candidate WhatsApp Group)
+    - contactPhone       : String? (Admission Helpdesk Telephone)
+    - contactEmail       : String? (Admission Helpdesk Email)
+    - officerName        : String? (Convener / Officer In-Charge Name)
+    - officerRole        : String? (e.g., "Admission In-Charge")
+    - officerDesignation : String? (e.g., "Associate Professor")
+    - isActive           : Boolean? (Portal Status Toggle, Default: true)
+    - createdAt / updatedAt : DateTime
 
-    CommitteeMember {
-        ObjectId id PK
-        String committee "academic | anti-ragging | icc | iic | iqac | grc..."
-        String name "Member full name"
-        String position "Chairperson, Convener, Member Secretary"
-        String department "Department or external affiliation"
-        String phone "Contact phone number"
-        String email "Official email address"
-        Int order "Sorting index in committee roster"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 8. AdmissionItem (Admission Circulars & Mandatory Forms)
+    - id                 : ObjectId (Primary Key)
+    - year               : String (Academic Session Year)
+    - category           : String (NOTICE | DOCUMENT)
+    - title              : String (Notice Title or Document Name)
+    - fileUrl            : String (Cloudinary Document / PDF URL)
+    - filePublicId       : String? (Cloudinary Asset ID for Deletion)
+    - order              : Int (Sorting Sequence Number)
+    - createdAt / updatedAt : DateTime
 
-    PlacementBrochure {
-        ObjectId id PK
-        String title "Brochure title"
-        String description "Overview of graduating batch"
-        String academicYear "e.g. 2025-2026"
-        String fileUrl "Cloudinary raw PDF download URL"
-        String filePublicId "Cloudinary public ID"
-        String fileType "pdf | doc | docx"
-        String fileName "Original uploaded file name"
-        String fileSize "Human-readable size (e.g. 4.2 MB)"
-        Boolean isActive "Active download brochure flag"
-        Int order "Display priority"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 9. FeeItem (Tuition & Institutional Fee Ledger)
+    - id                 : ObjectId (Primary Key)
+    - academicYear       : String (e.g., "2025-26")
+    - admissionType      : String (REGULAR [1st Sem] | LATERAL [3rd Sem])
+    - slNo               : String (Ledger Serial Number)
+    - feeHead            : String (Fee Component e.g., Tuition, Caution Deposit)
+    - cseEce             : String (Fee Amount for CSE & ECE Streams)
+    - core               : String (Fee Amount for Core Streams EE, ME, CE)
+    - order              : Int (Display Sequence Number)
+    - createdAt / updatedAt : DateTime
 
-    Recruiter {
-        ObjectId id PK
-        String name "Company name (e.g. TCS, Cognizant, Wipro)"
-        String logo "Cloudinary logo image URL"
-        String logoPublicId "Cloudinary public ID for logo"
-        String website "Corporate careers / company website"
-        Int order "Marquee sequence index"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 10. CommitteeMember (Statutory Regulatory Bodies Roster)
+    - id                 : ObjectId (Primary Key)
+    - committee          : String (Slug: academic, anti-ragging, icc, etc.)
+    - name               : String (Committee Member Full Name)
+    - position           : String (Designation: Chairman, Convener, Member)
+    - department         : String? (Department or External Affiliation)
+    - phone              : String? (Contact Telephone)
+    - email              : String? (Official Email Address)
+    - order              : Int (Roster Order Index)
+    - createdAt / updatedAt : DateTime
 
-    LeadershipMessage {
-        ObjectId id PK
-        String name "Leader name (e.g. Principal, Registrar)"
-        String role "Institutional title / Executive designation"
-        String dept "Administrative office"
-        String message "Institutional vision address"
-        String image "Cloudinary executive portrait photo"
-        String imagePublicId "Cloudinary public ID"
-        Int order "Display index"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 11. PlacementBrochure (Annual Campus Placement Brochure)
+    - id                 : ObjectId (Primary Key)
+    - title              : String (Brochure Title, Default: "Placement Brochure")
+    - description        : String? (Graduating Batch Summary)
+    - academicYear       : String? (e.g., "2025-2026")
+    - fileUrl            : String? (Cloudinary PDF URL)
+    - filePublicId       : String? (Cloudinary Asset ID for Deletion)
+    - fileType           : String? (pdf)
+    - fileName           : String? (Uploaded File Name)
+    - fileSize           : String? (Formatted File Size e.g., "3.8 MB")
+    - isActive           : Boolean (Active Publication Flag, Default: true)
+    - order              : Int (Sorting Sequence Number)
+    - createdAt / updatedAt : DateTime
 
-    HodMessage {
-        ObjectId id PK
-        String department UK "CSE | ECE | EE | ME | CE | BSH"
-        String name "HOD full name"
-        String designation "Head of the Department"
-        String message "Departmental message to students"
-        String image "Cloudinary HOD photo URL"
-        String imagePublicId "Cloudinary public ID"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 12. Recruiter (Corporate Hiring Partners & Logos)
+    - id                 : ObjectId (Primary Key)
+    - name               : String (Corporate Company Name)
+    - logo               : String (Cloudinary Logo Image URL)
+    - logoPublicId       : String? (Cloudinary Asset ID for Deletion)
+    - website            : String? (Corporate Careers Web Link)
+    - order              : Int (Marquee Display Sequence Number)
+    - createdAt / updatedAt : DateTime
 
-    Gallery {
-        ObjectId id PK
-        String title "Photograph title"
-        String category "Campus | Events | Sports | Labs | Cultural"
-        String imageUrl "Cloudinary high-res photo URL"
-        String imagePublicId "Cloudinary public ID"
-        String description "Event caption / context"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 13. LeadershipMessage (Institutional Vision Addresses)
+    - id                 : ObjectId (Primary Key)
+    - name               : String (Executive Name e.g., Principal)
+    - role               : String (Institutional Office Title)
+    - dept               : String? (Administrative Division)
+    - message            : String (Official Vision Statement & Message)
+    - image              : String (Cloudinary Portrait Photo URL)
+    - imagePublicId      : String? (Cloudinary Asset ID for Deletion)
+    - order              : Int (Display Sequence Number)
+    - createdAt / updatedAt : DateTime
 
-    WallMagazine {
-        ObjectId id PK
-        String title "Magazine title (e.g. ByteCode Vol. 4)"
-        String edition "e.g. Winter 2025"
-        String year "Publication year"
-        String description "Edition highlights and student editors"
-        String imageUrl "Cloudinary cover page scan URL"
-        String imagePublicId "Cloudinary public ID for cover image"
-        String pdfLink "Optional complete PDF download URL"
-        String pdfPublicId "Cloudinary public ID for PDF download"
-        String department "Associated academic department"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 14. HodMessage (Departmental Head Welcome Statements)
+    - id                 : ObjectId (Primary Key)
+    - department         : String (Unique Branch: CSE | ECE | EE | ME | CE | BSH)
+    - name               : String (Department Head Full Name)
+    - designation        : String (Default: "Head of the Department")
+    - message            : String (Departmental Message to Students)
+    - image              : String? (Cloudinary Head Photo URL)
+    - imagePublicId      : String? (Cloudinary Asset ID for Deletion)
+    - createdAt / updatedAt : DateTime
 
-    ContactMessage {
-        ObjectId id PK
-        String name "Sender full name"
-        String email "Sender email address"
-        String subject "Inquiry topic / Grievance category"
-        String message "Body text of inquiry"
-        DateTime createdAt
-        DateTime updatedAt
-    }
+ 15. Gallery (Campus Photo Albums & Infrastructure Gallery)
+    - id                 : ObjectId (Primary Key)
+    - title              : String (Photograph Caption / Title)
+    - category           : String (Campus | Events | Sports | Labs | Cultural)
+    - imageUrl           : String (Cloudinary High-Resolution Photo URL)
+    - imagePublicId      : String? (Cloudinary Asset ID for Deletion)
+    - description        : String? (Contextual Narrative)
+    - createdAt / updatedAt : DateTime
+
+ 16. WallMagazine (Digital Student Publications & Periodicals)
+    - id                 : ObjectId (Primary Key)
+    - title              : String (Wall Magazine Title e.g., ByteCode)
+    - edition            : String? (e.g., "Winter 2025 Edition")
+    - year               : String? (Publication Year)
+    - description        : String? (Student Editorial Highlights)
+    - imageUrl           : String (Cloudinary Cover Scan Image URL)
+    - imagePublicId      : String? (Cloudinary Asset ID for Deletion)
+    - pdfLink            : String? (Optional Complete Issue PDF URL)
+    - pdfPublicId        : String? (Cloudinary Asset ID for Deletion)
+    - department         : String? (Publishing Department Tag)
+    - createdAt / updatedAt : DateTime
+
+ 17. ContactMessage (Public Inquiries & Grievances)
+    - id                 : ObjectId (Primary Key)
+    - name               : String (Sender Full Name)
+    - email              : String (Sender Contact Email)
+    - subject            : String (Message Subject / Inquiry Category)
+    - message            : String (Body Text of Grievance or Question)
+    - createdAt / updatedAt : DateTime
+===========================================================================
 ```
 
 ---
