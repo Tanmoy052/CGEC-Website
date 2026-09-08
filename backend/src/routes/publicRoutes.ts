@@ -16,6 +16,7 @@ import {
   getBrochureById,
   getHodMessages,
   submitContactMessage,
+  getPublicHeroSlides,
 } from '../controllers/adminController';
 
 const router = Router();
@@ -25,6 +26,7 @@ router.post('/contact', submitContactMessage);
 router.post('/messages', submitContactMessage);
 
 // Public Read-Only endpoints
+router.get('/hero-slides', getPublicHeroSlides);
 router.get('/faculty', getFacultyList);
 router.get('/syllabus', getSyllabusList);
 router.get('/notices', getNoticesList);

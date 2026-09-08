@@ -68,6 +68,7 @@ export const getStats = async (req: Request, res: Response) => {
       brochureCount,
       hodMessagesCount,
       messagesCount,
+      heroSlidesCount,
     ] = await Promise.all([
       prisma.faculty.count(),
       prisma.notice.count(),
@@ -84,6 +85,7 @@ export const getStats = async (req: Request, res: Response) => {
       prisma.placementBrochure.count(),
       prisma.hodMessage.count(),
       prisma.contactMessage.count(),
+      prisma.heroSlide.count(),
     ]);
 
     const recentNotices = await prisma.notice.findMany({
@@ -113,6 +115,7 @@ export const getStats = async (req: Request, res: Response) => {
         brochures: brochureCount,
         hodMessages: hodMessagesCount,
         messages: messagesCount,
+        heroSlides: heroSlidesCount,
       },
       recentNotices,
       recentFaculty,
@@ -1614,6 +1617,207 @@ export const deleteMultipleMessages = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// ==================== HERO SLIDES & BANNERS ====================
+
+// Public: Get all active hero slides sorted by order then createdAt
+export const getPublicHeroSlides = async (req: Request, res: Response) => {
+  try {
+    const slides = await prisma.heroSlide.findMany({
+      where: { isActive: true },
+      orderBy: [
+        { order: 'asc' },
+        { createdAt: 'desc' },
+      ],
+    });
+    res.json(slides);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Admin: Get all hero slides (both active and inactive)
+export const getAllHeroSlidesAdmin = async (req: Request, res: Response) => {
+  try {
+    const slides = await prisma.heroSlide.findMany({
+      orderBy: [
+        { order: 'asc' },
+        { createdAt: 'desc' },
+      ],
+    });
+    res.json(slides);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Admin: Create a new hero slide
+export const createHeroSlide = async (req: Request, res: Response) => {
+  try {
+    const {
+      title,
+      subtitle,
+      description,
+      badge,
+      badgeColor,
+      bgImage,
+      bgImagePublicId,
+      primaryBtnText,
+      primaryBtnLink,
+      secondaryBtnText,
+      secondaryBtnLink,
+      eventDate,
+      venue,
+      qrCodeImage,
+      qrCodePublicId,
+      order,
+      isActive,
+    } = req.body;
+
+    if (!title || !description || !bgImage) {
+      return res.status(400).json({ message: 'Title, description, and background image are required.' });
+    }
+
+    const slide = await prisma.heroSlide.create({
+      data: {
+        title: title.trim(),
+        subtitle: subtitle?.trim() || null,
+        description: description.trim(),
+        badge: badge?.trim() || 'Special Announcement',
+        badgeColor: badgeColor || 'blue',
+        bgImage,
+        bgImagePublicId: bgImagePublicId || null,
+        primaryBtnText: primaryBtnText?.trim() || null,
+        primaryBtnLink: primaryBtnLink?.trim() || null,
+        secondaryBtnText: secondaryBtnText?.trim() || null,
+        secondaryBtnLink: secondaryBtnLink?.trim() || null,
+        eventDate: eventDate?.trim() || null,
+        venue: venue?.trim() || null,
+        qrCodeImage: qrCodeImage || null,
+        qrCodePublicId: qrCodePublicId || null,
+        order: typeof order === 'number' ? order : Number(order) || 0,
+        isActive: isActive !== undefined ? Boolean(isActive) : true,
+      },
+    });
+
+    res.status(201).json(slide);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Admin: Update an existing hero slide
+export const updateHeroSlide = async (req: Request, res: Response) => {
+  try {
+    const id = getParamId(req);
+    const existing = await prisma.heroSlide.findUnique({ where: { id } });
+    if (!existing) {
+      return res.status(404).json({ message: 'Hero slide not found.' });
+    }
+
+    const {
+      title,
+      subtitle,
+      description,
+      badge,
+      badgeColor,
+      bgImage,
+      bgImagePublicId,
+      primaryBtnText,
+      primaryBtnLink,
+      secondaryBtnText,
+      secondaryBtnLink,
+      eventDate,
+      venue,
+      qrCodeImage,
+      qrCodePublicId,
+      order,
+      isActive,
+    } = req.body;
+
+    // Clean up old background image from Cloudinary if replaced
+    if (bgImagePublicId && existing.bgImagePublicId && bgImagePublicId !== existing.bgImagePublicId) {
+      await deleteMediaAsset(existing.bgImage, existing.bgImagePublicId, 'image');
+    }
+
+    // Clean up old QR code from Cloudinary if replaced
+    if (qrCodePublicId && existing.qrCodePublicId && qrCodePublicId !== existing.qrCodePublicId) {
+      await deleteMediaAsset(existing.qrCodeImage, existing.qrCodePublicId, 'image');
+    }
+
+    const updated = await prisma.heroSlide.update({
+      where: { id },
+      data: {
+        title: title !== undefined ? title.trim() : existing.title,
+        subtitle: subtitle !== undefined ? (subtitle ? subtitle.trim() : null) : existing.subtitle,
+        description: description !== undefined ? description.trim() : existing.description,
+        badge: badge !== undefined ? (badge ? badge.trim() : null) : existing.badge,
+        badgeColor: badgeColor !== undefined ? badgeColor : existing.badgeColor,
+        bgImage: bgImage !== undefined ? bgImage : existing.bgImage,
+        bgImagePublicId: bgImagePublicId !== undefined ? bgImagePublicId : existing.bgImagePublicId,
+        primaryBtnText: primaryBtnText !== undefined ? (primaryBtnText ? primaryBtnText.trim() : null) : existing.primaryBtnText,
+        primaryBtnLink: primaryBtnLink !== undefined ? (primaryBtnLink ? primaryBtnLink.trim() : null) : existing.primaryBtnLink,
+        secondaryBtnText: secondaryBtnText !== undefined ? (secondaryBtnText ? secondaryBtnText.trim() : null) : existing.secondaryBtnText,
+        secondaryBtnLink: secondaryBtnLink !== undefined ? (secondaryBtnLink ? secondaryBtnLink.trim() : null) : existing.secondaryBtnLink,
+        eventDate: eventDate !== undefined ? (eventDate ? eventDate.trim() : null) : existing.eventDate,
+        venue: venue !== undefined ? (venue ? venue.trim() : null) : existing.venue,
+        qrCodeImage: qrCodeImage !== undefined ? qrCodeImage : existing.qrCodeImage,
+        qrCodePublicId: qrCodePublicId !== undefined ? qrCodePublicId : existing.qrCodePublicId,
+        order: order !== undefined ? (typeof order === 'number' ? order : Number(order) || 0) : existing.order,
+        isActive: isActive !== undefined ? Boolean(isActive) : existing.isActive,
+      },
+    });
+
+    res.json(updated);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Admin: Delete a hero slide and clean up images
+export const deleteHeroSlide = async (req: Request, res: Response) => {
+  try {
+    const id = getParamId(req);
+    const slide = await prisma.heroSlide.findUnique({ where: { id } });
+    if (!slide) {
+      return res.status(404).json({ message: 'Hero slide not found.' });
+    }
+
+    // Clean up Cloudinary assets
+    if (slide.bgImagePublicId) {
+      await deleteMediaAsset(slide.bgImage, slide.bgImagePublicId, 'image');
+    }
+    if (slide.qrCodePublicId) {
+      await deleteMediaAsset(slide.qrCodeImage, slide.qrCodePublicId, 'image');
+    }
+
+    await prisma.heroSlide.delete({ where: { id } });
+    res.json({ message: 'Hero slide deleted successfully.' });
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// Admin: Toggle active status
+export const toggleHeroSlideStatus = async (req: Request, res: Response) => {
+  try {
+    const id = getParamId(req);
+    const slide = await prisma.heroSlide.findUnique({ where: { id } });
+    if (!slide) {
+      return res.status(404).json({ message: 'Hero slide not found.' });
+    }
+
+    const updated = await prisma.heroSlide.update({
+      where: { id },
+      data: { isActive: !slide.isActive },
+    });
+
+    res.json(updated);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 
 
 

@@ -1,109 +1,122 @@
 <div align="center">
 
-<img src="frontend/public/cgec_round_logo.ico" alt="CGEC Logo" width="100" height="100" />
+<img src="frontend/public/cgec_round_logo.ico" alt="CGEC Logo" width="96" height="96" />
 
-# Cooch Behar Government Engineering College
+# Cooch Behar Government Engineering College (CGEC)
 ### Official Institutional Web Portal & Content Management System
 
-[![Release](https://img.shields.io/badge/Release-v1.0.0-blue.svg?style=flat-square&logo=github)](https://github.com/Tanmoy052/CGEC-Website/releases)
+[![Release](https://img.shields.io/badge/Release-v1.0.0%20(Initial%20Production)-blue.svg?style=flat-square&logo=github)](https://github.com/Tanmoy052/CGEC-Website/releases)
 [![Status](https://img.shields.io/badge/Status-Stable%20Production-success?style=flat-square)](https://github.com/Tanmoy052/CGEC-Website)
-[![Next.js](https://img.shields.io/badge/Next.js-16.x-black?style=flat-square&logo=next.js)](https://nextjs.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.1.6-black?style=flat-square&logo=next.js)](https://nextjs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-blue?style=flat-square&logo=typescript)](https://www.typescriptlang.org/)
-[![Express](https://img.shields.io/badge/Express-5.x-black?style=flat-square&logo=express)](https://expressjs.com/)
-[![Prisma](https://img.shields.io/badge/Prisma-6.x-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
+[![Express](https://img.shields.io/badge/Express-5.2.1-black?style=flat-square&logo=express)](https://expressjs.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-6.19.2-2D3748?style=flat-square&logo=prisma)](https://www.prisma.io/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-green?style=flat-square&logo=mongodb)](https://www.mongodb.com/)
 [![Cloudinary](https://img.shields.io/badge/Cloudinary-CDN-3448C5?style=flat-square&logo=cloudinary)](https://cloudinary.com/)
 
 <p align="center">
-  <b>A modern, full-stack digital portal for Cooch Behar Government Engineering College (Govt. of West Bengal, AICTE Approved, MAKAUT Affiliated).</b>
+  <b>A modern, enterprise-grade digital portal for Cooch Behar Government Engineering College (Govt. of West Bengal, AICTE Approved, MAKAUT Affiliated).</b>
 </p>
 
-[🚀 Quick Start](#-quick-start) • [✨ Key Features](#-key-features) • [🏛️ Architecture](#-system-architecture) • [📖 Technical Docs](TECHNICAL_DOCUMENTATION.md) • [🔐 Admin Access](#-admin-portal)
+[🚀 Quick Start](#-quick-start) • [✨ Key Features](#-key-features) • [🏛️ Architecture](#-system-architecture) • [📖 Technical Documentation](TECHNICAL_DOCUMENTATION.md) • [🔐 Admin Portal](#-admin-portal) • [👥 Developer Team](#-developers--contributors)
 
 </div>
 
 ---
 
-## 🌟 Release Highlights (v1.0.0)
+## 🌟 Welcome to Version 1.0.0 (Initial Official Release)
 
-Welcome to the **v1.0.0 first official release** of the CGEC Web Platform. This release delivers an end-to-end modernized digital presence, unifying public academic resources with a centralized administrative management system:
+Welcome to the **v1.0.0 initial production release** of the **CGEC Web Platform**. This project establishes an authoritative, centralized digital ecosystem for Cooch Behar Government Engineering College, replacing scattered web resources with a cohesive, high-performance web platform.
 
-- 🏛️ **Dynamic Academic Departments**: Full coverage for CSE, ECE, EE, ME, CE, and BSH with dedicated HOD messages, faculty rosters, lab facilities, syllabus PDFs, and wall magazines.
-- 🔐 **Comprehensive Admin CMS**: Centralized management across 15 institutional data models with secure JWT authentication and bcrypt credential encryption.
-- ☁️ **Cloudinary-First Media Management**: In-memory streaming uploads with automated remote cleanup upon deletion to eliminate orphaned assets.
-- 🤖 **CGEC Smart Assistant**: Built-in institutional knowledge chatbot answering student inquiries regarding admissions, exams, departments, faculty, and campus amenities.
-- ⚡ **Next.js 16 + Tailwind CSS v4**: Blazing-fast page loads, fluid responsive design, accessible typography, and smooth micro-animations.
+### Release Highlights
+- 🏛️ **6 Dynamic Department Portals**: Dedicated portals for CSE, ECE, EE, ME, CE, and BSH with dynamic HOD addresses, faculty rosters, lab facilities, semester syllabi, and wall magazines.
+- 🎨 **Dynamic Hero Banner & Event CMS**: Full admin control over homepage slides for hackathons, tech fests, and announcements with custom background uploads, event dates, venues, glowing badges, and interactive registration QR codes.
+- 🛡️ **Comprehensive Admin CMS**: Real-time management across 16 institutional data models with JWT token security, salted password hashing, and zero-orphaned-media cleanup via Cloudinary.
+- 📜 **Admissions & Fee Portal**: Live admission circulars, helpdesk contacts, and structured regular (1st sem) vs. lateral (3rd sem) fee breakdown tables.
+- 🤖 **CGEC AI Campus Assistant**: Embedded floating chatbot providing immediate answers to prospective and current student inquiries.
+- 👥 **Open Developer Directory (`/developers`)**: A fast, hardcoded contributor showcase allowing student developers to add their profiles via simple Git Pull Requests with zero database overhead.
+
+---
+
+## 🏛️ System Architecture
+
+The platform operates across a high-performance decoupled client-server architecture:
+
+```
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                 Client Layer (Next.js 16 App Router · Port 3000)            │
+│   Public Portal · Dynamic Academics · Smart ChatBot · CMS Dashboard        │
+└──────────────────────────────────────┬──────────────────────────────────────┘
+                                       │ HTTP / REST & Bearer JWT
+┌──────────────────────────────────────▼──────────────────────────────────────┐
+│                   Express.js 5 REST API Gateway (Port 5000)                  │
+│       JWT Auth Guards · Router Modules · Multer Memory Buffer Streamer      │
+└──────────────────────┬───────────────────────────────┬──────────────────────┘
+                       │ Prisma ORM 6                  │ Cloudinary SDK
+        ┌──────────────▼─────────────┐   ┌─────────────▼──────────────┐
+        │    MongoDB Atlas Cluster   │   │     Cloudinary Media CDN   │
+        │  (17 Institutional Models) │   │   (Images, PDFs, Documents)│
+        └────────────────────────────┘   └────────────────────────────┘
+```
+
+> **For the complete architecture, unified single-diagram ER schema, and UI/UX design specifications, please review the [Comprehensive Technical Documentation (TECHNICAL_DOCUMENTATION.md)](TECHNICAL_DOCUMENTATION.md).**
 
 ---
 
 ## ✨ Key Features
 
 ### 🌐 Public Experience
-- **Interactive Notice Board**: Categorized circulars (General, Academic, Tender, Recruitment) with priority tags and direct PDF attachments.
-- **Academic Ecosystem**: Live semester-wise syllabus downloads, lab directories, and faculty credentials with published research.
-- **Admissions & Fee Portal**: Centralized admission notices, official documents, contact directories, and detailed regular/lateral fee breakdowns.
-- **Training & Placement Center**: Placement records, recruiter showcases, and dynamic PDF brochure downloads.
-- **Institutional Governance**: Anti-Ragging, ICC, IQAC, GRC, and SC/ST committee directories with official contact channels.
-- **Contact & Inquiries**: Direct messaging pipeline with integrated administrative moderation.
+- **Interactive Central Notice Board**: Filter circulars by category (General, Academic, Tender, Recruitment) and priority with direct PDF attachments.
+- **Dynamic Hero Carousel**: Beautiful cinematic Ken Burns transitions with custom event banners, hackathon announcements, and instant phone-scannable QR lightbox modal.
+- **Academic Ecosystem**: Full coverage of all 6 engineering departments, semester-wise syllabus downloads, lab directories, and faculty credentials.
+- **Admissions & Fees Structure**: Official admission circulars, convener contact directories, and comprehensive tuition/caution deposit tables.
+- **Training & Placement Cell**: Placement statistics, corporate recruiter logo marquee, and dynamic placement brochure PDF viewer/downloader.
+- **Statutory Regulatory Bodies**: Detailed directories for all 10 mandated committees (Anti-Ragging, ICC, IQAC, GRC, SC/ST Cell, etc.).
+- **Campus Gallery & Wall Magazine**: Digital student wall magazines and multi-category high-resolution campus photo albums.
 
-### 🛡️ Administrative CMS Dashboard
-- **Faculty Directory Management**: Upload profile photos, update designations, research specializations, and attach curriculum vitae.
-- **Syllabus & Document Manager**: Organize and deploy semester-wise curriculum PDFs.
-- **Media & Gallery Management**: Multi-category image upload pipeline served via high-speed global CDN.
-- **Institutional Messaging**: Manage Principal & Registrar leadership messages and department HOD notes.
-- **Inquiry Inbox**: Review, batch-delete, and process contact inquiries submitted through the public portal.
-
----
-
-## 🏛️ System Architecture
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│                 Client Layer (Next.js 16)                   │
-│   Public Portal · Academics · Smart ChatBot · Admin CMS    │
-└──────────────────────────────┬──────────────────────────────┘
-                               │ HTTP / REST & Bearer JWT
-┌──────────────────────────────▼──────────────────────────────┐
-│           Express 5 REST API Gateway (Port 5000)            │
-│   Auth Middleware · Router Modules · Multer Memory Buffers  │
-└──────────────┬───────────────────────────────┬──────────────┘
-               │ Prisma ORM 6                  │ Cloudinary SDK
-┌──────────────▼─────────────┐   ┌─────────────▼──────────────┐
-│    MongoDB Atlas Cluster   │   │     Cloudinary Media CDN   │
-│  (15 Institutional Models) │   │   (Images, PDFs, Documents)│
-└────────────────────────────┘   └────────────────────────────┘
-```
-
-> For comprehensive architecture diagrams, database entity-relationship models, and in-depth data flows, view the **[Technical Documentation](TECHNICAL_DOCUMENTATION.md)**.
+### 🛡️ Administrative Management CMS
+- **Hero Slider Manager**: Upload custom banners, set titles, event dates, venues, CTA buttons, and upload registration QR codes.
+- **Faculty Directory CMS**: Upload faculty photos, update research domains, and attach downloadable CV PDFs.
+- **Curriculum & Syllabus CMS**: Deploy semester-wise curriculum PDFs directly through Cloudinary memory streaming.
+- **Notice & Tender Publisher**: Publish urgent alerts, institutional circulars, and government tenders with attachments.
+- **Admission & Fee Manager**: Update annual fee heads and admission guidelines in real time.
+- **Inquiry Inbox**: Review, process, and batch-delete student inquiries and grievance submissions.
+- **Account & Security Settings**: Secure superadmin username and password updates with Bcrypt salted encryption.
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Technology Stack Matrix
 
-| Domain | Technologies |
-| :--- | :--- |
-| **Frontend** | Next.js 16, React 19, TypeScript, Tailwind CSS v4, Framer Motion, Lucide React |
-| **Backend** | Node.js, Express.js 5, TypeScript, Multer, Bcrypt.js, JSON Web Tokens (JWT) |
-| **Database** | MongoDB Atlas, Prisma ORM 6 |
-| **Media & CDN** | Cloudinary Cloud Storage SDK |
-| **Tooling** | Concurrently, ts-node-dev, ESLint |
+| Domain | Technologies | Version |
+| :--- | :--- | :--- |
+| **Frontend Framework** | Next.js (App Router) | `16.1.6` |
+| **Client Core** | React & TypeScript | `19.x` / `5.x` |
+| **Styling & Design** | Tailwind CSS v4, Vanilla CSS | `4.x` |
+| **Micro-Animations** | Framer Motion | `12.x` |
+| **Icons** | Lucide React | `1.x` |
+| **Backend Gateway** | Express.js & Node.js | `5.2.1` / `18+` |
+| **Database** | MongoDB Atlas Document DB | Cloud |
+| **Database Client** | Prisma ORM | `6.19.2` |
+| **Media Delivery** | Cloudinary Cloud Storage SDK | `2.11.0` |
+| **File Buffer Handling**| Multer (In-Memory Buffer) | `2.3.0` |
+| **Authentication** | JSON Web Tokens (JWT) & Bcrypt.js | `9.0.3` / `3.0.3` |
 
 ---
 
-## 🚀 Quick Start
+## 🚀 Quick Start Guide
 
 ### Prerequisites
-- **Node.js** `v18.0.0` or higher
-- **npm** `v9.0.0` or higher
-- An active **MongoDB Atlas** database URI
-- A **Cloudinary** account (Cloud Name, API Key, API Secret)
+- **Node.js**: `v18.0.0` or higher (`v20+` recommended)
+- **npm**: `v9.0.0` or higher
+- **MongoDB Atlas**: An active connection string
+- **Cloudinary**: Cloud name, API key, and API secret
 
-### 1. Clone & Install
+### 1. Clone & Install Dependencies
 ```bash
 git clone https://github.com/Tanmoy052/CGEC-Website.git
 cd CGEC-Website
 
-# Install root and workspace dependencies
+# Install root and workspace packages
 npm run install:all
 ```
 
@@ -113,7 +126,7 @@ npm run install:all
 ```env
 PORT=5000
 DATABASE_URL="mongodb+srv://<username>:<password>@<cluster>.mongodb.net/cgec_website?retryWrites=true&w=majority"
-JWT_SECRET="your-secure-random-jwt-secret-key"
+JWT_SECRET="your-cryptographically-secure-random-key"
 CLOUDINARY_CLOUD_NAME="your_cloud_name"
 CLOUDINARY_API_KEY="your_api_key"
 CLOUDINARY_API_SECRET="your_api_secret"
@@ -125,7 +138,7 @@ NEXT_PUBLIC_API_URL="http://localhost:5000/api"
 NEXT_PUBLIC_PORTAL_URL="https://cgec-sms-portal.vercel.app/"
 ```
 
-### 3. Initialize Database
+### 3. Synchronize Database & Generate Prisma Client
 ```bash
 cd backend
 npx prisma generate
@@ -133,71 +146,43 @@ npx prisma db push
 cd ..
 ```
 
-### 4. Start Development Servers
+### 4. Run Development Servers
 ```bash
-# Starts both frontend (port 3000) and backend (port 5000) concurrently
+# Concurrently launches Next.js (port 3000) and Express (port 5000)
 npm run dev
 ```
 
-- **Frontend Portal**: `http://localhost:3000`
-- **Backend API**: `http://localhost:5000`
+- **Frontend Portal**: [http://localhost:3000](http://localhost:3000)
+- **Backend API Gateway**: [http://localhost:5000](http://localhost:5000)
+- **Developer Team Page**: [http://localhost:3000/developers](http://localhost:3000/developers)
 
 ---
 
-## 🔐 Admin Portal
+## 🔐 Admin Portal Access
 
-The Administrative Management System is secured behind an intentionally obscured route to minimize unauthorized exposure:
+To protect against automated bot crawlers and brute force scripts, the administrator access portal is located on an intentionally unadvertised route:
 
-- **Login URL**: `http://localhost:3000/admin/login/cgec`
-- **Default Superadmin Seed**:
+- **Portal URL**: `http://localhost:3000/admin/login/cgec`
+- **Default Seed Credentials**:
   - **Email**: `admin@cgec.org.in`
   - **Password**: `Admin@cgec2026`
-
-*(Default credentials are auto-seeded on first server boot if no administrator exists. Remember to update the password in production via the Account Settings tab).*
-
----
-
-## 📂 Project Structure
-
-```
-CGEC-Website/
-├── package.json               # Root monorepo configuration (concurrently runner)
-├── TECHNICAL_DOCUMENTATION.md # In-depth technical specifications and diagrams
-├── README.md                  # Project overview and first-release notes
-│
-├── frontend/                  # Next.js 16 Web Application
-│   ├── src/
-│   │   ├── app/               # App Router pages & routes
-│   │   │   ├── academics/     # Dynamic department hubs ([dept])
-│   │   │   ├── admin/         # Authenticated CMS dashboard & tabs
-│   │   │   ├── admission/     # Admission circulars & fee structures
-│   │   │   ├── committee/     # Statutory institutional committees
-│   │   │   ├── gallery/       # Campus photo gallery
-│   │   │   ├── notices/       # Official college circulars
-│   │   │   └── placement/     # TPO records, recruiters, brochure
-│   │   ├── components/        # Reusable UI components & ChatBot
-│   │   └── lib/               # Utility functions & navigation constants
-│   └── public/                # Static assets, institutional icons & logos
-│
-└── backend/                   # Express 5 REST API Server
-    ├── prisma/
-    │   └── schema.prisma      # MongoDB schema models & definitions
-    └── src/
-        ├── controllers/       # Admin, Auth, and Upload logic
-        ├── middleware/        # JWT verification and RBAC guards
-        ├── routes/            # Admin, Public, and Auth routes
-        └── lib/               # Prisma and Cloudinary client instances
-```
+  *(Change this immediately upon deployment under the Admin Account & Security Settings tab).*
 
 ---
 
-## 📚 Technical Documentation
+## 👥 Developers & Contributors
 
-For detailed architectural diagrams, schema breakdowns, API endpoint listings, and operational policies, refer to the full **[Technical Documentation](TECHNICAL_DOCUMENTATION.md)**.
+The CGEC Web Platform is engineered and maintained by student engineers of Cooch Behar Government Engineering College:
+
+- **Tanmoy Pal** — *Main Developer & Lead Architect* (CSE, Class of 2027) • [GitHub](https://github.com/Tanmoy052/) • [LinkedIn](https://www.linkedin.com/in/tanmoy-pal-755611294/)
+- **Sabir Ali Mondal** — *Development Contributor* (CSE, Class of 2027) • [GitHub](https://github.com/Sabir-Ali-Mondal) • [LinkedIn](https://www.linkedin.com/in/sabir-ali-mondal/)
+
+### Want to contribute?
+Check out **Section 8 of [TECHNICAL_DOCUMENTATION.md](TECHNICAL_DOCUMENTATION.md)** for instructions on how to add your name to the [`/developers`](http://localhost:3000/developers) page via a simple Pull Request!
 
 ---
 
-## 📄 License & Attribution
+## 📄 License & Institutional Copyright
 
-This project is developed for **Cooch Behar Government Engineering College**, Government of West Bengal.  
-All institutional emblems, logos, and academic documents are proprietary property of CGEC.
+© 2026 **Cooch Behar Government Engineering College**. All Rights Reserved.  
+Designed & Developed by **CGEC Team**.

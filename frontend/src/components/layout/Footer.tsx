@@ -301,22 +301,33 @@ const Footer = () => {
           </div>
         </div>
 
-        {/* Developer Details - Home page only (Centered to prevent ChatBot icon overlap) */}
+        {/* Developer & Management Team (Centered to prevent ChatBot icon overlap) */}
         {pathname === "/" && (
           <div className="mb-6 pt-6 border-t border-gray-800/80 flex justify-center">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 px-6 py-2.5 rounded-xl bg-gray-800/50 border border-gray-700/50 text-xs shadow-sm max-w-3xl w-full mx-auto text-center">
-              <div className="flex items-center justify-center gap-2 text-gray-300">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 px-6 py-2.5 rounded-xl bg-gray-800/50 border border-gray-700/50 hover:border-gray-600/60 text-xs shadow-sm max-w-3xl w-full mx-auto text-center transition-colors">
+              <Link
+                href="/developers"
+                className="flex items-center justify-center gap-2 text-gray-300 hover:text-white transition-colors"
+                title="View Developer & Management Team"
+              >
                 <Code2 className="w-4 h-4 text-blue-400 shrink-0" />
-                <span className="font-semibold text-gray-200 tracking-wide whitespace-nowrap">Developer Details</span>
-              </div>
+                <span className="font-semibold text-gray-200 hover:text-blue-300 tracking-wide whitespace-nowrap transition-colors">
+                  CGEC Website Developer &amp; Management Team
+                </span>
+              </Link>
 
               <div className="hidden sm:block w-px h-4 bg-gray-700" />
 
               <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-gray-300">
-                {/* Main Developer */}
+                {/* Main Developer: Tanmoy Pal */}
                 <div className="flex items-center gap-1.5">
                   <span className="text-gray-400">Main Developer:</span>
-                  <span className="font-medium text-white">Tanmoy Pal</span>
+                  <Link
+                    href="/developers"
+                    className="font-medium text-white hover:text-blue-400 transition-colors"
+                  >
+                    Tanmoy Pal
+                  </Link>
                   <div className="flex items-center gap-1 ml-0.5">
                     <a
                       href="https://github.com/Tanmoy052/"
@@ -341,10 +352,15 @@ const Footer = () => {
                   </div>
                 </div>
 
-                {/* Development Contributors */}
+                {/* Development Contributor: Sabir Ali Mondal */}
                 <div className="flex items-center gap-1.5">
                   <span className="text-gray-400">Development Contributor:</span>
-                  <span className="font-medium text-white">Sabir Ali Mondal</span>
+                  <Link
+                    href="/developers"
+                    className="font-medium text-white hover:text-blue-400 transition-colors"
+                  >
+                    Sabir Ali Mondal
+                  </Link>
                   <div className="flex items-center gap-1 ml-0.5">
                     <a
                       href="https://github.com/Sabir-Ali-Mondal"
@@ -373,7 +389,7 @@ const Footer = () => {
           </div>
         )}
 
-        <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm">
+        <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-sm mr-8">
           <p>
             © {new Date().getFullYear()} {COLLEGE_NAME}. All Rights Reserved.
           </p>
@@ -381,10 +397,10 @@ const Footer = () => {
             <span>
               Designed & Developed by{" "}
               <Link
-                href="/"
+                href="/developers"
                 className="hover:text-white hover:underline transition-colors text-blue-400 font-medium"
               >
-                CGEC
+                CGEC Team
               </Link>
             </span>
           </div>

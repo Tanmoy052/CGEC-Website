@@ -59,6 +59,11 @@ import {
   getContactMessages,
   deleteContactMessage,
   deleteMultipleMessages,
+  getAllHeroSlidesAdmin,
+  createHeroSlide,
+  updateHeroSlide,
+  deleteHeroSlide,
+  toggleHeroSlideStatus,
 } from '../controllers/adminController';
 
 import multer from 'multer';
@@ -166,6 +171,13 @@ router.delete('/hod-message/:deptOrId', deleteHodMessage);
 router.get('/messages', getContactMessages);
 router.delete('/messages/:id', deleteContactMessage);
 router.post('/messages/batch-delete', deleteMultipleMessages);
+
+// Hero Slides & Event Banners
+router.get('/hero-slides', getAllHeroSlidesAdmin);
+router.post('/hero-slides', createHeroSlide);
+router.put('/hero-slides/:id', updateHeroSlide);
+router.delete('/hero-slides/:id', deleteHeroSlide);
+router.patch('/hero-slides/:id/toggle', toggleHeroSlideStatus);
 
 export default router;
 

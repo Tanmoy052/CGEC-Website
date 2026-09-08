@@ -33,6 +33,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/public", publicRoutes);
+app.use("/api", publicRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("CGEC Website API is running...");

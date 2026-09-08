@@ -224,3 +224,26 @@ model ContactMessage {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model HeroSlide {
+  id                  String   @id @default(auto()) @map("_id") @db.ObjectId
+  title               String
+  subtitle            String?
+  description         String
+  badge               String?  // e.g. "HACKATHON 2026", "TECH FEST", "SPECIAL ANNOUNCEMENT"
+  badgeColor          String?  @default("blue") // "blue", "purple", "emerald", "amber", "rose", "cyan"
+  bgImage             String   // Cloudinary URL for banner background
+  bgImagePublicId     String?  // For Cloudinary asset cleanup
+  primaryBtnText      String?  // e.g. "Register Now"
+  primaryBtnLink      String?  // e.g. "https://unstop.com/..."
+  secondaryBtnText    String?  // e.g. "Download Brochure"
+  secondaryBtnLink    String?  // e.g. "/notices/..."
+  eventDate           String?  // e.g. "Oct 24 - 26, 2026"
+  venue               String?  // e.g. "Central Auditorium & Labs"
+  qrCodeImage         String?  // Cloudinary URL for QR code
+  qrCodePublicId      String?
+  order               Int      @default(0) // Lower numbers appear first
+  isActive            Boolean  @default(true)
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+}
