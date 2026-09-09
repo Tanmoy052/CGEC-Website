@@ -45,11 +45,12 @@ export default function AdmissionDynamicPage() {
   });
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    try {
       const stored = localStorage.getItem("cgec_admission_year");
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      if (stored) setYear(stored);
-    }
+      if (stored) {
+        requestAnimationFrame(() => setYear(stored));
+      }
+    } catch {}
 
     fetch(`${API_URL}/public/admission`)
       .then((res) => (res.ok ? res.json() : null))
