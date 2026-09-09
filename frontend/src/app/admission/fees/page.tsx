@@ -45,18 +45,18 @@ export default function FeesStructurePage() {
           const reg = data
             .filter((item: RawFeeItem) => item.admissionType === "REGULAR")
             .map((item: RawFeeItem) => ({
-              id: item.slNo.toLowerCase() === "total" ? "" : item.slNo,
-              desc: item.feeHead,
-              cse: item.cseEce,
-              core: item.core,
+              id: item.slNo?.toLowerCase() === "total" ? "" : (item.slNo || ""),
+              desc: item.feeHead || "",
+              cse: item.cseEce || "",
+              core: item.core || "",
             }));
           const lat = data
             .filter((item: RawFeeItem) => item.admissionType === "LATERAL")
             .map((item: RawFeeItem) => ({
-              id: item.slNo.toLowerCase() === "total" ? "" : item.slNo,
-              desc: item.feeHead,
-              cse: item.cseEce,
-              core: item.core,
+              id: item.slNo?.toLowerCase() === "total" ? "" : (item.slNo || ""),
+              desc: item.feeHead || "",
+              cse: item.cseEce || "",
+              core: item.core || "",
             }));
           if (reg.length > 0) setTable1Data(reg);
           if (lat.length > 0) setTable2Data(lat);

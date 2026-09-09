@@ -12,8 +12,14 @@ const generateToken = (id: string, role: string, email: string, name: string) =>
 export const register = async (req: Request, res: Response) => {
   const { email, password, name, role, dept } = req.body;
 
+  if (!email || !password) {
+    return res.status(400).json({ message: 'Email and password are required' });
+  }
+
+  const normalizedEmail = email.trim().toLowerCase();
+
   try {
-    const userExists = await prisma.user.findUnique({ where: { email } });
+    const userExists = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     if (userExists) {
       return res.status(400).json({ message: 'User already exists' });
@@ -23,9 +29,9 @@ export const register = async (req: Request, res: Response) => {
 
     const user = await prisma.user.create({
       data: {
-        email,
+        email: normalizedEmail,
         password: hashedPassword,
-        name,
+        name: name?.trim() || 'User',
         role: role || 'STUDENT',
         dept,
       },
@@ -50,8 +56,10 @@ export const login = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
+
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     if (user && (await bcrypt.compare(password, user.password))) {
       res.json({
@@ -77,8 +85,10 @@ export const adminLogin = async (req: Request, res: Response) => {
     return res.status(400).json({ message: 'Email and password are required' });
   }
 
+  const normalizedEmail = email.trim().toLowerCase();
+
   try {
-    const user = await prisma.user.findUnique({ where: { email } });
+    const user = await prisma.user.findUnique({ where: { email: normalizedEmail } });
 
     if (!user) {
       return res.status(401).json({ message: 'Admin account not found' });

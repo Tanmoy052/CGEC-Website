@@ -103,44 +103,79 @@ const Hero = () => {
   const [expandedQr, setExpandedQr] = useState<string | null>(null);
 
   // Fetch custom active hero slides from backend API
-  useEffect(() => {
-    const fetchHeroSlides = async () => {
-      try {
-        const res = await fetch(`${API_URL}/public/hero-slides`);
-        if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            // Map backend slide format to HeroSlide format
-            const customSlides: HeroSlide[] = data.map((item: ApiHeroSlide) => ({
-              id: item.id,
-              image: item.bgImage,
-              tag: item.badge || "Special Announcement",
-              title: item.title,
-              subtitle: item.subtitle,
-              description: item.description,
-              isCustom: true,
-              badgeColor: item.badgeColor || "blue",
-              primaryBtnText: item.primaryBtnText,
-              primaryBtnLink: item.primaryBtnLink,
-              secondaryBtnText: item.secondaryBtnText,
-              secondaryBtnLink: item.secondaryBtnLink,
-              eventDate: item.eventDate,
-              venue: item.venue,
-              qrCodeImage: item.qrCodeImage,
-            }));
+  const fetchHeroSlides = useCallback(() => {
+    fetch(`${API_URL}/public/hero-slides?_t=${Date.now()}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (Array.isArray(data) && data.length > 0) {
+          // Map backend slide format to HeroSlide format
+          const customSlides: HeroSlide[] = data.map((item: ApiHeroSlide) => ({
+            id: item.id,
+            image: item.bgImage,
+            tag: item.badge || "Special Announcement",
+            title: item.title,
+            subtitle: item.subtitle,
+            description: item.description,
+            isCustom: true,
+            badgeColor: item.badgeColor || "blue",
+            primaryBtnText: item.primaryBtnText,
+            primaryBtnLink: item.primaryBtnLink,
+            secondaryBtnText: item.secondaryBtnText,
+            secondaryBtnLink: item.secondaryBtnLink,
+            eventDate: item.eventDate,
+            venue: item.venue,
+            qrCodeImage: item.qrCodeImage,
+          }));
 
-            // Custom slides always come first, followed by default college slides
-            setSlides([...customSlides, ...defaultSlides]);
-          }
+          // Custom slides always come first, followed by default college slides
+          const combined = [...customSlides, ...defaultSlides];
+          setSlides(combined);
+          setCurrentIndex(0);
+          try {
+            localStorage.setItem("cgec_hero_slides_cache", JSON.stringify(combined));
+          } catch {}
+        } else if (data) {
+          setSlides(defaultSlides);
+          setCurrentIndex(0);
+          try {
+            localStorage.removeItem("cgec_hero_slides_cache");
+          } catch {}
         }
-      } catch (err) {
+      })
+      .catch((err) => {
         // Silently fallback to default campus slides on error
         console.warn("Could not load dynamic hero slides, using defaults:", err);
+      });
+  }, []);
+
+  useEffect(() => {
+    // Synchronize client cache immediately upon mount without hydration mismatch
+    try {
+      const cached = localStorage.getItem("cgec_hero_slides_cache");
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          requestAnimationFrame(() => {
+            setSlides(parsed);
+            setCurrentIndex(0);
+          });
+        }
       }
-    };
+    } catch {}
 
     fetchHeroSlides();
-  }, []);
+
+    // Listen for custom slide updates from admin panel or storage
+    const handleUpdate = () => {
+      fetchHeroSlides();
+    };
+    window.addEventListener("cgec_hero_slides_updated", handleUpdate);
+    window.addEventListener("storage", handleUpdate);
+    return () => {
+      window.removeEventListener("cgec_hero_slides_updated", handleUpdate);
+      window.removeEventListener("storage", handleUpdate);
+    };
+  }, [fetchHeroSlides]);
 
   const nextSlide = useCallback(() => {
     setDirection(1);
@@ -163,7 +198,7 @@ const Hero = () => {
       nextSlide();
     }, 6000);
     return () => clearInterval(timer);
-  }, [nextSlide, isPaused, expandedQr]);
+  }, [nextSlide, isPaused, expandedQr, slides]);
 
   const currentSlide = slides[currentIndex] || defaultSlides[0];
 
@@ -214,7 +249,7 @@ const Hero = () => {
       <div className="absolute inset-0 z-0 overflow-hidden">
         <AnimatePresence initial={false} custom={direction}>
           <motion.div
-            key={currentIndex}
+            key={currentSlide.id || currentSlide.image || currentIndex}
             initial={{ opacity: 0, scale: 1.08 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0 }}
@@ -248,7 +283,7 @@ const Hero = () => {
           <div className="max-w-3xl flex-1">
             <AnimatePresence mode="wait">
               <motion.div
-                key={currentIndex}
+                key={currentSlide.id || currentSlide.title || currentIndex}
                 initial={{ opacity: 0, y: 15 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -15 }}

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search,
@@ -37,8 +38,12 @@ const CATEGORIES = ["All", "NOTICE", "TENDER", "NEWS", "RECRUITMENT"];
 
 const NOTICES_DATA: NoticeRecord[] = [];
 
-const NoticePage = () => {
-  const [activeCategory, setActiveCategory] = useState("All");
+const NoticeContent = () => {
+  const searchParams = useSearchParams();
+  const urlCategory = searchParams.get("category")?.toUpperCase();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const activeCategory =
+    selectedCategory ?? (urlCategory && CATEGORIES.includes(urlCategory) ? urlCategory : "All");
   const [searchQuery, setSearchQuery] = useState("");
   const [dbNotices, setDbNotices] = useState<NoticeRecord[]>([]);
 
@@ -121,7 +126,7 @@ const NoticePage = () => {
                   {CATEGORIES.map((cat) => (
                     <button
                       key={cat}
-                      onClick={() => setActiveCategory(cat)}
+                      onClick={() => setSelectedCategory(cat)}
                       className={cn(
                         "px-6 py-3 rounded-xl font-bold text-sm transition-all whitespace-nowrap",
                         activeCategory === cat
@@ -244,4 +249,16 @@ const NoticePage = () => {
   );
 };
 
-export default NoticePage;
+export default function NoticePage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+          <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+        </div>
+      }
+    >
+      <NoticeContent />
+    </Suspense>
+  );
+}

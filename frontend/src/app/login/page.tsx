@@ -120,12 +120,27 @@ const LoginPage = () => {
                 <label className="text-sm font-bold text-gray-700 uppercase tracking-wider">
                   Password
                 </label>
-                <Link
-                  href="/forgot-password"
-                  className="text-sm text-blue-600 font-bold hover:underline"
+                <button
+                  type="button"
+                  onClick={() =>
+                    toast(
+                      "Please contact College Administration at principalofficecgec@gmail.com to reset your credentials.",
+                      {
+                        icon: "ℹ️",
+                        duration: 5000,
+                        style: {
+                          borderRadius: "12px",
+                          background: "#1e293b",
+                          color: "#fff",
+                          fontSize: "13px",
+                        },
+                      }
+                    )
+                  }
+                  className="text-sm text-blue-600 font-bold hover:underline cursor-pointer"
                 >
                   Forgot?
-                </Link>
+                </button>
               </div>
               <div className="relative">
                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />

@@ -79,6 +79,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  async redirects() {
+    return [
+      {
+        source: "/tenders",
+        destination: "/notices?category=TENDER",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default nextConfig;

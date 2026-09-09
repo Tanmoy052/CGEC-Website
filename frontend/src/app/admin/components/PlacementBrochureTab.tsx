@@ -408,7 +408,7 @@ export default function PlacementBrochureTab({ adminToken }: PlacementBrochureTa
               <div className="pt-4 border-t border-slate-800/80 flex items-center justify-between gap-2">
                 {b.fileUrl ? (
                   <a
-                    href="/placement/brochure.pdf"
+                    href={b.id ? `/api/brochure/view?id=${b.id}` : (b.fileUrl || "/api/brochure/view")}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/10 hover:bg-blue-600/20 text-blue-400 rounded-lg text-xs font-bold transition-colors border border-blue-500/20"
@@ -517,7 +517,7 @@ export default function PlacementBrochureTab({ adminToken }: PlacementBrochureTa
                       </div>
                     </div>
                     <a
-                      href="/placement/brochure.pdf"
+                      href={formData.fileUrl || "/api/brochure/view"}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-xs text-blue-400 hover:text-blue-300 font-semibold underline shrink-0 ml-2"

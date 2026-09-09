@@ -11,6 +11,9 @@ import {
   Monitor,
   Projector,
   Building2,
+  Home as HomeIcon,
+  GraduationCap,
+  ArrowUpRight,
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -68,21 +71,21 @@ export default function Home() {
       role: "2020 passout",
       dept: "EE",
       text: "Well furnished classroom facilities, laboratories, workshops, hostels, mess and great infrastructure. Provides a great atmosphere to study learn and to become successful.",
-      image: "/img/alumni/EE_Rounak%20Das.jpg",
+      image: "/img/alumni/EE_Rounak_Das.jpg",
     },
     {
       name: "Anubrata Sengupta",
       role: "2020 passout",
       dept: "EE",
       text: "A new bud in the educational field of Bengal. Hope it will flourish as the center of excellence of North Bengal. A perfect place to study, learn and increase knowledge.",
-      image: "/img/alumni/EE_ANUBRATA%20SENGUPTA.jpg",
+      image: "/img/alumni/EE_ANUBRATA_SENGUPTA.jpg",
     },
     {
       name: "Manas Kumar Kundu",
       role: "2020 passout",
       dept: "ECE",
       text: "Very very excellent college.... I'm a student of this college. All teachers and students are very close to each other. No words for this college..",
-      image: "/img/alumni/ECE_MANAS%20KUMAR%20KUNDU.jpg",
+      image: "/img/alumni/ECE_MANAS_KUMAR_KUNDU.jpg",
     },
   ];
 
@@ -415,74 +418,165 @@ export default function Home() {
               </div>
             </div>
             <div className="w-full lg:w-1/2 relative mt-4 lg:mt-0">
-              <div className="absolute -inset-4 bg-blue-100/50 rounded-3xl blur-2xl -z-10"></div>
-              <div className="relative z-10 grid grid-cols-2 gap-3 sm:gap-4 p-2 sm:p-4">
-                <div className="space-y-3 sm:space-y-4 pt-6 sm:pt-8">
+              {/* Cinematic Ambient Backdrop Glows */}
+              <div className="absolute -top-6 -left-6 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl -z-10 pointer-events-none" />
+              <div className="absolute -bottom-6 -right-6 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl -z-10 pointer-events-none" />
+
+              {/* Sculpted Exhibition Showcase Frame */}
+              <div className="relative p-2.5 sm:p-4 rounded-[2.5rem] bg-gradient-to-br from-slate-900/[0.03] via-blue-900/[0.02] to-slate-900/[0.06] border border-blue-200/70 shadow-2xl shadow-blue-950/10 backdrop-blur-sm">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   {/* 21+ Acres Campus */}
-                  <div className="aspect-square min-h-[140px] sm:min-h-[180px] relative rounded-2xl overflow-hidden group shadow-lg border-2 sm:border-4 border-white">
+                  <div className="aspect-[16/11] relative rounded-tl-[2rem] sm:rounded-tl-[2.5rem] rounded-tr-xl rounded-bl-xl rounded-br-2xl overflow-hidden group shadow-xl border-2 sm:border-3 border-white/90 ring-1 ring-emerald-500/20 hover:ring-emerald-500/50 transition-all duration-500 hover:-translate-y-1">
                     <Image
                       src="/img/hero/slider-1.jpg"
                       alt="CGEC Campus"
                       fill
                       sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/40 to-transparent flex flex-col justify-end p-3 sm:p-6 text-white">
-                      <div className="text-2xl sm:text-4xl font-bold mb-0.5 sm:mb-1">21+</div>
-                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest opacity-90">
-                        Acres Campus
+                    {/* Top Status Capsule */}
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-slate-950/70 backdrop-blur-md border border-white/25 text-white shadow-lg">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse shadow-[0_0_6px_rgba(52,211,153,0.8)]" />
+                      <span className="text-[9px] sm:text-[11px] font-semibold tracking-wide text-emerald-200">21-Acre Lush Campus</span>
+                    </div>
+
+                    {/* Gradient Depth Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+
+                    {/* Bottom HUD Widget */}
+                    <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 z-10 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-slate-950/80 backdrop-blur-md border border-white/20 shadow-xl flex items-center justify-between transition-all duration-300 group-hover:border-emerald-500/50 group-hover:bg-slate-950/90">
+                      <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 shrink-0 rounded-lg sm:rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shadow-inner group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                          <Building2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-base sm:text-xl font-black text-white leading-none tracking-tight mb-0.5">
+                            21+
+                          </div>
+                          <div className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-emerald-200/90 truncate">
+                            Acres Campus
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-6 h-6 shrink-0 rounded-full bg-white/10 hidden sm:flex items-center justify-center text-white/70 group-hover:bg-emerald-500 group-hover:text-white transition-all duration-300">
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 5 Hostels */}
+                  <div className="aspect-[16/11] relative rounded-tr-[2rem] sm:rounded-tr-[2.5rem] rounded-tl-xl rounded-br-xl rounded-bl-2xl overflow-hidden group shadow-xl border-2 sm:border-3 border-white/90 ring-1 ring-amber-500/20 hover:ring-amber-500/50 transition-all duration-500 hover:-translate-y-1">
+                    <Image
+                      src="/img/hostel_image.jpg"
+                      alt="Student Hostels"
+                      fill
+                      sizes="(max-width: 768px) 50vw, 25vw"
+                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
+                    />
+                    {/* Top Status Capsule */}
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-slate-950/70 backdrop-blur-md border border-white/25 text-white shadow-lg">
+                      <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shadow-[0_0_6px_rgba(251,191,36,0.8)]" />
+                      <span className="text-[9px] sm:text-[11px] font-semibold tracking-wide text-amber-200">5 Student Hostels</span>
+                    </div>
+
+                    {/* Gradient Depth Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+
+                    {/* Bottom HUD Widget */}
+                    <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 z-10 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-slate-950/80 backdrop-blur-md border border-white/20 shadow-xl flex items-center justify-between transition-all duration-300 group-hover:border-amber-500/50 group-hover:bg-slate-950/90">
+                      <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 shrink-0 rounded-lg sm:rounded-xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shadow-inner group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
+                          <HomeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-base sm:text-xl font-black text-white leading-none tracking-tight mb-0.5">
+                            5
+                          </div>
+                          <div className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-amber-200/90 truncate">
+                            Hostels
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-6 h-6 shrink-0 rounded-full bg-white/10 hidden sm:flex items-center justify-center text-white/70 group-hover:bg-amber-500 group-hover:text-white transition-all duration-300">
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                       </div>
                     </div>
                   </div>
 
                   {/* 5 B.Tech Programs */}
-                  <div className="aspect-[4/3] min-h-[120px] sm:min-h-[150px] relative rounded-2xl overflow-hidden group shadow-lg border-2 sm:border-4 border-white">
+                  <div className="aspect-[16/11] relative rounded-bl-[2rem] sm:rounded-bl-[2.5rem] rounded-tl-xl rounded-br-xl rounded-tr-2xl overflow-hidden group shadow-xl border-2 sm:border-3 border-white/90 ring-1 ring-purple-500/20 hover:ring-purple-500/50 transition-all duration-500 hover:-translate-y-1">
                     <Image
                       src="https://images.unsplash.com/photo-1523580494863-6f3031224c94?auto=format&fit=crop&q=80&w=1000"
                       alt="Engineering Departments"
                       fill
                       sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/40 to-transparent flex flex-col justify-end p-3 sm:p-6 text-white">
-                      <div className="text-2xl sm:text-4xl font-bold mb-0.5 sm:mb-1">5</div>
-                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest opacity-90">
-                        B.Tech Programs
-                      </div>
+                    {/* Top Status Capsule */}
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-slate-950/70 backdrop-blur-md border border-white/25 text-white shadow-lg">
+                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse shadow-[0_0_6px_rgba(192,132,252,0.8)]" />
+                      <span className="text-[9px] sm:text-[11px] font-semibold tracking-wide text-purple-200">AICTE Approved</span>
                     </div>
-                  </div>
-                </div>
-                <div className="space-y-3 sm:space-y-4">
-                  {/* 5 Hostels */}
-                  <div className="aspect-[4/3] min-h-[120px] sm:min-h-[150px] relative rounded-2xl overflow-hidden group shadow-lg border-2 sm:border-4 border-white">
-                    <Image
-                      src="/img/hero/slider-3.jpg"
-                      alt="Student Hostels"
-                      fill
-                      sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/40 to-transparent flex flex-col justify-end p-3 sm:p-6 text-white">
-                      <div className="text-2xl sm:text-4xl font-bold mb-0.5 sm:mb-1">5</div>
-                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest opacity-90">
-                        Hostels
+
+                    {/* Gradient Depth Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+
+                    {/* Bottom HUD Widget */}
+                    <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 z-10 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-slate-950/80 backdrop-blur-md border border-white/20 shadow-xl flex items-center justify-between transition-all duration-300 group-hover:border-purple-500/50 group-hover:bg-slate-950/90">
+                      <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 shrink-0 rounded-lg sm:rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 shadow-inner group-hover:bg-purple-500 group-hover:text-white transition-colors duration-300">
+                          <GraduationCap className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-base sm:text-xl font-black text-white leading-none tracking-tight mb-0.5">
+                            5
+                          </div>
+                          <div className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-purple-200/90 truncate">
+                            B.Tech Programs
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-6 h-6 shrink-0 rounded-full bg-white/10 hidden sm:flex items-center justify-center text-white/70 group-hover:bg-purple-500 group-hover:text-white transition-all duration-300">
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                       </div>
                     </div>
                   </div>
 
                   {/* 300+ Computers */}
-                  <div className="aspect-square min-h-[140px] sm:min-h-[180px] relative rounded-2xl overflow-hidden group shadow-lg border-2 sm:border-4 border-white">
+                  <div className="aspect-[16/11] relative rounded-br-[2rem] sm:rounded-br-[2.5rem] rounded-tr-xl rounded-bl-xl rounded-tl-2xl overflow-hidden group shadow-xl border-2 sm:border-3 border-white/90 ring-1 ring-cyan-500/20 hover:ring-cyan-500/50 transition-all duration-500 hover:-translate-y-1">
                     <Image
-                      src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?q=80&w=1000&auto=format&fit=crop"
+                      src="/img/hero/slider-2.jpg"
                       alt="Computer Labs"
                       fill
                       sizes="(max-width: 768px) 50vw, 25vw"
-                      className="object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-108"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/40 to-transparent flex flex-col justify-end p-3 sm:p-6 text-white">
-                      <div className="text-2xl sm:text-4xl font-bold mb-0.5 sm:mb-1">300+</div>
-                      <div className="text-[10px] sm:text-xs font-bold uppercase tracking-wider sm:tracking-widest opacity-90">
-                        Computers
+                    {/* Top Status Capsule */}
+                    <div className="absolute top-2 left-2 sm:top-3 sm:left-3 z-10 inline-flex items-center gap-1.5 px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full bg-slate-950/70 backdrop-blur-md border border-white/25 text-white shadow-lg">
+                      <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_rgba(34,211,238,0.8)]" />
+                      <span className="text-[9px] sm:text-[11px] font-semibold tracking-wide text-cyan-200">High-Speed Computing</span>
+                    </div>
+
+                    {/* Gradient Depth Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent" />
+
+                    {/* Bottom HUD Widget */}
+                    <div className="absolute bottom-2 left-2 right-2 sm:bottom-3 sm:left-3 sm:right-3 z-10 p-2 sm:p-2.5 rounded-xl sm:rounded-2xl bg-slate-950/80 backdrop-blur-md border border-white/20 shadow-xl flex items-center justify-between transition-all duration-300 group-hover:border-cyan-500/50 group-hover:bg-slate-950/90">
+                      <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                        <div className="w-7 h-7 sm:w-9 sm:h-9 shrink-0 rounded-lg sm:rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 shadow-inner group-hover:bg-cyan-500 group-hover:text-white transition-colors duration-300">
+                          <Monitor className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-base sm:text-xl font-black text-white leading-none tracking-tight mb-0.5">
+                            300+
+                          </div>
+                          <div className="text-[8px] sm:text-[10px] font-bold uppercase tracking-wider text-cyan-200/90 truncate">
+                            Computers
+                          </div>
+                        </div>
+                      </div>
+                      <div className="w-6 h-6 shrink-0 rounded-full bg-white/10 hidden sm:flex items-center justify-center text-white/70 group-hover:bg-cyan-500 group-hover:text-white transition-all duration-300">
+                        <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                       </div>
                     </div>
                   </div>

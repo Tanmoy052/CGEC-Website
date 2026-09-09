@@ -583,16 +583,17 @@ export const updateAdminProfile = async (req: AuthRequest, res: Response) => {
 
     // 3. Update Password if requested
     if (newPassword && newPassword.trim()) {
-      if (newPassword.length < 6) {
+      if (newPassword.trim().length < 6) {
         return res.status(400).json({ message: 'New password must be at least 6 characters long.' });
       }
 
-      // If current password was provided, verify it
-      if (currentPassword) {
-        const isMatch = await bcrypt.compare(currentPassword, user.password);
-        if (!isMatch) {
-          return res.status(400).json({ message: 'Current password does not match.' });
-        }
+      if (!currentPassword) {
+        return res.status(400).json({ message: 'Current password is required to change password.' });
+      }
+
+      const isMatch = await bcrypt.compare(currentPassword, user.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: 'Current password does not match.' });
       }
 
       updateData.password = await bcrypt.hash(newPassword.trim(), 10);
@@ -1559,6 +1560,11 @@ export const submitContactMessage = async (req: Request, res: Response) => {
     const { name, email, subject, message } = req.body;
     if (!name?.trim() || !email?.trim() || !subject?.trim() || !message?.trim()) {
       return res.status(400).json({ message: 'All fields (name, email, subject, message) are required.' });
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email.trim())) {
+      return res.status(400).json({ message: 'Please provide a valid email address.' });
     }
 
     const newMessage = await prisma.contactMessage.create({

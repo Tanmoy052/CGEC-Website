@@ -220,7 +220,7 @@ export default function HeroSlidesTab({ adminToken }: HeroSlidesTabProps) {
       venue: "",
       qrCodeImage: "",
       qrCodePublicId: "",
-      order: slides.length,
+      order: 0,
       isActive: true,
     });
     setIsModalOpen(true);
@@ -260,6 +260,12 @@ export default function HeroSlidesTab({ adminToken }: HeroSlidesTabProps) {
       if (res.ok) {
         const updated = await res.json();
         setSlides((prev) => prev.map((s) => (s.id === slide.id ? updated : s)));
+        try {
+          localStorage.removeItem("cgec_hero_slides_cache");
+        } catch {}
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("cgec_hero_slides_updated"));
+        }
         toast.success(`Slide ${updated.isActive ? "activated" : "deactivated"}!`);
       } else {
         toast.error("Failed to toggle slide status");
@@ -305,6 +311,12 @@ export default function HeroSlidesTab({ adminToken }: HeroSlidesTabProps) {
       if (res.ok) {
         toast.success(editingSlide ? "Slide updated successfully!" : "Slide created successfully!");
         setIsModalOpen(false);
+        try {
+          localStorage.removeItem("cgec_hero_slides_cache");
+        } catch {}
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("cgec_hero_slides_updated"));
+        }
         fetchSlides();
       } else {
         const err = await res.json();
@@ -328,6 +340,12 @@ export default function HeroSlidesTab({ adminToken }: HeroSlidesTabProps) {
       if (res.ok) {
         toast.success("Hero slide and media deleted!");
         setSlideToDelete(null);
+        try {
+          localStorage.removeItem("cgec_hero_slides_cache");
+        } catch {}
+        if (typeof window !== "undefined") {
+          window.dispatchEvent(new Event("cgec_hero_slides_updated"));
+        }
         fetchSlides();
       } else {
         toast.error("Failed to delete slide");

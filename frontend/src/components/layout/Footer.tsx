@@ -146,7 +146,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/tenders"
+                  href="/notices?category=TENDER"
                   className="hover:text-blue-500 hover:underline transition-colors"
                 >
                   Tenders

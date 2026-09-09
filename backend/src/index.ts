@@ -11,18 +11,38 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Restrict CORS to only the Vercel frontend and local dev
-const allowedOrigins = [
+// Robust CORS configuration supporting production, preview deployments, and local dev
+const explicitOrigins = [
   'https://cgec-website-frontend.vercel.app',
+  'https://cgec.org.in',
+  'https://www.cgec.org.in',
   'http://localhost:3000',
+  'http://localhost:3001',
+  'http://localhost:3002',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:3001',
 ];
+
+if (process.env.FRONTEND_URL) {
+  explicitOrigins.push(process.env.FRONTEND_URL.replace(/\/$/, ''));
+}
+
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, curl, Render health checks)
-    if (!origin || allowedOrigins.includes(origin)) {
+    // Allow requests with no origin (mobile apps, curl, server-to-server, Render health checks)
+    if (!origin) {
+      return callback(null, true);
+    }
+    const isAllowed =
+      explicitOrigins.includes(origin) ||
+      /^https:\/\/[a-zA-Z0-9-]+-.*\.vercel\.app$/.test(origin) ||
+      /^https:\/\/.*cgec.*\.vercel\.app$/.test(origin);
+
+    if (isAllowed) {
       callback(null, true);
     } else {
-      callback(new Error(`CORS: Origin '${origin}' not allowed`));
+      // Return false without crashing Express with an unhandled exception
+      callback(null, false);
     }
   },
   credentials: true,
@@ -37,6 +57,14 @@ app.use("/api", publicRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("CGEC Website API is running...");
+});
+
+// Global Express error handler
+app.use((err: any, req: Request, res: Response, _next: any) => {
+  console.error("Express unhandled error:", err?.message || err);
+  res.status(err.status || 500).json({
+    message: err.message || "Internal server error",
+  });
 });
 
 app.listen(PORT, async () => {
